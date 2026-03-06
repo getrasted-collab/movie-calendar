@@ -138,6 +138,73 @@ main{
   max-width: 1180px;
   margin: 0 auto;
 }
+/* ---------------- MOBILE FIXES ---------------- */
+
+@media (max-width: 700px){
+
+/* layout becomes vertical */
+.layout{
+  grid-template-columns: 1fr;
+  padding:10px;
+}
+
+/* mini calendar becomes main calendar */
+.mini-calendar{
+  width:100%;
+  position:relative;
+  order:1;
+}
+
+/* hide desktop calendar grid */
+.calendar-grid{
+  display:none;
+}
+
+/* mini calendar fills screen */
+.mini-calendar table{
+  width:100%;
+  font-size:16px;
+}
+
+/* day cells bigger */
+.mini-calendar td{
+  height:48px;
+  border-radius:10px;
+}
+
+/* event dots bigger */
+.mini-calendar .dot{
+  width:8px;
+  height:8px;
+}
+
+/* add movie button smaller */
+.add-btn{
+  width:auto;
+  padding:10px 16px;
+  font-size:14px;
+  border-radius:12px;
+}
+
+/* stop button from stretching */
+.controls{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* modal better on phone */
+.modal{
+  width:90%;
+  max-height:85vh;
+}
+
+/* posters larger */
+.poster-card{
+  width:130px;
+}
+
+}
 
 /* ---------- Segmented filter (All / Movies / TV / Digital) ---------- */
 .seg{
