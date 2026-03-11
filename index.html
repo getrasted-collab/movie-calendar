@@ -6,6 +6,39 @@
 <title>Movie & Show Calendar (2026)</title>
 
 <style>
+:root{
+  --bg:#000000;
+  --panel:rgba(16,18,22,.92);
+  --panel2:#141821;
+  --border:rgba(255,255,255,.10);
+  --text:#f3f5f7;
+  --muted:rgba(243,245,247,.62);
+  --accent:#34c759;
+  --accent2:#ff8a00;
+  --danger:#ff3b30;
+  --shadow:0 16px 40px rgba(0,0,0,.55);
+  --r16:16px;
+  --bottom-nav-h:84px;
+}
+
+*{ box-sizing:border-box; }
+
+html, body{ min-height:100%; }
+
+body{
+  margin:0;
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:
+    radial-gradient(1200px 800px at 20% 0%, rgba(0,224,84,.08), transparent 55%),
+    radial-gradient(900px 650px at 90% 10%, rgba(255,138,0,.06), transparent 55%),
+    var(--bg);
+  color:var(--text);
+  padding-bottom:calc(var(--bottom-nav-h) + env(safe-area-inset-bottom));
+}
+
+.event-label,
+.event-tag,
+.poster-tag{ display:none !important; }
 
 /* Main calendar month chip bar (shown on mobile when main calendar is visible) */
 .main-monthsbar{
@@ -45,38 +78,11 @@
   body.mobile-show-main #mainMonthsBar{ display:flex; }
   body.mobile-show-mini  #mainMonthsBar{ display:none !important; }
 }
-:root{
-  --bg:#0b0d10;
-  --panel:rgba(16,18,22,.92);
-  --panel2:#141821;
-  --border:rgba(255,255,255,.10);
-  --text:#f3f5f7;
-  --muted:rgba(243,245,247,.62);
-  --accent:#00e054;
-  --accent2:#ff8a00;
-  --danger:#ff3b30;
-  --shadow:0 16px 40px rgba(0,0,0,.55);
-  --r16:16px;
-}
-
-*{ box-sizing:border-box; }
-
-body{
-  margin:0;
-  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  background:
-    radial-gradient(1200px 800px at 20% 0%, rgba(0,224,84,.10), transparent 55%),
-    radial-gradient(900px 650px at 90% 10%, rgba(255,138,0,.08), transparent 55%),
-    var(--bg);
-  color:var(--text);
-}
-
-.event-label,
-.event-tag,
-.poster-tag{ display:none !important; }
 
 header{
-  position:sticky; top:0; z-index:20;
+  position:sticky;
+  top:0;
+  z-index:20;
   background:var(--panel);
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--border);
@@ -106,22 +112,6 @@ header.compact{ padding:10px 16px 10px; }
   border:1px solid var(--border);
   color:var(--muted);
   background:rgba(255,255,255,.03);
-}
-
-.tabs{ display:flex; gap:8px; flex-wrap:wrap; }
-.tab{
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.03);
-  color:var(--text);
-  padding:9px 12px;
-  border-radius:999px;
-  cursor:pointer;
-  font-size:13px;
-}
-.tab.active{
-  border-color:rgba(0,224,84,.35);
-  background:rgba(0,224,84,.10);
-  color:rgba(236,255,244,.98);
 }
 
 .controls{
@@ -355,24 +345,24 @@ main{
   align-items:start;
   padding-top:6px;
 }
-@media (min-width: 1400px){
+@media (min-width:1400px){
   .cal-shell{ grid-template-columns:460px 1fr; }
 }
-@media (max-width: 980px){
+@media (max-width:980px){
   .cal-shell{ grid-template-columns:1fr; }
 }
 
 .mini-month{
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:22px;
-  background:rgba(12,14,18,.62);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:28px;
+  background:rgba(12,14,18,.72);
   box-shadow:0 18px 50px rgba(0,0,0,.55);
   overflow:hidden;
   margin-top:10px;
   width:100%;
 }
 .mini-head{
-  padding:14px 16px;
+  padding:16px 18px 14px;
   border-bottom:1px solid rgba(255,255,255,.08);
   background:rgba(255,255,255,.02);
   display:flex;
@@ -384,11 +374,14 @@ main{
   font-weight:950;
   user-select:none;
   cursor:pointer;
+  font-size:26px;
+  letter-spacing:-.02em;
 }
 #miniHint{
-  padding:10px 16px;
-  border-bottom:1px solid rgba(255,255,255,.08);
+  padding:10px 18px;
+  border-bottom:1px solid rgba(255,255,255,.06);
   color:rgba(243,245,247,.55);
+  font-size:12px;
 }
 .mini-dow{
   display:grid;
@@ -398,6 +391,7 @@ main{
   font-size:11px;
 }
 .mini-dow > div{ text-align:center; }
+
 .mini-grid{
   display:grid;
   grid-template-columns:repeat(7, 1fr);
@@ -406,7 +400,7 @@ main{
 }
 .mini-day{
   aspect-ratio:1 / 1;
-  border-radius:10px;
+  border-radius:12px;
   border:1px solid rgba(255,255,255,.08);
   background:rgba(255,255,255,.03);
   display:flex;
@@ -418,6 +412,7 @@ main{
   user-select:none;
   position:relative;
   font-weight:800;
+  padding-top:8px;
 }
 .mini-day.other{ opacity:.35; }
 .mini-day.sel{
@@ -431,16 +426,20 @@ main{
 }
 .mini-dotbar{
   position:absolute;
-  bottom:6px;
+  top:5px;
+  left:50%;
+  transform:translateX(-50%);
   display:flex;
   gap:3px;
 }
 .mini-dot{
-  width:4px; height:4px; border-radius:99px;
+  width:5px;
+  height:5px;
+  border-radius:99px;
   background:rgba(255,255,255,.22);
 }
-.mini-dot.a{ background:rgba(0,224,84,.95); }
-.mini-dot.b{ background:rgba(255,138,0,.95); }
+.mini-dot.a{ background:#34c759; }
+.mini-dot.b{ background:#34c759; }
 
 .mini-navbtn{
   width:38px; height:38px;
@@ -454,64 +453,69 @@ main{
 }
 
 .mini-year{
-  padding:12px;
+  padding:18px 18px 20px;
   display:grid;
   grid-template-columns:repeat(3, minmax(0, 1fr));
-  gap:10px;
+  gap:22px 18px;
   width:100%;
 }
 .apple-month{
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:16px;
-  background:rgba(16,18,22,.55);
-  box-shadow:0 10px 26px rgba(0,0,0,.28);
-  padding:10px 10px 12px;
   min-width:0;
   width:100%;
-  transition:transform .12s ease, border-color .12s ease, background .12s ease;
+  padding:0;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  border-radius:0;
+  transition:opacity .12s ease, transform .12s ease;
 }
 .apple-month:hover{
-  transform:translateY(-2px);
-  border-color:rgba(0,224,84,.22);
-  background:rgba(16,18,22,.68);
+  transform:translateY(-1px);
+  opacity:1;
 }
-.apple-month.active{
-  border-color:rgba(0,224,84,.30);
-  box-shadow:0 12px 30px rgba(0,0,0,.35);
+.apple-month.active .apple-month-name{
+  color:#ff4d57;
 }
 .apple-month-name{
-  font-weight:950;
-  font-size:12px;
-  margin-bottom:8px;
-  letter-spacing:.2px;
+  font-weight:900;
+  font-size:19px;
+  margin-bottom:10px;
+  letter-spacing:-.02em;
+  color:rgba(243,245,247,.96);
 }
 .apple-grid{
   display:grid;
   grid-template-columns:repeat(7, minmax(0, 1fr));
-  gap:3px;
+  gap:6px 4px;
 }
 .apple-day{
   position:relative;
   text-align:center;
-  font-size:9px;
+  font-size:14px;
   font-weight:800;
-  line-height:1.2;
-  color:rgba(243,245,247,.86);
-  padding:2px 0;
-  border-radius:6px;
+  line-height:1.15;
+  color:rgba(243,245,247,.92);
+  padding:10px 0 2px;
+  border-radius:999px;
 }
-.apple-day.muted{ opacity:.26; }
-.apple-day.has::after{
+.apple-day.muted{ opacity:.22; }
+.apple-day.has::before{
   content:'';
   position:absolute;
   left:50%;
   transform:translateX(-50%);
-  bottom:-2px;
-  width:4px;
-  height:4px;
+  top:2px;
+  width:5px;
+  height:5px;
   border-radius:99px;
-  background:rgba(0,224,84,.95);
-  box-shadow:0 0 0 4px rgba(0,224,84,.10);
+  background:#34c759;
+}
+.apple-day.selected{
+  background:#ff4d57;
+  color:#fff;
+}
+.apple-day.selected::before{
+  background:#fff;
 }
 
 .cal-wrap{
@@ -630,7 +634,7 @@ main{
 }
 .event-tile img{
   width:100%;
-   height:56px;
+  height:56px;
   object-fit:cover;
   object-position:center top;
   display:block;
@@ -1009,6 +1013,41 @@ main{
   box-shadow:var(--shadow);
   padding:12px;
 }
+
+.bottom-tabs{
+  position:fixed;
+  left:50%;
+  bottom:calc(10px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+  width:min(520px, calc(100vw - 20px));
+  z-index:120;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(18,18,20,.92);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 20px 50px rgba(0,0,0,.45);
+}
+.bottom-tab{
+  flex:1 1 0;
+  min-height:54px;
+  border:none;
+  border-radius:22px;
+  background:transparent;
+  color:rgba(243,245,247,.70);
+  font-weight:900;
+  font-size:14px;
+}
+.bottom-tab.active{
+  background:rgba(52,199,89,.14);
+  color:#f6fff8;
+  box-shadow:inset 0 0 0 1px rgba(52,199,89,.24);
+}
+
 .mobile-add-panel .controls{
   margin-top:0;
   display:grid;
@@ -1019,7 +1058,7 @@ main{
   margin-top:10px;
 }
 
-@media (max-width: 720px){
+@media (max-width:720px){
   .mini-open-btn{
     display:inline-flex;
     align-items:center;
@@ -1094,10 +1133,11 @@ main{
     margin-top:0;
     width:100%;
     max-width:100%;
-    border-radius:24px;
-    background:rgba(28,28,30,.94);
+    min-height:calc(100vh - 210px);
+    border-radius:28px;
+    background:#000;
     border:1px solid rgba(255,255,255,.06);
-    box-shadow:0 14px 36px rgba(0,0,0,.34);
+    box-shadow:none;
     backdrop-filter:blur(18px);
     -webkit-backdrop-filter:blur(18px);
     overflow:hidden;
@@ -1115,20 +1155,20 @@ main{
   .sheet{ display:none !important; }
 
   .mini-head{
-    padding:16px 16px 12px;
+    padding:18px 18px 14px;
     background:transparent;
     border-bottom:1px solid rgba(255,255,255,.06);
   }
 
   .mini-title{
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif;
-    font-size:22px;
+    font-size:28px;
     font-weight:700;
-    letter-spacing:-0.02em;
+    letter-spacing:-0.03em;
   }
 
   #miniHint{
-    padding:10px 16px 8px;
+    padding:10px 18px 8px;
     border-bottom:0;
     color:rgba(235,235,245,.55);
     font-size:12px;
@@ -1147,59 +1187,59 @@ main{
 
   .mini-year{
     grid-template-columns:repeat(3, minmax(0, 1fr));
-    gap:12px;
-    padding:14px;
+    gap:18px 12px;
+    padding:10px 16px 22px;
     width:100%;
+    align-content:start;
   }
 
   .apple-month{
     width:100%;
     min-width:0;
-    border-radius:20px;
-    background:rgba(36,36,38,.88);
-    border:1px solid rgba(255,255,255,.06);
-    padding:14px 10px 16px;
+    padding:0;
+    background:transparent;
+    border:none;
     box-shadow:none;
   }
 
   .apple-month.active{
-    border-color:rgba(10,132,255,.35);
-    background:rgba(44,44,46,.95);
+    background:transparent;
+    border:none;
   }
 
   .apple-month-name{
-    font-size:15px;
+    font-size:17px;
     font-weight:900;
-    margin-bottom:10px;
-    letter-spacing:.01em;
+    margin-bottom:8px;
+    letter-spacing:-.01em;
   }
 
-  .apple-grid{ gap:4px; }
+  .apple-grid{
+    gap:5px 3px;
+  }
 
   .apple-day{
     font-size:11px;
-    border-radius:8px;
-    padding:4px 0;
+    border-radius:999px;
+    padding:8px 0 2px;
   }
 
-  .apple-day.has::after{
+  .apple-day.has::before{
     width:5px;
     height:5px;
-    bottom:-2px;
+    top:1px;
     background:#34c759;
     box-shadow:none;
   }
+
   body.mobile-show-mini #calWrap{ display:none !important; }
   body.mobile-show-mini #miniMonthAside{ display:block !important; }
 
   body.mobile-show-main #calWrap{ display:block !important; }
   body.mobile-show-main #miniMonthAside{ display:none !important; }
 
-  /* Back button only when main is showing */
   body.mobile-show-main #calBackBtn{ display:inline-flex !important; }
-}
 
-  /* FIXED MOBILE MAIN CALENDAR */
   .cal-body-scroll{
     width:100%;
     max-width:100%;
@@ -1309,18 +1349,24 @@ main{
   .mobile-add-panel .import-label{
     width:100%;
   }
-  .mobile-add-panel #addItemBtn{
-    width:100%;
-    padding:12px 14px !important;
-    border-radius:16px !important;
-    font-size:16px !important;
+
+  .bottom-tabs{
+    width:calc(100vw - 20px);
+    padding:8px;
+    border-radius:24px;
+  }
+  .bottom-tab{
+    min-height:52px;
+    font-size:13px;
   }
 }
 
-@media (max-width: 380px){
+@media (max-width:380px){
   .poster-card{ width:144px; }
   .poster-img{ height:216px; }
-  .mini-year{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .mini-year{ grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px 10px; }
+  .apple-month-name{ font-size:16px; }
+  .apple-day{ font-size:10px; }
 }
 </style>
 </head>
@@ -1331,11 +1377,6 @@ main{
     <div class="brand">
       Movie &amp; Show Calendar
       <span class="pill">2026 only • PVOD estimate + TMDb now playing hold check</span>
-    </div>
-    <div class="tabs">
-      <button class="tab active" data-tab="calendar">Calendar</button>
-      <button class="tab" data-tab="lists">Lists</button>
-      <button class="tab" data-tab="help">Help</button>
     </div>
   </div>
 
@@ -1414,15 +1455,15 @@ main{
         <div class="mini-grid" id="miniGrid"></div>
       </aside>
 
-<div class="cal-wrap" id="calWrap">
-  <div class="main-monthsbar" id="mainMonthsBar"></div>
+      <div class="cal-wrap" id="calWrap">
+        <div class="main-monthsbar" id="mainMonthsBar"></div>
 
-  <div class="cal-header">
-  <div class="cal-title">
-    <button type="button" id="calBackBtn" class="iconbtn" style="display:none;">←</button>
-    <span id="calTitle">2026</span>
-    <span class="badge-mini" id="calModeBadge">Mode</span>
-  </div>
+        <div class="cal-header">
+          <div class="cal-title">
+            <button type="button" id="calBackBtn" class="iconbtn" style="display:none;">←</button>
+            <span id="calTitle">2026</span>
+            <span class="badge-mini" id="calModeBadge">Mode</span>
+          </div>
 
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             <button type="button" id="miniOpenBtn" class="mini-open-btn">Mini Calendar</button>
@@ -1519,6 +1560,12 @@ main{
     </div>
   </section>
 </main>
+
+<nav class="bottom-tabs" aria-label="Main navigation">
+  <button class="bottom-tab tab active" data-tab="calendar">Calendar</button>
+  <button class="bottom-tab tab" data-tab="lists">Lists</button>
+  <button class="bottom-tab tab" data-tab="help">Help</button>
+</nav>
 
 <div class="modal" id="modal">
   <div class="modal-content">
@@ -2051,8 +2098,7 @@ let miniUI = {
 };
 
 const el = {
-
-mainMonthsBar: document.getElementById('mainMonthsBar'),
+  mainMonthsBar: document.getElementById('mainMonthsBar'),
 
   header:document.getElementById('header'),
   tabs:Array.from(document.querySelectorAll('.tab')),
@@ -2163,6 +2209,7 @@ if(calBackBtn){
     mobileSetScreen('mini');
   };
 }
+
 function openPosterView(src){
   el.posterViewImg.src = src;
   el.posterView.classList.add('active');
@@ -2656,7 +2703,7 @@ function renderMiniMonth(eventsByDay){
   }
 
   if(miniUI.mode === 'months'){
-    el.miniHint.textContent = mobileMQ.matches ? 'Tap a month to jump the main calendar' : 'Months view • Tap a month';
+    el.miniHint.textContent = mobileMQ.matches ? 'Tap a month to jump the main calendar' : 'Tap a month to jump the main calendar';
     el.miniDow.style.display = 'none';
     el.miniGrid.className = 'mini-year';
     el.miniTitle.textContent = String(YEAR_FILTER);
@@ -2667,13 +2714,12 @@ function renderMiniMonth(eventsByDay){
       el.miniPrev.style.display = 'none';
       el.miniNext.style.display = 'none';
     }else{
-      el.miniPrev.style.display = '';
-      el.miniNext.style.display = '';
-      el.miniPrev.onclick = () => {};
-      el.miniNext.onclick = () => {};
+      el.miniPrev.style.display = 'none';
+      el.miniNext.style.display = 'none';
     }
 
     const activeMonth = ui.monthCursor.getMonth();
+    const selectedISO = ui.selectedISO;
     el.miniGrid.innerHTML = '';
 
     function buildAppleMonth(m){
@@ -2707,34 +2753,33 @@ function renderMiniMonth(eventsByDay){
 
         const evs = (d.getFullYear() === YEAR_FILTER) ? (eventsByDay.get(iso) || []) : [];
         if(inMonth && evs.length) cell.classList.add('has');
+        if(inMonth && sameISO(iso, selectedISO)) cell.classList.add('selected');
 
         grid.appendChild(cell);
       }
 
       wrap.appendChild(grid);
 
-wrap.onclick = () => {
-  ui.monthCursor = new Date(YEAR_FILTER, m, 1);
-  ui.selectedISO = toISODateLocal(new Date(YEAR_FILTER, m, 1));
-  ui.activeMonthKey = `${YEAR_FILTER}-${String(m + 1).padStart(2, '0')}`;
+      wrap.onclick = () => {
+        ui.monthCursor = new Date(YEAR_FILTER, m, 1);
+        ui.selectedISO = toISODateLocal(new Date(YEAR_FILTER, m, 1));
+        ui.activeMonthKey = `${YEAR_FILTER}-${String(m + 1).padStart(2, '0')}`;
 
-  // on mobile, stay in months mode and switch screens instead of showing day-view mini
-  if(mobileMQ.matches){
-    miniUI.mode = 'months';
-    ui.view = 'month';
-    Array.from(el.viewToggle.querySelectorAll('button'))
-      .forEach(b => b.classList.toggle('active', b.dataset.view === 'month'));
+        if(mobileMQ.matches){
+          miniUI.mode = 'months';
+          ui.view = 'month';
+          Array.from(el.viewToggle.querySelectorAll('button'))
+            .forEach(b => b.classList.toggle('active', b.dataset.view === 'month'));
 
-    renderCalendarShell();
-    mobileSetScreen('main');
-    return;
-  }
+          renderCalendarShell();
+          mobileSetScreen('main');
+          return;
+        }
 
-  // desktop/tablet behavior
-  miniUI.mode = 'days';
-  renderCalendarShell();
-  setTimeout(() => scrollTimelineToMonth(ui.activeMonthKey), 30);
-};
+        miniUI.mode = 'days';
+        renderCalendarShell();
+        setTimeout(() => scrollTimelineToMonth(ui.activeMonthKey), 30);
+      };
 
       return wrap;
     }
@@ -2758,6 +2803,9 @@ wrap.onclick = () => {
     miniUI.mode = 'months';
     renderMiniMonth(eventsByDay);
   };
+
+  el.miniPrev.style.display = '';
+  el.miniNext.style.display = '';
 
   el.miniPrev.onclick = () => {
     const prev = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth() - 1, 1);
@@ -2814,16 +2862,9 @@ wrap.onclick = () => {
     if(dots.count){
       const bar = document.createElement('div');
       bar.className = 'mini-dotbar';
-      if(dots.hasMovie){
-        const dotA = document.createElement('div');
-        dotA.className = 'mini-dot a';
-        bar.appendChild(dotA);
-      }
-      if(dots.hasEp){
-        const dotB = document.createElement('div');
-        dotB.className = 'mini-dot b';
-        bar.appendChild(dotB);
-      }
+      const dot = document.createElement('div');
+      dot.className = 'mini-dot a';
+      bar.appendChild(dot);
       btn.appendChild(bar);
     }
 
@@ -2907,7 +2948,6 @@ function renderMonthChips(){
 function renderMainMonthsBar(){
   if(!el.mainMonthsBar) return;
 
-  // Only build on mobile (desktop can keep using the top strip months)
   if(!mobileMQ.matches){
     el.mainMonthsBar.innerHTML = '';
     return;
@@ -2933,8 +2973,6 @@ function renderMainMonthsBar(){
         .forEach(b => b.classList.toggle('active', b.dataset.view === 'month'));
 
       renderCalendarShell();
-
-      // keep the bar positioned near the selected month
       chip.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
     };
 
@@ -3701,7 +3739,7 @@ function renderCalendarShell(){
   if(!mobileMQ.matches && ui.view === 'week') setMonthCursorFromISO(ui.selectedISO);
 
   renderMonthChips();
-renderMainMonthsBar();
+  renderMainMonthsBar();
   highlightMonthChip();
 
   const entries = filteredEntries();
