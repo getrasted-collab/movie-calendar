@@ -6,6 +6,45 @@
 <title>Movie & Show Calendar (2026)</title>
 
 <style>
+
+/* Main calendar month chip bar (shown on mobile when main calendar is visible) */
+.main-monthsbar{
+  display:none;
+  padding:10px 12px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  gap:8px;
+  overflow-x:auto;
+  white-space:nowrap;
+  -webkit-overflow-scrolling:touch;
+  background:rgba(255,255,255,.02);
+}
+.main-monthsbar::-webkit-scrollbar{ height:10px; }
+.main-monthsbar::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.12); border-radius:8px; }
+.main-monthsbar::-webkit-scrollbar-track{ background:rgba(255,255,255,.06); border-radius:8px; }
+
+.main-month-chip{
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.03);
+  color:rgba(243,245,247,.82);
+  padding:8px 10px;
+  border-radius:999px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:900;
+  user-select:none;
+}
+.main-month-chip.active{
+  border-color:rgba(0,224,84,.35);
+  background:rgba(0,224,84,.12);
+  color:rgba(236,255,244,.98);
+}
+
+/* Only show it on mobile when main calendar is active */
+@media (max-width:720px){
+  body.mobile-show-main #mainMonthsBar{ display:flex; }
+  body.mobile-show-mini  #mainMonthsBar{ display:none !important; }
+}
 :root{
   --bg:#0b0d10;
   --panel:rgba(16,18,22,.92);
@@ -24,7 +63,7 @@
 
 body{
   margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
   background:
     radial-gradient(1200px 800px at 20% 0%, rgba(0,224,84,.10), transparent 55%),
     radial-gradient(900px 650px at 90% 10%, rgba(255,138,0,.08), transparent 55%),
@@ -32,21 +71,19 @@ body{
   color:var(--text);
 }
 
-/* Remove text + tag bubble overlays on posters */
 .event-label,
 .event-tag,
 .poster-tag{ display:none !important; }
 
-/* HEADER: collapses on scroll (hide the add bar + notes) */
 header{
   position:sticky; top:0; z-index:20;
-  background: var(--panel);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 16px 12px;
-  transition: padding .15s ease;
+  background:var(--panel);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:14px 16px 12px;
+  transition:padding .15s ease;
 }
-header.compact{ padding: 10px 16px 10px; }
+header.compact{ padding:10px 16px 10px; }
 
 .topbar{
   display:flex;
@@ -68,62 +105,66 @@ header.compact{ padding: 10px 16px 10px; }
   border-radius:999px;
   border:1px solid var(--border);
   color:var(--muted);
-  background: rgba(255,255,255,.03);
+  background:rgba(255,255,255,.03);
 }
 
 .tabs{ display:flex; gap:8px; flex-wrap:wrap; }
 .tab{
   border:1px solid var(--border);
-  background: rgba(255,255,255,.03);
-  color: var(--text);
-  padding: 9px 12px;
-  border-radius: 999px;
+  background:rgba(255,255,255,.03);
+  color:var(--text);
+  padding:9px 12px;
+  border-radius:999px;
   cursor:pointer;
-  font-size: 13px;
+  font-size:13px;
 }
 .tab.active{
-  border-color: rgba(0,224,84,.35);
-  background: rgba(0,224,84,.10);
-  color: rgba(236,255,244,.98);
+  border-color:rgba(0,224,84,.35);
+  background:rgba(0,224,84,.10);
+  color:rgba(236,255,244,.98);
 }
 
 .controls{
-  margin-top: 12px;
+  margin-top:12px;
   display:flex;
   gap:10px;
   flex-wrap:wrap;
   align-items:center;
 }
 
-input, select, button{
-  border-radius: 12px;
+input, select, button, textarea{
+  border-radius:12px;
   border:1px solid var(--border);
-  background: var(--panel2);
-  color: var(--text);
-  padding: 10px 12px;
+  background:var(--panel2);
+  color:var(--text);
+  padding:10px 12px;
   outline:none;
+  font:inherit;
+}
+textarea{
+  resize:vertical;
+  min-height:84px;
 }
 
-button{ cursor:pointer; transition: transform .08s ease, opacity .08s ease; }
-button:active{ transform: scale(.98); }
+button{ cursor:pointer; transition:transform .08s ease, opacity .08s ease; }
+button:active{ transform:scale(.98); }
 
 .btn-accent{
-  background: linear-gradient(135deg, rgba(0,224,84,1), rgba(0,224,84,.55));
-  border: none;
+  background:linear-gradient(135deg, rgba(0,224,84,1), rgba(0,224,84,.55));
+  border:none;
   color:#04120a;
   font-weight:900;
 }
-.btn-ghost{ background: rgba(255,255,255,.03); }
+.btn-ghost{ background:rgba(255,255,255,.03); }
 .btn-danger{
-  background: rgba(255,59,48,.12);
-  border-color: rgba(255,59,48,.25);
+  background:rgba(255,59,48,.12);
+  border-color:rgba(255,59,48,.25);
   color:#ffd6d3;
 }
 
-.split{ width:100%; height:1px; background: var(--border); margin: 12px 0; }
+.split{ width:100%; height:1px; background:var(--border); margin:12px 0; }
 
-/* this row (add/search area) disappears on scroll */
-.collapse-on-scroll{ transition: opacity .12s ease, max-height .12s ease, margin .12s ease; }
+.collapse-on-scroll{ transition:opacity .12s ease, max-height .12s ease, margin .12s ease; }
 header.compact .collapse-on-scroll{
   opacity:0;
   max-height:0;
@@ -134,111 +175,42 @@ header.compact .collapse-on-scroll{
 header.compact .split{ display:none; }
 
 main{
-  padding: 14px 16px 18px;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-/* ---------------- MOBILE FIXES ---------------- */
-
-@media (max-width: 700px){
-
-/* layout becomes vertical */
-.layout{
-  grid-template-columns: 1fr;
-  padding:10px;
+  padding:14px 16px 18px;
+  max-width:1180px;
+  margin:0 auto;
 }
 
-/* mini calendar becomes main calendar */
-.mini-calendar{
-  width:100%;
-  position:relative;
-  order:1;
-}
-
-/* hide desktop calendar grid */
-.calendar-grid{
-  display:none;
-}
-
-/* mini calendar fills screen */
-.mini-calendar table{
-  width:100%;
-  font-size:16px;
-}
-
-/* day cells bigger */
-.mini-calendar td{
-  height:48px;
-  border-radius:10px;
-}
-
-/* event dots bigger */
-.mini-calendar .dot{
-  width:8px;
-  height:8px;
-}
-
-/* add movie button smaller */
-.add-btn{
-  width:auto;
-  padding:10px 16px;
-  font-size:14px;
-  border-radius:12px;
-}
-
-/* stop button from stretching */
-.controls{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-
-/* modal better on phone */
-.modal{
-  width:90%;
-  max-height:85vh;
-}
-
-/* posters larger */
-.poster-card{
-  width:130px;
-}
-
-}
-
-/* ---------- Segmented filter (All / Movies / TV / Digital) ---------- */
 .seg{
   display:inline-flex;
   border:1px solid rgba(255,255,255,.10);
-  border-radius: 999px;
+  border-radius:999px;
   overflow:hidden;
-  background: rgba(255,255,255,.03);
+  background:rgba(255,255,255,.03);
 }
 .seg button{
   border:none;
-  background: transparent;
-  padding: 9px 12px;
-  color: rgba(243,245,247,.74);
+  background:transparent;
+  padding:9px 12px;
+  color:rgba(243,245,247,.74);
   cursor:pointer;
   font-weight:800;
   letter-spacing:.2px;
 }
 .seg button.active{
-  background: rgba(0,224,84,.12);
-  color: rgba(236,255,244,.98);
+  background:rgba(0,224,84,.12);
+  color:rgba(236,255,244,.98);
 }
 
-/* ---------- Timeline strip ---------- */
 .strip-wrap{
   border:1px solid var(--border);
-  border-radius: var(--r16);
-  background: rgba(12,14,18,.58);
-  box-shadow: var(--shadow);
+  border-radius:var(--r16);
+  background:rgba(12,14,18,.58);
+  box-shadow:var(--shadow);
   overflow:hidden;
-  margin-bottom: 12px;
+  margin-bottom:12px;
 }
 .strip-head{
-  padding: 12px 14px;
+  padding:12px 14px;
   border-bottom:1px solid rgba(255,255,255,.08);
   display:flex;
   justify-content:space-between;
@@ -246,160 +218,163 @@ main{
   gap:10px;
   flex-wrap:wrap;
 }
-.strip-title{ font-weight: 900; letter-spacing:.2px; }
-.strip-sub{ color: rgba(243,245,247,.58); font-size: 12px; }
+.strip-title{ font-weight:900; letter-spacing:.2px; }
+.strip-sub{ color:rgba(243,245,247,.58); font-size:12px; }
 .badge-mini{
   display:inline-flex;
   gap:6px;
   align-items:center;
-  padding: 4px 8px;
-  border-radius: 999px;
+  padding:4px 8px;
+  border-radius:999px;
   border:1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  color: rgba(243,245,247,.68);
-  font-size: 12px;
+  background:rgba(255,255,255,.03);
+  color:rgba(243,245,247,.68);
+  font-size:12px;
 }
 
-/* month chips */
 .strip-months{
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
   display:flex;
   gap:8px;
   overflow-x:auto;
   white-space:nowrap;
 }
 .strip-months::-webkit-scrollbar{ height:10px; }
-.strip-months::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.12); border-radius: 8px; }
-.strip-months::-webkit-scrollbar-track{ background: rgba(255,255,255,.06); border-radius: 8px; }
+.strip-months::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.12); border-radius:8px; }
+.strip-months::-webkit-scrollbar-track{ background:rgba(255,255,255,.06); border-radius:8px; }
 
 .month-chip{
   border:1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  color: rgba(243,245,247,.80);
-  padding: 8px 10px;
-  border-radius: 999px;
+  background:rgba(255,255,255,.03);
+  color:rgba(243,245,247,.80);
+  padding:8px 10px;
+  border-radius:999px;
   cursor:pointer;
-  font-size: 12px;
+  font-size:12px;
   user-select:none;
   font-weight:800;
 }
 .month-chip.active{
-  border-color: rgba(0,224,84,.35);
-  background: rgba(0,224,84,.12);
-  color: rgba(236,255,244,.98);
+  border-color:rgba(0,224,84,.35);
+  background:rgba(0,224,84,.12);
+  color:rgba(236,255,244,.98);
 }
 
 .strip-scroll{
   overflow-x:auto;
-  padding: 14px 14px 18px;
+  padding:14px 14px 18px;
   white-space:nowrap;
 }
-.strip-scroll::-webkit-scrollbar{ height: 12px; }
-.strip-scroll::-webkit-scrollbar-thumb{ background: rgba(0,224,84,.55); border-radius: 8px; }
-.strip-scroll::-webkit-scrollbar-track{ background: rgba(255,255,255,.06); border-radius: 8px; }
+.strip-scroll::-webkit-scrollbar{ height:12px; }
+.strip-scroll::-webkit-scrollbar-thumb{ background:rgba(0,224,84,.55); border-radius:8px; }
+.strip-scroll::-webkit-scrollbar-track{ background:rgba(255,255,255,.06); border-radius:8px; }
 
 .strip-timeline{
   display:flex;
   gap:18px;
   min-width:max-content;
-  padding-right: 14px;
+  padding-right:14px;
 }
 .strip-section{
-  flex: 0 0 auto;
-  width: max-content;
-  padding-right: 16px;
-  border-right: 1px solid rgba(255,255,255,.08);
+  flex:0 0 auto;
+  width:max-content;
+  padding-right:16px;
+  border-right:1px solid rgba(255,255,255,.08);
 }
 .strip-section:last-child{ border-right:none; }
-
 .strip-section-title{
-  font-weight: 950;
+  font-weight:950;
   letter-spacing:.2px;
-  font-size: 13px;
-  color: rgba(243,245,247,.88);
-  padding: 0 2px 12px;
+  font-size:13px;
+  color:rgba(243,245,247,.88);
+  padding:0 2px 12px;
 }
 .strip-row{
   display:flex;
-  gap: 14px;
+  gap:14px;
   min-width:max-content;
 }
 
-/* BIG posters strip */
 .poster-card{
-  width: 210px;
-  flex: 0 0 auto;
+  width:210px;
+  flex:0 0 auto;
   border:1px solid rgba(255,255,255,.10);
-  border-radius: 16px;
-  background: rgba(12,14,18,.72);
+  border-radius:16px;
+  background:rgba(12,14,18,.72);
   overflow:hidden;
   cursor:pointer;
-  transition: transform .15s ease, border-color .15s ease, opacity .15s ease;
+  transition:transform .15s ease, border-color .15s ease, opacity .15s ease;
   position:relative;
 }
 .poster-card:hover{
-  transform: translateY(-2px);
-  border-color: rgba(0,224,84,.35);
+  transform:translateY(-2px);
+  border-color:rgba(0,224,84,.35);
 }
 .poster-img{
   width:100%;
-  height: 312px;
+  height:312px;
   object-fit:cover;
   display:block;
 }
 .poster-meta{
-  padding: 12px 12px 14px;
+  padding:12px 12px 14px;
   display:flex;
   flex-direction:column;
-  gap: 6px;
-  background: rgba(10,12,16,.85);
-  border-top: 1px solid rgba(255,255,255,.08);
+  gap:6px;
+  background:rgba(10,12,16,.85);
+  border-top:1px solid rgba(255,255,255,.08);
 }
 .poster-title{
-  font-size: 14px;
-  font-weight: 950;
-  line-height: 1.25;
+  font-size:14px;
+  font-weight:950;
+  line-height:1.25;
   overflow:hidden;
   display:-webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
 }
 .poster-date{
-  font-size: 12px;
-  color: rgba(243,245,247,.62);
+  font-size:12px;
+  color:rgba(243,245,247,.62);
   font-weight:800;
   letter-spacing:.2px;
 }
+.poster-subdate{
+  font-size:11px;
+  color:rgba(243,245,247,.48);
+  font-weight:800;
+  line-height:1.35;
+}
 .poster-card.watched{ opacity:.55; }
 
-/* ---------- Calendar + Mini Month ---------- */
 .cal-shell{
   display:grid;
-  grid-template-columns: 420px 1fr;
-  gap: 18px;
+  grid-template-columns:420px 1fr;
+  gap:18px;
   align-items:start;
-  padding-top: 6px;
+  padding-top:6px;
 }
 @media (min-width: 1400px){
-  .cal-shell{ grid-template-columns: 460px 1fr; }
+  .cal-shell{ grid-template-columns:460px 1fr; }
 }
 @media (max-width: 980px){
-  .cal-shell{ grid-template-columns: 1fr; }
+  .cal-shell{ grid-template-columns:1fr; }
 }
 
 .mini-month{
   border:1px solid rgba(255,255,255,.10);
-  border-radius: 22px;
-  background: rgba(12,14,18,.62);
-  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  border-radius:22px;
+  background:rgba(12,14,18,.62);
+  box-shadow:0 18px 50px rgba(0,0,0,.55);
   overflow:hidden;
-  margin-top: 10px;
+  margin-top:10px;
+  width:100%;
 }
 .mini-head{
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.02);
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.02);
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -411,34 +386,34 @@ main{
   cursor:pointer;
 }
 #miniHint{
-  padding: 10px 16px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  color: rgba(243,245,247,.55);
+  padding:10px 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  color:rgba(243,245,247,.55);
 }
 .mini-dow{
   display:grid;
-  grid-template-columns: repeat(7, 1fr);
-  padding: 10px 12px 0;
-  color: rgba(243,245,247,.55);
-  font-size: 11px;
+  grid-template-columns:repeat(7, 1fr);
+  padding:10px 12px 0;
+  color:rgba(243,245,247,.55);
+  font-size:11px;
 }
 .mini-dow > div{ text-align:center; }
 .mini-grid{
   display:grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-  padding: 12px 12px 14px;
+  grid-template-columns:repeat(7, 1fr);
+  gap:6px;
+  padding:12px 12px 14px;
 }
 .mini-day{
-  aspect-ratio: 1 / 1;
-  border-radius: 10px;
+  aspect-ratio:1 / 1;
+  border-radius:10px;
   border:1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.03);
+  background:rgba(255,255,255,.03);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size: 12px;
-  color: rgba(243,245,247,.78);
+  font-size:12px;
+  color:rgba(243,245,247,.78);
   cursor:pointer;
   user-select:none;
   position:relative;
@@ -446,125 +421,129 @@ main{
 }
 .mini-day.other{ opacity:.35; }
 .mini-day.sel{
-  border-color: rgba(0,224,84,.35);
-  background: rgba(0,224,84,.10);
-  color: rgba(236,255,244,.98);
+  border-color:rgba(0,224,84,.35);
+  background:rgba(0,224,84,.10);
+  color:rgba(236,255,244,.98);
 }
 .mini-day.today{
-  outline: 2px solid rgba(0,224,84,.25);
-  outline-offset: 2px;
+  outline:2px solid rgba(0,224,84,.25);
+  outline-offset:2px;
 }
 .mini-dotbar{
   position:absolute;
-  bottom: 6px;
+  bottom:6px;
   display:flex;
-  gap: 3px;
+  gap:3px;
 }
 .mini-dot{
-  width: 4px; height:4px; border-radius:99px;
-  background: rgba(255,255,255,.22);
+  width:4px; height:4px; border-radius:99px;
+  background:rgba(255,255,255,.22);
 }
-.mini-dot.a{ background: rgba(0,224,84,.95); }
-.mini-dot.b{ background: rgba(255,138,0,.95); }
+.mini-dot.a{ background:rgba(0,224,84,.95); }
+.mini-dot.b{ background:rgba(255,138,0,.95); }
 
 .mini-navbtn{
   width:38px; height:38px;
-  border-radius: 12px;
+  border-radius:12px;
   border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
+  background:rgba(255,255,255,.04);
   display:flex; align-items:center; justify-content:center;
   cursor:pointer;
   user-select:none;
   font-weight:950;
 }
 
-/* ---------- YEAR view (make it match your “first image” layout) ---------- */
 .mini-year{
-  padding: 12px;
+  padding:12px;
   display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:10px;
+  width:100%;
 }
 .apple-month{
-  border: 1px solid rgba(255,255,255,.10);
-  border-radius: 16px;
-  background: rgba(16,18,22,.55);
-  box-shadow: 0 10px 26px rgba(0,0,0,.28);
-  padding: 10px 10px 12px;
-  min-width: 0;
-  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:16px;
+  background:rgba(16,18,22,.55);
+  box-shadow:0 10px 26px rgba(0,0,0,.28);
+  padding:10px 10px 12px;
+  min-width:0;
+  width:100%;
+  transition:transform .12s ease, border-color .12s ease, background .12s ease;
 }
 .apple-month:hover{
-  transform: translateY(-2px);
-  border-color: rgba(0,224,84,.22);
-  background: rgba(16,18,22,.68);
+  transform:translateY(-2px);
+  border-color:rgba(0,224,84,.22);
+  background:rgba(16,18,22,.68);
 }
 .apple-month.active{
-  border-color: rgba(0,224,84,.30);
-  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+  border-color:rgba(0,224,84,.30);
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
 }
 .apple-month-name{
-  font-weight: 950;
-  font-size: 12px;
-  margin-bottom: 8px;
-  letter-spacing: .2px;
+  font-weight:950;
+  font-size:12px;
+  margin-bottom:8px;
+  letter-spacing:.2px;
 }
 .apple-grid{
   display:grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 3px;
+  grid-template-columns:repeat(7, minmax(0, 1fr));
+  gap:3px;
 }
 .apple-day{
   position:relative;
   text-align:center;
-  font-size: 9px;
-  font-weight: 800;
-  line-height: 1.2;
-  color: rgba(243,245,247,.86);
-  padding: 2px 0;
-  border-radius: 6px;
+  font-size:9px;
+  font-weight:800;
+  line-height:1.2;
+  color:rgba(243,245,247,.86);
+  padding:2px 0;
+  border-radius:6px;
 }
 .apple-day.muted{ opacity:.26; }
 .apple-day.has::after{
   content:'';
   position:absolute;
   left:50%;
-  transform: translateX(-50%);
-  bottom: -2px;
-  width: 4px;
-  height: 4px;
-  border-radius: 99px;
-  background: rgba(0,224,84,.95);
-  box-shadow: 0 0 0 4px rgba(0,224,84,.10);
+  transform:translateX(-50%);
+  bottom:-2px;
+  width:4px;
+  height:4px;
+  border-radius:99px;
+  background:rgba(0,224,84,.95);
+  box-shadow:0 0 0 4px rgba(0,224,84,.10);
 }
 
-/* Main calendar */
 .cal-wrap{
   border:1px solid var(--border);
-  border-radius: var(--r16);
-  background: rgba(12,14,18,.58);
-  box-shadow: var(--shadow);
+  border-radius:var(--r16);
+  background:rgba(12,14,18,.58);
+  box-shadow:var(--shadow);
   overflow:hidden;
 }
 .cal-header{
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
   border-bottom:1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.02);
-  gap: 10px;
+  background:rgba(255,255,255,.02);
+  gap:10px;
   flex-wrap:wrap;
 }
 .cal-title{
-  font-weight: 950;
+  font-weight:950;
   letter-spacing:.2px;
-  display:flex; gap:10px; align-items:center;
+  display:flex;
+  gap:10px;
+  align-items:center;
 }
 .cal-nav{ display:flex; gap:8px; align-items:center; }
 .iconbtn{
   width:38px; height:38px;
-  border-radius: 12px;
+  border-radius:12px;
   border:1px solid var(--border);
-  background: rgba(255,255,255,.03);
+  background:rgba(255,255,255,.03);
   display:flex; align-items:center; justify-content:center;
   cursor:pointer;
   user-select:none;
@@ -574,118 +553,121 @@ main{
 .view-toggle{
   display:inline-flex;
   border:1px solid rgba(255,255,255,.10);
-  border-radius: 999px;
+  border-radius:999px;
   overflow:hidden;
-  background: rgba(255,255,255,.03);
+  background:rgba(255,255,255,.03);
 }
 .view-toggle button{
   border:none;
-  background: transparent;
-  padding: 9px 12px;
-  color: rgba(243,245,247,.75);
+  background:transparent;
+  padding:9px 12px;
+  color:rgba(243,245,247,.75);
   cursor:pointer;
   font-weight:900;
 }
 .view-toggle button.active{
-  background: rgba(0,224,84,.12);
-  color: rgba(236,255,244,.98);
+  background:rgba(0,224,84,.12);
+  color:rgba(236,255,244,.98);
 }
 
+.cal-body-scroll{
+  width:100%;
+}
 .cal-weekdays{
   display:grid;
-  grid-template-columns: repeat(7, 1fr);
-  padding: 10px 14px;
-  color: rgba(243,245,247,.60);
-  font-size: 12px;
+  grid-template-columns:repeat(7, 1fr);
+  padding:10px 14px;
+  color:rgba(243,245,247,.60);
+  font-size:12px;
 }
 .cal-weekdays > div{ text-align:center; font-weight:900; }
 
 .cal-grid{
   display:grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-  padding: 0 14px 14px;
+  grid-template-columns:repeat(7, 1fr);
+  gap:10px;
+  padding:0 14px 14px;
 }
 .cal-day{
   border:1px solid rgba(255,255,255,.08);
-  border-radius: 14px;
-  background: rgba(20,24,33,.6);
-  padding: 6px;
+  border-radius:14px;
+  background:rgba(20,24,33,.6);
+  padding:6px;
   display:flex;
   flex-direction:column;
   gap:6px;
   overflow:hidden;
-  min-height: 120px;
-  justify-content: space-between;
+  min-height:120px;
+  justify-content:space-between;
 }
 .cal-day.other-month{ opacity:.45; }
 
 .cal-daynum{
-  font-size: 11px;
-  font-weight: 950;
-  color: rgba(243,245,247,.82);
+  font-size:11px;
+  font-weight:950;
+  color:rgba(243,245,247,.82);
   display:flex; justify-content:space-between; align-items:center;
 }
 .dot{
   width:7px; height:7px; border-radius:99px;
-  background: rgba(255,255,255,.22);
+  background:rgba(255,255,255,.22);
 }
-.dot.today{ background: rgba(0,224,84,.95); box-shadow: 0 0 0 4px rgba(0,224,84,.10); }
+.dot.today{ background:rgba(0,224,84,.95); box-shadow:0 0 0 4px rgba(0,224,84,.10); }
 
 .day-events{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap: 8px;
+  gap:8px;
   flex-wrap:wrap;
   flex:1;
 }
 
 .event-tile{
-  width: 75px;
-  display:flex;
+  max-width:36px;
+  flex:0 1 36px;
   justify-content:center;
 }
 .event-tile img{
   width:100%;
-  height:110px;
-  object-fit: cover;
+   height:56px;
+  object-fit:cover;
+  object-position:center top;
   display:block;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  box-shadow: 0 4px 12px rgba(0,0,0,.35);
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
 }
 .event-tile.watched{ opacity:.55; }
 
 .cal-more{
   margin-top:auto;
-  font-size: 11px;
-  color: rgba(243,245,247,.55);
+  font-size:11px;
+  color:rgba(243,245,247,.55);
   font-weight:800;
 }
 
-/* Week view */
-.week-wrap{ padding: 0 14px 14px; overflow: hidden; }
+.week-wrap{ padding:0 14px 14px; overflow:hidden; }
 .week-grid{
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 14px;
-  align-items: stretch;
+  display:grid;
+  grid-template-columns:repeat(7, minmax(0, 1fr));
+  gap:14px;
+  align-items:stretch;
 }
 .week-day{
-  background: rgba(20,24,33,.6);
-  border-radius: 18px;
-  padding: 14px;
-  min-height: 140px;
+  background:rgba(20,24,33,.6);
+  border-radius:18px;
+  padding:14px;
+  min-height:140px;
   display:flex;
-  flex-direction: column;
+  flex-direction:column;
 }
 .week-top{
   display:flex;
   align-items:baseline;
   justify-content:space-between;
   gap:10px;
-  margin-bottom: 10px;
+  margin-bottom:10px;
 }
 .week-events{
   display:flex;
@@ -693,88 +675,98 @@ main{
   gap:10px;
 }
 .week-events .event-tile{
-  border-radius: 14px;
+  border-radius:14px;
   overflow:hidden;
-  background: transparent;
-  border: 0;
-  height: 90px;
+  background:transparent;
+  border:0;
+  height:90px;
+  width:100%;
 }
 .week-events .event-tile img{
   width:100%;
   height:100%;
-  object-fit: cover;
+  object-fit:cover;
+  object-position:center top;
   display:block;
 }
 
-/* Lists */
 .list-wrap{
   border:1px solid var(--border);
-  border-radius: var(--r16);
-  background: rgba(12,14,18,.58);
-  box-shadow: var(--shadow);
+  border-radius:var(--r16);
+  background:rgba(12,14,18,.58);
+  box-shadow:var(--shadow);
   overflow:hidden;
 }
 .list-head{
-  padding: 12px 14px;
+  padding:12px 14px;
   border-bottom:1px solid rgba(255,255,255,.08);
-  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
   font-weight:950;
 }
-.table{ width:100%; border-collapse: collapse; }
+.table{ width:100%; border-collapse:collapse; }
 .table th, .table td{
-  padding: 10px 12px;
+  padding:10px 12px;
   border-bottom:1px solid rgba(255,255,255,.06);
-  font-size: 13px;
-  color: rgba(243,245,247,.88);
+  font-size:13px;
+  color:rgba(243,245,247,.88);
 }
-.table th{ color: rgba(243,245,247,.62); font-weight: 950; text-align:left; font-size: 12px; }
+.table th{
+  color:rgba(243,245,247,.62);
+  font-weight:950;
+  text-align:left;
+  font-size:12px;
+}
 .rowbtn{
-  padding: 6px 10px;
-  border-radius: 10px;
-  background: rgba(255,255,255,.04);
+  padding:6px 10px;
+  border-radius:10px;
+  background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.10);
   cursor:pointer;
   font-weight:900;
 }
 
-/* Modal (edit) */
 .modal{
   position:fixed; inset:0;
-  background: rgba(0,0,0,.76);
+  background:rgba(0,0,0,.76);
   display:flex; justify-content:center; align-items:center;
   visibility:hidden; opacity:0;
-  transition: opacity .15s ease, visibility .15s ease;
-  padding: 16px;
+  transition:opacity .15s ease, visibility .15s ease;
+  padding:16px;
   z-index:50;
 }
 .modal.active{ visibility:visible; opacity:1; }
 .modal-content{
-  width: 100%;
-  max-width: 520px;
-  background: rgba(16,18,22,.94);
+  width:100%;
+  max-width:760px;
+  max-height:90vh;
+  overflow:auto;
+  background:rgba(16,18,22,.94);
   border:1px solid var(--border);
-  border-radius: var(--r16);
-  box-shadow: var(--shadow);
-  padding: 14px;
+  border-radius:var(--r16);
+  box-shadow:var(--shadow);
+  padding:14px;
   position:relative;
   display:flex; flex-direction:column; gap:10px;
 }
-.modal-content h3{ margin: 0 0 4px 0; font-weight:950; }
+.modal-content h3{ margin:0 0 4px 0; font-weight:950; }
 .close-modal{
   position:absolute; top:10px; right:10px;
   width:38px; height:38px;
-  border-radius: 12px;
+  border-radius:12px;
   border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,59,48,.18);
+  background:rgba(255,59,48,.18);
   color:#ffd6d3;
   cursor:pointer;
   font-weight:950;
 }
 
-/* Poster Picker (from mini calendar click) */
 .pick-modal{
   position:fixed; inset:0;
-  background: rgba(0,0,0,.78);
+  background:rgba(0,0,0,.78);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -782,17 +774,17 @@ main{
   z-index:60;
   visibility:hidden;
   opacity:0;
-  transition: opacity .15s ease, visibility .15s ease;
+  transition:opacity .15s ease, visibility .15s ease;
 }
 .pick-modal.active{ visibility:visible; opacity:1; }
 
 .pick-card{
-  width: auto;
-  max-width: 420px;
-  background: rgba(16,18,22,.94);
+  width:auto;
+  max-width:420px;
+  background:rgba(16,18,22,.94);
   border:1px solid rgba(255,255,255,.12);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
+  border-radius:18px;
+  box-shadow:var(--shadow);
   overflow:hidden;
   display:flex;
   flex-direction:column;
@@ -802,8 +794,8 @@ main{
   justify-content:space-between;
   align-items:center;
   gap:10px;
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 .pick-title{
   font-weight:950;
@@ -813,96 +805,112 @@ main{
   flex-wrap:wrap;
 }
 .pick-date{
-  color: rgba(243,245,247,.62);
-  font-size: 12px;
+  color:rgba(243,245,247,.62);
+  font-size:12px;
   font-weight:900;
   border:1px solid rgba(255,255,255,.10);
   border-radius:999px;
   padding:4px 10px;
-  background: rgba(255,255,255,.03);
+  background:rgba(255,255,255,.03);
 }
 .pick-close{
   width:40px; height:40px;
-  border-radius: 14px;
+  border-radius:14px;
   border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
-  color: rgba(243,245,247,.88);
+  background:rgba(255,255,255,.04);
+  color:rgba(243,245,247,.88);
   cursor:pointer;
   font-weight:950;
 }
 .pick-grid{
-  padding: 20px;
+  padding:20px;
   display:flex;
   justify-content:center;
   align-items:center;
-  gap: 12px;
+  gap:12px;
+  flex-wrap:wrap;
 }
 .pick-item{
-  width: 260px;
+  width:260px;
   border:1px solid rgba(255,255,255,.10);
-  border-radius: 16px;
+  border-radius:16px;
   overflow:hidden;
   cursor:pointer;
-  background: rgba(12,14,18,.70);
-  transition: transform .14s ease, border-color .14s ease;
+  background:rgba(12,14,18,.70);
+  transition:transform .14s ease, border-color .14s ease;
 }
 .pick-item:hover{
-  transform: translateY(-2px);
-  border-color: rgba(0,224,84,.35);
+  transform:translateY(-2px);
+  border-color:rgba(0,224,84,.35);
 }
 .pick-item img{
   width:100%;
-  aspect-ratio: 2/3;
+  aspect-ratio:2/3;
   object-fit:cover;
   display:block;
 }
 .pick-meta{
-  padding: 10px 10px 12px;
-  border-top: 1px solid rgba(255,255,255,.08);
+  padding:10px 10px 12px;
+  border-top:1px solid rgba(255,255,255,.08);
 }
 .pick-name{
   font-weight:950;
-  font-size: 13px;
+  font-size:13px;
   line-height:1.25;
   overflow:hidden;
   display:-webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
 }
 .pick-kind{
-  margin-top: 6px;
+  margin-top:6px;
   display:inline-flex;
-  padding: 5px 8px;
-  border-radius: 999px;
-  font-size: 11px;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:11px;
   font-weight:950;
   border:1px solid rgba(255,255,255,.12);
-  color: rgba(243,245,247,.78);
-  background: rgba(255,255,255,.03);
+  color:rgba(243,245,247,.78);
+  background:rgba(255,255,255,.03);
 }
-.pick-kind.movie{ border-color: rgba(0,224,84,.35); }
-.pick-kind.digital{ border-color: rgba(0,224,84,.22); }
-.pick-kind.episode{ border-color: rgba(255,138,0,.35); }
+.pick-kind.movie{ border-color:rgba(0,224,84,.35); }
+.pick-kind.digital{ border-color:rgba(0,224,84,.22); }
+.pick-kind.episode{ border-color:rgba(255,138,0,.35); }
 
-.grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-.full{ grid-column: 1 / -1; }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.full{ grid-column:1 / -1; }
 .inline{
   display:flex; align-items:center; gap:8px;
-  font-size: 13px; color: var(--muted);
+  font-size:13px; color:var(--muted);
   font-weight:700;
 }
-.actions{ display:flex; gap:10px; }
+.actions{ display:flex; gap:10px; flex-wrap:wrap; }
 .actions button{ flex:1; }
 .note{
-  color: rgba(243,245,247,.62);
-  font-size: 12px;
-  line-height: 1.35;
+  color:rgba(243,245,247,.62);
+  font-size:12px;
+  line-height:1.35;
+}
+.muted-box{
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  border-radius:12px;
+  padding:10px 12px;
+  color:rgba(243,245,247,.72);
+  font-size:12px;
+  line-height:1.45;
+}
+.section-label{
+  margin-top:6px;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.3px;
+  color:rgba(243,245,247,.72);
 }
 
-/* Poster viewer */
 .poster-view{
   position:fixed; inset:0;
-  background: rgba(0,0,0,.82);
+  background:rgba(0,0,0,.82);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -910,61 +918,60 @@ main{
   z-index:70;
   visibility:hidden;
   opacity:0;
-  transition: opacity .15s ease, visibility .15s ease;
+  transition:opacity .15s ease, visibility .15s ease;
 }
 .poster-view.active{ visibility:visible; opacity:1; }
 .poster-view-card{
   width:min(520px, 92vw);
-  border-radius: 18px;
+  border-radius:18px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,.12);
-  background: rgba(16,18,22,.94);
-  box-shadow: var(--shadow);
+  background:rgba(16,18,22,.94);
+  box-shadow:var(--shadow);
   position:relative;
 }
 #posterViewImg{
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:contain;
 }
 .poster-view-close{
   position:absolute;
   top:10px; right:10px;
   width:42px; height:42px;
-  border-radius: 14px;
+  border-radius:14px;
   border:1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.45);
-  color: rgba(243,245,247,.92);
+  background:rgba(0,0,0,.45);
+  color:rgba(243,245,247,.92);
   cursor:pointer;
   font-weight:950;
-  backdrop-filter: blur(8px);
+  backdrop-filter:blur(8px);
 }
 
 .hidden{ display:none !important; }
 
-/* ---------- Mobile Mini Calendar Sheet ---------- */
 .sheet{
   position:fixed; inset:0;
-  background: rgba(0,0,0,.72);
+  background:rgba(0,0,0,.72);
   display:flex;
   justify-content:center;
   align-items:flex-end;
-  padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
+  padding:10px 10px calc(10px + env(safe-area-inset-bottom));
   z-index:80;
   visibility:hidden;
   opacity:0;
-  transition: opacity .15s ease, visibility .15s ease;
+  transition:opacity .15s ease, visibility .15s ease;
 }
 .sheet.active{ visibility:visible; opacity:1; }
 .sheet-card{
-  width: min(560px, 100%);
-  max-height: calc(92vh - env(safe-area-inset-top));
-  background: rgba(16,18,22,.96);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 22px;
+  width:min(560px, 100%);
+  max-height:calc(92vh - env(safe-area-inset-top));
+  background:rgba(16,18,22,.96);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
   overflow:hidden;
-  box-shadow: var(--shadow);
+  box-shadow:var(--shadow);
   display:flex;
   flex-direction:column;
 }
@@ -972,134 +979,348 @@ main{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
-.sheet-title{
-  font-weight: 950;
-  letter-spacing:.2px;
-}
+.sheet-title{ font-weight:950; letter-spacing:.2px; }
 .sheet-close{
   width:42px; height:42px;
-  border-radius: 14px;
+  border-radius:14px;
   border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.04);
-  color: rgba(243,245,247,.92);
+  background:rgba(255,255,255,.04);
+  color:rgba(243,245,247,.92);
   cursor:pointer;
   font-weight:950;
 }
 .sheet-body{
   overflow:auto;
-  padding: 12px;
+  padding:12px;
 }
 
-/* button appears on phone only */
 .mini-open-btn{ display:none; }
+
+.mobile-add-panel{
+  display:none;
+  margin-top:14px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  background:rgba(16,18,22,.88);
+  box-shadow:var(--shadow);
+  padding:12px;
+}
+.mobile-add-panel .controls{
+  margin-top:0;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.mobile-add-panel .note{
+  margin-top:10px;
+}
+
 @media (max-width: 720px){
   .mini-open-btn{
     display:inline-flex;
     align-items:center;
     gap:8px;
-    padding: 9px 12px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.03);
+    padding:9px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.03);
     border:1px solid rgba(255,255,255,.10);
-    font-weight: 900;
+    font-weight:900;
     cursor:pointer;
   }
 
-  /* ensure the moved mini-month is visible inside the sheet */
   #miniSheet .mini-month{ display:block !important; margin-top:0; }
-}
 
-/* =========================
-   PHONE / MOBILE OVERRIDES
-   ========================= */
-@media (max-width: 720px){
-  header{ padding: 12px 12px 10px; }
-  main{ padding: 10px 12px 18px; }
+  header{ padding:12px 12px 10px; }
+  main{ padding:10px 12px 24px; }
 
-  .brand{ gap:8px; font-size: 14px; }
+  .brand{ gap:8px; font-size:14px; }
   .pill{ display:none; }
 
-  /* chip-scroll for control rows */
   .controls{
     gap:10px;
     overflow-x:auto;
-    -webkit-overflow-scrolling: touch;
-    flex-wrap: nowrap;
-    padding-bottom: 6px;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap;
+    padding-bottom:6px;
   }
   .controls::-webkit-scrollbar{ display:none; }
 
-  .seg{ flex: 0 0 auto; }
-  .seg button{ padding: 10px 12px; }
+  .seg{ flex:0 0 auto; }
+  .seg button{ padding:10px 12px; }
 
-  /* Add bar: stack */
-  .collapse-on-scroll .controls{
-    display:grid !important;
-    grid-template-columns: 1fr;
-    gap:10px;
-  }
-  #addTitle{ min-width: 0 !important; width: 100%; }
-  #addType, #addItemBtn, #refreshBtn, #exportBtn, #clearBtn{ width: 100%; }
+  .collapse-on-scroll{ display:none !important; }
+  .split{ display:none !important; }
 
-  button, input, select{
-    min-height: 44px;
-    font-size: 16px;
+  button, input, select, textarea{
+    min-height:44px;
+    font-size:16px;
   }
 
-  /* timeline sizing */
-  .strip-head{ padding: 10px 12px; }
-  .strip-months{ padding: 10px 12px; }
-  .strip-scroll{ padding: 12px 12px 16px; }
+  .strip-head{ padding:10px 12px; }
+  .strip-months{ padding:10px 12px; }
+  .strip-scroll{ padding:12px 12px 16px; }
   .strip-timeline{ gap:14px; }
 
-  .poster-card{ width: 160px; border-radius: 16px; }
-  .poster-img{ height: 240px; }
-  .poster-title{ font-size: 13px; }
-  .poster-meta{ padding: 10px 10px 12px; }
+  .poster-card{
+    width:158px;
+    border-radius:18px;
+  }
+  .poster-img{
+    height:236px;
+    border-radius:0;
+  }
+  .poster-title{
+    font-size:13px;
+    line-height:1.25;
+  }
+  .poster-meta{
+    padding:10px 10px 12px;
+    background:rgba(18,20,24,.95);
+  }
 
-  /* calendar full width; mini-month hidden (sheet replaces it) */
-  .cal-shell{ grid-template-columns: 1fr !important; gap: 12px; }
-  .mini-month{ display:none !important; }
+  .cal-shell{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:14px !important;
+  }
 
-  .cal-header{ padding: 10px 12px; }
-  .cal-title{ font-size: 14px; }
-  .iconbtn{ width:40px; height:40px; }
+  .mini-month{
+    display:block !important;
+    order:1;
+    margin-top:0;
+    width:100%;
+    max-width:100%;
+    border-radius:24px;
+    background:rgba(28,28,30,.94);
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:0 14px 36px rgba(0,0,0,.34);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    overflow:hidden;
+  }
 
-  /* week view becomes a vertical feed */
-  .week-wrap{ padding: 0 12px 12px; }
+  .cal-wrap{
+    display:block !important;
+    order:2;
+    width:100%;
+    max-width:100%;
+    overflow:hidden;
+  }
+
+  .mini-open-btn{ display:none !important; }
+  .sheet{ display:none !important; }
+
+  .mini-head{
+    padding:16px 16px 12px;
+    background:transparent;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+
+  .mini-title{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+
+  #miniHint{
+    padding:10px 16px 8px;
+    border-bottom:0;
+    color:rgba(235,235,245,.55);
+    font-size:12px;
+  }
+
+  .mini-navbtn{
+    width:38px;
+    height:38px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.05);
+    font-size:16px;
+  }
+
+  .mini-dow{ display:none !important; }
+
+  .mini-year{
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:12px;
+    padding:14px;
+    width:100%;
+  }
+
+  .apple-month{
+    width:100%;
+    min-width:0;
+    border-radius:20px;
+    background:rgba(36,36,38,.88);
+    border:1px solid rgba(255,255,255,.06);
+    padding:14px 10px 16px;
+    box-shadow:none;
+  }
+
+  .apple-month.active{
+    border-color:rgba(10,132,255,.35);
+    background:rgba(44,44,46,.95);
+  }
+
+  .apple-month-name{
+    font-size:15px;
+    font-weight:900;
+    margin-bottom:10px;
+    letter-spacing:.01em;
+  }
+
+  .apple-grid{ gap:4px; }
+
+  .apple-day{
+    font-size:11px;
+    border-radius:8px;
+    padding:4px 0;
+  }
+
+  .apple-day.has::after{
+    width:5px;
+    height:5px;
+    bottom:-2px;
+    background:#34c759;
+    box-shadow:none;
+  }
+  body.mobile-show-mini #calWrap{ display:none !important; }
+  body.mobile-show-mini #miniMonthAside{ display:block !important; }
+
+  body.mobile-show-main #calWrap{ display:block !important; }
+  body.mobile-show-main #miniMonthAside{ display:none !important; }
+
+  /* Back button only when main is showing */
+  body.mobile-show-main #calBackBtn{ display:inline-flex !important; }
+}
+
+  /* FIXED MOBILE MAIN CALENDAR */
+  .cal-body-scroll{
+    width:100%;
+    max-width:100%;
+    overflow:visible !important;
+    padding-bottom:0;
+  }
+
+  .cal-weekdays,
+  .cal-grid,
   .week-grid{
-    grid-template-columns: 1fr !important;
-    gap: 12px;
+    min-width:0 !important;
+    width:100% !important;
   }
-  .week-day{
-    border-radius: 18px;
-    padding: 12px;
-    min-height: 0;
-  }
-  .week-events .event-tile{ height: 110px; }
-  .week-events .event-tile img{ border-radius: 14px; }
 
-  /* month view on phone: less cramped */
-  .cal-weekdays{ display:none; }
+  .cal-weekdays{
+    padding:8px 8px 6px;
+    font-size:11px;
+    gap:0;
+  }
+
   .cal-grid{
-    gap: 8px;
-    padding: 0 12px 12px;
+    grid-template-columns:repeat(7, minmax(0, 1fr));
+    gap:4px;
+    padding:0 8px 10px;
   }
+
   .cal-day{
-    min-height: 100px;
-    border-radius: 16px;
+    min-height:92px;
+    padding:5px 4px 6px;
+    border-radius:12px;
+    gap:4px;
   }
-  .event-tile{ width: 62px; }
-  .event-tile img{ height: 96px; border-radius: 12px; }
+
+  .cal-daynum{
+    font-size:10px;
+  }
+
+  .dot{
+    width:6px;
+    height:6px;
+  }
+
+  .day-events{
+    gap:4px;
+    justify-content:center;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    overflow:hidden;
+  }
+
+  .event-tile{
+    width:100%;
+    max-width:34px;
+    flex:0 1 34px;
+  }
+
+  .event-tile img{
+    width:100%;
+    height:52px;
+    border-radius:8px;
+    object-fit:cover;
+    object-position:center top;
+  }
+
+  .cal-more{
+    margin-top:2px;
+    font-size:9px;
+    text-align:center;
+  }
+
+  .week-wrap{
+    padding:0 8px 10px;
+    overflow:hidden;
+  }
+
+  .week-grid{
+    grid-template-columns:repeat(7, minmax(0, 1fr));
+    gap:6px;
+  }
+
+  .week-day{
+    min-height:112px;
+    padding:8px;
+    border-radius:14px;
+  }
+
+  .week-events{
+    gap:6px;
+  }
+
+  .week-events .event-tile{
+    height:64px;
+    width:100%;
+    max-width:none;
+  }
+
+  .pick-card{ max-width:92vw; }
+  .pick-item{ width:min(260px, 72vw); }
+  .modal-content{ max-width:92vw; }
+
+  .mobile-add-panel{ display:block; }
+  .mobile-add-panel #addTitle,
+  .mobile-add-panel #addType,
+  .mobile-add-panel #refreshBtn,
+  .mobile-add-panel #exportBtn,
+  .mobile-add-panel #clearBtn,
+  .mobile-add-panel .import-label{
+    width:100%;
+  }
+  .mobile-add-panel #addItemBtn{
+    width:100%;
+    padding:12px 14px !important;
+    border-radius:16px !important;
+    font-size:16px !important;
+  }
 }
 
 @media (max-width: 380px){
-  .poster-card{ width: 150px; }
-  .poster-img{ height: 225px; }
+  .poster-card{ width:144px; }
+  .poster-img{ height:216px; }
+  .mini-year{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
 }
 </style>
 </head>
@@ -1109,7 +1330,7 @@ main{
   <div class="topbar">
     <div class="brand">
       Movie &amp; Show Calendar
-      <span class="pill">2026 only • TV shows = newest/upcoming season (2026)</span>
+      <span class="pill">2026 only • PVOD estimate + TMDb now playing hold check</span>
     </div>
     <div class="tabs">
       <button class="tab active" data-tab="calendar">Calendar</button>
@@ -1123,7 +1344,7 @@ main{
       <button type="button" data-content="all" class="active">All</button>
       <button type="button" data-content="movies">Movies</button>
       <button type="button" data-content="shows">TV Shows</button>
-      <button type="button" data-content="digital">Digital</button>
+      <button type="button" data-content="digital">Digital / PVOD</button>
     </div>
 
     <button id="favoritesBtn" class="btn-ghost">★ Favorites</button>
@@ -1134,18 +1355,18 @@ main{
 
   <div class="collapse-on-scroll">
     <div class="controls" style="margin-top:0;">
-      <input id="addTitle" placeholder="Add a movie or show…" style="min-width:280px;">
+      <input id="addTitle" placeholder="Add a movie, show, Oscars, Emmys…" style="min-width:280px;">
       <select id="addType">
         <option value="movie">Movie (TMDb auto)</option>
         <option value="show">TV Show (TVMaze auto)</option>
-        <option value="tba">TBA (manual)</option>
+        <option value="tba">Manual / TBA / Event</option>
       </select>
       <button id="addItemBtn" class="btn-accent">Add</button>
 
       <button id="refreshBtn" class="btn-ghost">Refresh Dates</button>
 
       <button id="exportBtn" class="btn-ghost">Export</button>
-      <label class="btn-ghost" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+      <label class="btn-ghost import-label" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
         Import <input id="importFile" type="file" accept="application/json" style="display:none;">
       </label>
 
@@ -1153,7 +1374,7 @@ main{
     </div>
 
     <div class="note" style="margin-top:10px;">
-      Everything shown is filtered to <b>2026</b>. If TMDb/TVMaze returns old dates, they won’t show up here.
+      Refresh Dates now checks <b>TMDb now playing</b> for movies. If a passed PVOD estimate still looks theatrical, the estimate gets moved forward instead of disappearing.
     </div>
   </div>
 </header>
@@ -1193,15 +1414,17 @@ main{
         <div class="mini-grid" id="miniGrid"></div>
       </aside>
 
-      <div class="cal-wrap" id="calWrap">
-        <div class="cal-header">
-          <div class="cal-title">
-            <span id="calTitle">2026</span>
-            <span class="badge-mini" id="calModeBadge">Mode</span>
-          </div>
+<div class="cal-wrap" id="calWrap">
+  <div class="main-monthsbar" id="mainMonthsBar"></div>
+
+  <div class="cal-header">
+  <div class="cal-title">
+    <button type="button" id="calBackBtn" class="iconbtn" style="display:none;">←</button>
+    <span id="calTitle">2026</span>
+    <span class="badge-mini" id="calModeBadge">Mode</span>
+  </div>
 
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <!-- PHONE: open mini calendar sheet -->
             <button type="button" id="miniOpenBtn" class="mini-open-btn">Mini Calendar</button>
 
             <div class="view-toggle" id="viewToggle">
@@ -1211,19 +1434,42 @@ main{
 
             <div class="cal-nav">
               <div class="iconbtn" id="prevBtn">‹</div>
-              <div class="iconbtn" id="todayBtn" title="Jump to Jan 1, 2026">•</div>
+              <div class="iconbtn" id="todayBtn" title="Jump to current 2026 month">•</div>
               <div class="iconbtn" id="nextBtn">›</div>
             </div>
           </div>
         </div>
 
-        <div class="cal-weekdays" id="weekdays"></div>
+        <div class="cal-body-scroll" id="calBodyScroll">
+          <div class="cal-weekdays" id="weekdays"></div>
+          <div class="cal-grid" id="calGrid"></div>
 
-        <div class="cal-grid" id="calGrid"></div>
-
-        <div class="week-wrap hidden" id="weekWrap">
-          <div class="week-grid" id="weekGrid"></div>
+          <div class="week-wrap hidden" id="weekWrap">
+            <div class="week-grid" id="weekGrid"></div>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <div class="mobile-add-panel" id="mobileAddPanel">
+      <div class="controls">
+        <input id="addTitleMobile" placeholder="Add a movie, show, Oscars, Emmys…">
+        <select id="addTypeMobile">
+          <option value="movie">Movie (TMDb auto)</option>
+          <option value="show">TV Show (TVMaze auto)</option>
+          <option value="tba">Manual / TBA / Event</option>
+        </select>
+        <button id="addItemBtnMobile" class="btn-accent">Add</button>
+        <button id="refreshBtnMobile" class="btn-ghost">Refresh Dates</button>
+        <button id="exportBtnMobile" class="btn-ghost">Export</button>
+        <label class="btn-ghost import-label" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+          Import <input id="importFileMobile" type="file" accept="application/json" style="display:none;">
+        </label>
+        <button id="clearBtnMobile" class="btn-danger">Clear All</button>
+      </div>
+
+      <div class="note">
+        Digital mode keeps delayed PVOD estimates on the calendar instead of moving them to TBA.
       </div>
     </div>
   </section>
@@ -1232,7 +1478,7 @@ main{
     <div class="list-wrap">
       <div class="list-head">
         <div>Lists</div>
-        <div class="note">Click Edit to change an item.</div>
+        <div class="note">Sorted by nearest 2026 date first. Click Edit to change an item.</div>
       </div>
       <div style="overflow:auto;">
         <table class="table" id="listTable">
@@ -1241,7 +1487,10 @@ main{
               <th>Title</th>
               <th>Type</th>
               <th>Theatrical</th>
-              <th>Digital</th>
+              <th>Est. PVOD</th>
+              <th>Confirmed PVOD</th>
+              <th>Still Theaters</th>
+              <th>PVOD Status</th>
               <th>Next TV Ep</th>
               <th>Fav</th>
               <th>Watched</th>
@@ -1259,20 +1508,18 @@ main{
       <div style="font-weight:950; margin-bottom:6px;">How it works (2026)</div>
       <div class="note">
         <ul>
-          <li><b>Calendar is 2026 only.</b> Anything dated outside 2026 is hidden from the timeline/calendar.</li>
-          <li><b>All:</b> shows <b>movies + TV episodes</b> together (movies use theatrical dates).</li>
-          <li><b>Digital:</b> shows <b>movies only</b> using their digital dates.</li>
-          <li><b>TV Episodes:</b> only episodes in <b>2026</b>, and only the <b>newest season that has 2026 dates</b>.</li>
-          <li><b>Header collapses</b> when you scroll down so the add bar disappears.</li>
-          <li><b>Mini calendar:</b> starts on <b>months</b>. Tap a month → see dotted days → tap a dotted day to pop up posters.</li>
-          <li><b>On phone:</b> Mini calendar lives behind <b>Mini Calendar</b> button.</li>
+          <li><b>All:</b> movies use theatrical dates, TV uses 2026 episode dates.</li>
+          <li><b>Digital / PVOD:</b> uses confirmed PVOD first, otherwise estimated PVOD.</li>
+          <li><b>Refresh Dates</b> checks TMDb now playing for movies added through TMDb.</li>
+          <li><b>If a PVOD estimate already passed</b> and the movie still looks theatrical, the estimate gets moved forward 14 days.</li>
+          <li><b>Theatrical status</b> can still be overridden manually.</li>
+          <li><b>Auto Estimate PVOD</b> uses studio-specific fallback rules.</li>
         </ul>
       </div>
     </div>
   </section>
 </main>
 
-<!-- EDIT MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <button class="close-modal" id="closeModal">✕</button>
@@ -1283,7 +1530,7 @@ main{
       <select id="mType">
         <option value="movie">Movie</option>
         <option value="show">TV Show</option>
-        <option value="tba">TBA</option>
+        <option value="tba">Manual / TBA / Event</option>
       </select>
       <select id="mHype">
         <option value="0">Hype 0</option><option value="1">Hype 1</option><option value="2">Hype 2</option>
@@ -1291,18 +1538,51 @@ main{
       </select>
 
       <input id="mPoster" class="full" placeholder="Poster URL">
-      <input id="mStudio" placeholder="Studio (optional)">
-      <input id="mGenre" placeholder="Genre (optional)">
+      <input id="mStudio" placeholder="Studio / Network / Event Type">
+      <input id="mGenre" placeholder="Genre / Category">
       <input id="mDirector" class="full" placeholder="Director (movies)">
       <input id="mCast" class="full" placeholder="Cast (comma separated)">
       <input id="mTheatrical" type="date">
       <input id="mDigital" type="date">
 
+      <div class="full section-label">PVOD / DIGITAL TRACKING</div>
+
+      <input id="mPVODEstimated" type="date" placeholder="Estimated PVOD">
+      <input id="mPVODConfirmed" type="date" placeholder="Confirmed PVOD">
+
+      <select id="mPVODStatus">
+        <option value="none">PVOD Status: None</option>
+        <option value="estimated">PVOD Status: Estimated</option>
+        <option value="delayed">PVOD Status: Delayed</option>
+        <option value="confirmed">PVOD Status: Confirmed</option>
+        <option value="live">PVOD Status: Live</option>
+      </select>
+      <input id="mPVODPlatforms" placeholder="PVOD Platforms (Apple TV, Prime Video, etc.)">
+
+      <div class="full section-label">THEATRICAL HOLD</div>
+
+      <select id="mTheatricalStatus">
+        <option value="unknown">Theatrical Status: Unknown</option>
+        <option value="exclusive">Still in theaters</option>
+        <option value="limited">Limited theaters</option>
+        <option value="ending">Ending run</option>
+        <option value="ended">Ended theatrical run</option>
+      </select>
+      <input id="mTheatricalCheckDate" type="date">
+
+      <label class="inline full"><input type="checkbox" id="mStillInTheaters"> Still in theaters</label>
+
+      <input id="mPVODConfidence" placeholder="Estimate confidence" readonly>
+      <button id="mAutoEstimate" type="button" class="btn-ghost">Auto Estimate PVOD</button>
+
+      <textarea id="mPVODReason" class="full" placeholder="Estimate reason / rule" readonly></textarea>
+      <textarea id="mNotes" class="full" placeholder="Notes (optional)"></textarea>
+
       <label class="inline full"><input type="checkbox" id="mFav"> Favorite</label>
       <label class="inline full"><input type="checkbox" id="mWatched"> Watched</label>
       <label class="inline full"><input type="checkbox" id="mWeekly"> Weekly release (TV)</label>
 
-      <div class="note full" id="mEpNote"></div>
+      <div class="muted-box full" id="mEpNote"></div>
     </div>
 
     <div class="actions">
@@ -1312,7 +1592,6 @@ main{
   </div>
 </div>
 
-<!-- MINI-DAY PICKER -->
 <div class="pick-modal" id="pickModal">
   <div class="pick-card">
     <div class="pick-head">
@@ -1326,7 +1605,6 @@ main{
   </div>
 </div>
 
-<!-- POSTER VIEWER -->
 <div class="poster-view" id="posterView">
   <div class="poster-view-card">
     <button class="poster-view-close" id="posterViewClose">✕</button>
@@ -1334,7 +1612,6 @@ main{
   </div>
 </div>
 
-<!-- PHONE MINI CALENDAR SHEET -->
 <div class="sheet" id="miniSheet" aria-hidden="true">
   <div class="sheet-card" role="dialog" aria-modal="true">
     <div class="sheet-head">
@@ -1346,39 +1623,36 @@ main{
 </div>
 
 <script>
-/* =======================
-   2026 FIXES (KEY PART)
-   ======================= */
-const YEAR_FILTER = 2026; // everything shown is for this year only
+const YEAR_FILTER = 2026;
 const TMDB_API_KEY = 'ba199522ebd04e467996dcfb2bade6a4';
-const STORAGE_KEY = 'items_v8_letterboxd_2026';
+const STORAGE_KEY = 'items_v13_letterboxd_2026_tmdb_now_playing';
 
-/* ------------------- Date helpers (LOCAL) ------------------- */
 function parseISODateLocal(iso){
   if(!iso) return null;
   const [y,m,d] = iso.split('-').map(Number);
-  if(!y||!m||!d) return null;
-  return new Date(y, m-1, d);
+  if(!y || !m || !d) return null;
+  return new Date(y, m - 1, d);
 }
 function toISODateLocal(dt){
   if(!(dt instanceof Date)) return '';
   const y = dt.getFullYear();
-  const m = String(dt.getMonth()+1).padStart(2,'0');
-  const d = String(dt.getDate()).padStart(2,'0');
+  const m = String(dt.getMonth() + 1).padStart(2, '0');
+  const d = String(dt.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
 }
 function startOfMonth(dt){ return new Date(dt.getFullYear(), dt.getMonth(), 1); }
-function endOfMonth(dt){ return new Date(dt.getFullYear(), dt.getMonth()+1, 0); }
-function addDays(dt, n){ const x = new Date(dt); x.setDate(x.getDate()+n); return x; }
+function endOfMonth(dt){ return new Date(dt.getFullYear(), dt.getMonth() + 1, 0); }
+function addDays(dt, n){ const x = new Date(dt); x.setDate(x.getDate() + n); return x; }
 function startOfWeek(dt){
   const x = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate());
-  x.setDate(x.getDate() - x.getDay()); // Sun-start
+  x.setDate(x.getDate() - x.getDay());
   return x;
 }
 function endOfWeek(dt){ return addDays(startOfWeek(dt), 6); }
-function sameISO(aISO,bISO){ return String(aISO||'') === String(bISO||''); }
+function sameISO(aISO, bISO){ return String(aISO || '') === String(bISO || ''); }
+function clamp(num, min, max){ return Math.max(min, Math.min(num, max)); }
 
-function isISOInYear(iso, y=YEAR_FILTER){
+function isISOInYear(iso, y = YEAR_FILTER){
   const d = parseISODateLocal(iso);
   return !!d && d.getFullYear() === y;
 }
@@ -1396,114 +1670,499 @@ function setMonthCursorFromISO(iso){
   ui.monthCursor = new Date(d.getFullYear(), d.getMonth(), 1);
   ui.monthCursor = clampTo2026(ui.monthCursor);
 }
+function fallbackPoster(title){
+  return `https://via.placeholder.com/420x630?text=${encodeURIComponent(title || 'Title')}`;
+}
+function normalizeManualType(it){
+  if(!it.type) return 'movie';
+  return it.type;
+}
+function todayLocalISO(){
+  return toISODateLocal(new Date());
+}
+function normalizeStudio(studio = ''){
+  const s = String(studio || '').trim().toLowerCase();
+  const map = {
+    'universal':'Universal',
+    'universal pictures':'Universal',
+    'focus':'Focus Features',
+    'focus features':'Focus Features',
+    'disney':'Disney',
+    'walt disney pictures':'Disney',
+    'marvel studios':'Disney',
+    'pixar':'Disney',
+    '20th century':'20th Century',
+    '20th century studios':'20th Century',
+    'searchlight':'Searchlight',
+    'searchlight pictures':'Searchlight',
+    'warner bros':'Warner Bros.',
+    'warner bros.':'Warner Bros.',
+    'warner brothers':'Warner Bros.',
+    'new line':'New Line',
+    'new line cinema':'New Line',
+    'sony':'Sony',
+    'sony pictures':'Sony',
+    'columbia pictures':'Sony',
+    'screen gems':'Screen Gems',
+    'paramount':'Paramount',
+    'paramount pictures':'Paramount',
+    'lionsgate':'Lionsgate',
+    'a24':'A24',
+    'neon':'Neon',
+    'ifc films':'IFC Films',
+    'ifc':'IFC Films',
+    'magnolia':'Magnolia',
+    'magnolia pictures':'Magnolia',
+    'rlje':'RLJE',
+    'rlje films':'RLJE',
+    'vertical':'Vertical',
+    'vertical entertainment':'Vertical',
+    'bleecker street':'Bleecker Street',
+    'roadside attractions':'Roadside Attractions',
+    'miramax':'Miramax',
+    'amazon mgm':'Amazon MGM',
+    'amazon mgm studios':'Amazon MGM',
+    'mgm':'Amazon MGM',
+    'apple original films':'Apple Original Films',
+    'apple':'Apple Original Films',
+    'netflix':'Netflix',
+    'hulu':'Hulu',
+    'prime video':'Prime Video'
+  };
+  return map[s] || studio || 'Unknown';
+}
 
-/* ------------------- State ------------------- */
+function inferStillInTheaters(it){
+  if(!it.theatricalDate) return false;
+  const release = parseISODateLocal(it.theatricalDate);
+  if(!release) return false;
+
+  const today = new Date();
+  const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const diffDays = Math.floor((startToday - release) / (1000 * 60 * 60 * 24));
+  const studio = normalizeStudio(it.studio || '');
+  const genre = String(it.genre || '').toLowerCase();
+
+  let threshold = 21;
+  if(['Disney','Universal','Warner Bros.','Sony','Paramount'].includes(studio)) threshold = 30;
+  if(genre.includes('family') || genre.includes('animation')) threshold = 45;
+  if(String(it.boxOfficeTrend || '').toLowerCase() === 'strong') threshold += 14;
+  if(String(it.franchiseLevel || '').toLowerCase() === 'major') threshold += 10;
+
+  return diffDays >= 0 && diffDays < threshold;
+}
+
+function estimatePVOD(item){
+  const studio = normalizeStudio(item.studio || '');
+  const genre = String(item.genre || '').toLowerCase();
+  const releasePattern = String(item.releasePattern || 'wide').toLowerCase();
+  const isAwardsTitle = !!item.isAwardsTitle;
+  const boxOfficeTrend = String(item.boxOfficeTrend || 'normal').toLowerCase();
+  const franchiseLevel = String(item.franchiseLevel || 'none').toLowerCase();
+  const theatricalDate = item.theatricalDate || '';
+  let days = 35;
+  const reasons = [];
+
+  const STUDIO_BASE_WINDOWS = {
+    'Universal': 31,
+    'Focus Features': 35,
+    'Disney': 60,
+    '20th Century': 45,
+    'Searchlight': 45,
+    'Warner Bros.': 39,
+    'New Line': 31,
+    'Sony': 39,
+    'Screen Gems': 31,
+    'Paramount': 45,
+    'Lionsgate': 28,
+    'A24': 35,
+    'Neon': 42,
+    'IFC Films': 21,
+    'Magnolia': 21,
+    'RLJE': 21,
+    'Vertical': 14,
+    'Bleecker Street': 28,
+    'Roadside Attractions': 28,
+    'Miramax': 35,
+    'Amazon MGM': 45,
+    'Apple Original Films': 45,
+    'Netflix': 14,
+    'Hulu': 17,
+    'Prime Video': 17
+  };
+
+  if(STUDIO_BASE_WINDOWS[studio] != null){
+    days = STUDIO_BASE_WINDOWS[studio];
+    reasons.push(`${studio} base ${days}`);
+  }else{
+    reasons.push(`generic base ${days}`);
+  }
+
+  if(studio === 'Universal'){
+    if(franchiseLevel === 'major'){ days = 45; reasons.push('Universal major franchise -> 45'); }
+    if(genre.includes('horror')){ days = 21; reasons.push('Universal horror -> 21'); }
+    if(genre.includes('family') || genre.includes('animation')){ days = 45; reasons.push('Universal family/animation -> 45'); }
+  }
+  if(studio === 'Disney'){
+    if(genre.includes('family') || genre.includes('animation')){ days = 70; reasons.push('Disney family/animation -> 70'); }
+    if(franchiseLevel === 'major'){ days = 75; reasons.push('Disney major franchise -> 75'); }
+    if(boxOfficeTrend === 'weak'){ days = Math.min(days, 45); reasons.push('Disney weak box office cap -> 45'); }
+  }
+  if(studio === 'Warner Bros.'){
+    if(genre.includes('horror')){ days = 31; reasons.push('WB horror -> 31'); }
+    if(franchiseLevel === 'major'){ days = Math.max(days, 49); reasons.push('WB major franchise -> 49'); }
+  }
+  if(studio === 'Sony'){
+    if(genre.includes('horror')){ days = 28; reasons.push('Sony horror -> 28'); }
+    if(genre.includes('family')){ days = 45; reasons.push('Sony family -> 45'); }
+    if(boxOfficeTrend === 'weak'){ days = Math.min(days, 31); reasons.push('Sony weak box office cap -> 31'); }
+  }
+  if(studio === 'Paramount'){
+    if(genre.includes('horror')){ days = 31; reasons.push('Paramount horror -> 31'); }
+    if(franchiseLevel === 'major'){ days = 55; reasons.push('Paramount major franchise -> 55'); }
+    if(boxOfficeTrend === 'weak'){ days = Math.min(days, 35); reasons.push('Paramount weak box office cap -> 35'); }
+  }
+  if(studio === 'Lionsgate'){
+    if(genre.includes('horror') || genre.includes('thriller')){ days = 21; reasons.push('Lionsgate horror/thriller -> 21'); }
+    if(releasePattern === 'limited'){ days = 24; reasons.push('Lionsgate limited -> 24'); }
+    if(boxOfficeTrend === 'strong'){ days = Math.max(days, 35); reasons.push('Lionsgate strong box office -> 35'); }
+  }
+  if(studio === 'A24'){
+    if(releasePattern === 'platform'){ days = 45; reasons.push('A24 platform -> 45'); }
+    if(isAwardsTitle){ days = Math.max(days, 49); reasons.push('A24 awards -> 49'); }
+    if(genre.includes('horror')){ days = 28; reasons.push('A24 horror -> 28'); }
+  }
+  if(studio === 'Neon'){
+    if(isAwardsTitle){ days = 56; reasons.push('Neon awards -> 56'); }
+    if(genre.includes('horror')){ days = 31; reasons.push('Neon horror -> 31'); }
+    if(releasePattern === 'limited'){ days += 7; reasons.push('Neon limited +7'); }
+  }
+  if(studio === 'Searchlight'){
+    if(isAwardsTitle){ days = 56; reasons.push('Searchlight awards -> 56'); }
+    if(releasePattern === 'platform'){ days += 7; reasons.push('Searchlight platform +7'); }
+    if(boxOfficeTrend === 'weak'){ days = Math.min(days, 35); reasons.push('Searchlight weak box office cap -> 35'); }
+  }
+  if(studio === 'IFC Films' || studio === 'Magnolia' || studio === 'RLJE'){
+    if(releasePattern === 'limited'){
+      days = Math.min(days, 21);
+      reasons.push('small indie limited quick PVOD');
+    }
+  }
+  if(studio === 'Vertical'){
+    days = 14;
+    reasons.push('Vertical fast PVOD -> 14');
+  }
+
+  if(releasePattern === 'limited'){ days += 10; reasons.push('limited +10'); }
+  else if(releasePattern === 'platform'){ days += 14; reasons.push('platform +14'); }
+
+  if(genre.includes('horror')){ days -= 7; reasons.push('horror -7'); }
+  if(genre.includes('thriller')){ days -= 4; reasons.push('thriller -4'); }
+  if(genre.includes('family')){ days += 14; reasons.push('family +14'); }
+  if(genre.includes('animation')){ days += 10; reasons.push('animation +10'); }
+  if(genre.includes('prestige')){ days += 10; reasons.push('prestige +10'); }
+  if(genre.includes('documentary')){ days -= 7; reasons.push('documentary -7'); }
+  if(genre.includes('faith')){ days -= 7; reasons.push('faith-based -7'); }
+
+  if(isAwardsTitle){ days += 14; reasons.push('awards +14'); }
+  if(franchiseLevel === 'major'){ days += 10; reasons.push('major franchise +10'); }
+  else if(franchiseLevel === 'mid'){ days += 4; reasons.push('mid franchise +4'); }
+
+  if(boxOfficeTrend === 'weak'){ days -= 10; reasons.push('weak box office -10'); }
+  else if(boxOfficeTrend === 'strong'){ days += 10; reasons.push('strong box office +10'); }
+
+  days = clamp(days, 14, 90);
+
+  let confidence = 'low';
+  if(studio !== 'Unknown' && theatricalDate) confidence = 'medium';
+  if(studio !== 'Unknown' && theatricalDate && genre && releasePattern) confidence = 'high';
+
+  let estimatedDate = '';
+  if(theatricalDate){
+    const baseDate = parseISODateLocal(theatricalDate);
+    if(baseDate) estimatedDate = toISODateLocal(addDays(baseDate, days));
+  }
+
+  return {
+    estimatedDays: days,
+    estimatedDate,
+    confidence,
+    studio,
+    reason: reasons.join(' | ')
+  };
+}
+
+async function tmdbMovieInNowPlaying(movieId){
+  if(!movieId) return false;
+  try{
+    for(let page = 1; page <= 3; page++){
+      const res = await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${TMDB_API_KEY}&region=US&page=${page}`);
+      if(!res.ok) break;
+      const data = await res.json();
+      const results = data?.results || [];
+      if(results.some(m => Number(m.id) === Number(movieId))) return true;
+      const totalPages = Number(data?.total_pages || 1);
+      if(page >= totalPages) break;
+    }
+  }catch(_e){}
+  return false;
+}
+
+function shouldHoldPVODEstimate(it){
+  if(it.type !== 'movie') return false;
+  if(!it.theatricalDate) return false;
+  if(it.pvodConfirmedDate) return false;
+  if(it.stillInTheaters) return true;
+  if(it.theatricalStatus === 'exclusive') return true;
+  if(it.theatricalStatus === 'limited') return true;
+  return false;
+}
+
+function pushEstimateForward(it, days = 14){
+  if(!it.pvodEstimatedDate || it.pvodConfirmedDate) return;
+  const est = parseISODateLocal(it.pvodEstimatedDate);
+  if(!est) return;
+
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  if(est.getTime() < todayStart.getTime() && shouldHoldPVODEstimate(it)){
+    const pushed = addDays(todayStart, days);
+    it.pvodEstimatedDate = toISODateLocal(pushed);
+    it.pvodStatus = 'delayed';
+    const extra = 'pushed forward because movie still appears to be in theaters';
+    it.pvodEstimateReason = it.pvodEstimateReason
+      ? `${it.pvodEstimateReason} | ${extra}`
+      : extra;
+  }
+}
+
+function updatePVODStateSync(it, forceEstimate = false){
+  if(it.type !== 'movie') return;
+
+  if(!it.theatricalStatus) it.theatricalStatus = 'unknown';
+  if(!it.theatricalCheckDate) it.theatricalCheckDate = todayLocalISO();
+
+  if(it.theatricalStatus === 'exclusive' || it.theatricalStatus === 'limited'){
+    it.stillInTheaters = true;
+  }else if(it.theatricalStatus === 'ended'){
+    it.stillInTheaters = false;
+  }else if(it.theatricalStatus === 'unknown' && typeof it.stillInTheaters !== 'boolean'){
+    it.stillInTheaters = inferStillInTheaters(it);
+  }
+
+  if(it.pvodConfirmedDate){
+    if(it.pvodStatus !== 'live') it.pvodStatus = 'confirmed';
+    return;
+  }
+
+  if((!it.pvodEstimatedDate || forceEstimate) && it.theatricalDate){
+    const est = estimatePVOD(it);
+    it.pvodEstimatedDate = est.estimatedDate || '';
+    it.pvodEstimateConfidence = est.confidence || '';
+    it.pvodEstimateReason = est.reason || '';
+    if(it.pvodEstimatedDate) it.pvodStatus = 'estimated';
+  }
+
+  pushEstimateForward(it, 14);
+
+  if(it.stillInTheaters && !it.pvodConfirmedDate){
+    it.pvodStatus = it.pvodEstimatedDate ? 'delayed' : 'none';
+  }else if(it.pvodEstimatedDate && !it.pvodConfirmedDate && (!it.pvodStatus || it.pvodStatus === 'none')){
+    it.pvodStatus = 'estimated';
+  }
+}
+
+async function updateMovieTheatricalState(it){
+  if(it.type !== 'movie') return;
+
+  if(it.theatricalStatus === 'exclusive' || it.theatricalStatus === 'limited'){
+    it.stillInTheaters = true;
+    it.theatricalCheckDate = todayLocalISO();
+    return;
+  }
+
+  if(it.theatricalStatus === 'ended'){
+    it.stillInTheaters = false;
+    it.theatricalCheckDate = todayLocalISO();
+    return;
+  }
+
+  let inNowPlaying = false;
+  if(it.tmdbId){
+    inNowPlaying = await tmdbMovieInNowPlaying(it.tmdbId);
+  }
+
+  if(inNowPlaying){
+    it.stillInTheaters = true;
+    if(it.theatricalStatus === 'unknown') it.theatricalStatus = 'exclusive';
+  }else{
+    it.stillInTheaters = inferStillInTheaters(it);
+    if(!it.stillInTheaters && it.theatricalStatus === 'unknown'){
+      it.theatricalStatus = 'ending';
+    }
+  }
+
+  it.theatricalCheckDate = todayLocalISO();
+}
+
+function getDigitalCalendarDate(it){
+  if(it.pvodConfirmedDate) return it.pvodConfirmedDate;
+  return it.pvodEstimatedDate || it.digitalDate || '';
+}
+function getDigitalLabel(it){
+  if(it.pvodConfirmedDate) return `Confirmed PVOD: ${it.pvodConfirmedDate}`;
+  if(it.pvodStatus === 'delayed' && it.pvodEstimatedDate) return `Delayed PVOD est: ${it.pvodEstimatedDate}`;
+  if(it.pvodEstimatedDate) return `Estimated PVOD: ${it.pvodEstimatedDate}`;
+  if(it.digitalDate) return `Digital: ${it.digitalDate}`;
+  return 'PVOD: TBA';
+}
+
+function primarySortISO(it){
+  if(it.type === 'show'){
+    const eps = (it.episodes || [])
+      .map(e => e.date)
+      .filter(d => isISOInYear(d, YEAR_FILTER))
+      .sort();
+    return eps[0] || '';
+  }
+  return it.theatricalDate || getDigitalCalendarDate(it) || '';
+}
+
 let items = [];
 let currentEditIndex = null;
 
 let ui = {
-  tab: 'calendar',
-  contentUI: 'all',
-  contentFilter: 'all',
-  mode: 'theatrical',
-  favoritesOnly: false,
-  watchedOnly: false,
-  monthCursor: new Date(YEAR_FILTER, 0, 1),
-  view: 'month',
-  selectedISO: toISODateLocal(new Date(YEAR_FILTER, 0, 1)),
-  activeMonthKey: `${YEAR_FILTER}-01`,
+  tab:'calendar',
+  contentUI:'all',
+  contentFilter:'all',
+  mode:'theatrical',
+  favoritesOnly:false,
+  watchedOnly:false,
+  monthCursor:new Date(YEAR_FILTER, 0, 1),
+  view:'month',
+  selectedISO:toISODateLocal(new Date(YEAR_FILTER, 0, 1)),
+  activeMonthKey:`${YEAR_FILTER}-01`,
 };
 
 let miniUI = {
-  mode: 'months', // 'months' | 'days'
-  year: YEAR_FILTER,
+  mode:'months',
+  year:YEAR_FILTER,
 };
 
 const el = {
-  header: document.getElementById('header'),
-  tabs: Array.from(document.querySelectorAll('.tab')),
-  tabCalendar: document.getElementById('tab-calendar'),
-  tabLists: document.getElementById('tab-lists'),
-  tabHelp: document.getElementById('tab-help'),
 
-  contentSeg: document.getElementById('contentSeg'),
-  favoritesBtn: document.getElementById('favoritesBtn'),
-  watchedBtn: document.getElementById('watchedBtn'),
+mainMonthsBar: document.getElementById('mainMonthsBar'),
 
-  addTitle: document.getElementById('addTitle'),
-  addType: document.getElementById('addType'),
-  addBtn: document.getElementById('addItemBtn'),
-  refreshBtn: document.getElementById('refreshBtn'),
-  exportBtn: document.getElementById('exportBtn'),
-  importFile: document.getElementById('importFile'),
-  clearBtn: document.getElementById('clearBtn'),
+  header:document.getElementById('header'),
+  tabs:Array.from(document.querySelectorAll('.tab')),
+  tabCalendar:document.getElementById('tab-calendar'),
+  tabLists:document.getElementById('tab-lists'),
+  tabHelp:document.getElementById('tab-help'),
 
-  stripTitle: document.getElementById('stripTitle'),
-  stripSub: document.getElementById('stripSub'),
-  stripBadge: document.getElementById('stripBadge'),
-  stripMonths: document.getElementById('stripMonths'),
-  stripScroll: document.getElementById('stripScroll'),
-  stripTimeline: document.getElementById('stripTimeline'),
+  contentSeg:document.getElementById('contentSeg'),
+  favoritesBtn:document.getElementById('favoritesBtn'),
+  watchedBtn:document.getElementById('watchedBtn'),
 
-  viewToggle: document.getElementById('viewToggle'),
-  calTitle: document.getElementById('calTitle'),
-  calModeBadge: document.getElementById('calModeBadge'),
-  weekdays: document.getElementById('weekdays'),
-  calGrid: document.getElementById('calGrid'),
-  weekWrap: document.getElementById('weekWrap'),
-  weekGrid: document.getElementById('weekGrid'),
-  prevBtn: document.getElementById('prevBtn'),
-  nextBtn: document.getElementById('nextBtn'),
-  todayBtn: document.getElementById('todayBtn'),
+  addTitle:document.getElementById('addTitle'),
+  addType:document.getElementById('addType'),
+  addBtn:document.getElementById('addItemBtn'),
+  refreshBtn:document.getElementById('refreshBtn'),
+  exportBtn:document.getElementById('exportBtn'),
+  importFile:document.getElementById('importFile'),
+  clearBtn:document.getElementById('clearBtn'),
 
-  miniPrev: document.getElementById('miniPrev'),
-  miniNext: document.getElementById('miniNext'),
-  miniTitle: document.getElementById('miniTitle'),
-  miniHint: document.getElementById('miniHint'),
-  miniDow: document.getElementById('miniDow'),
-  miniGrid: document.getElementById('miniGrid'),
-  miniBack: document.getElementById('miniBack'),
-  miniMonthAside: document.getElementById('miniMonthAside'),
+  addTitleMobile:document.getElementById('addTitleMobile'),
+  addTypeMobile:document.getElementById('addTypeMobile'),
+  addBtnMobile:document.getElementById('addItemBtnMobile'),
+  refreshBtnMobile:document.getElementById('refreshBtnMobile'),
+  exportBtnMobile:document.getElementById('exportBtnMobile'),
+  importFileMobile:document.getElementById('importFileMobile'),
+  clearBtnMobile:document.getElementById('clearBtnMobile'),
 
-  listTableBody: document.querySelector('#listTable tbody'),
+  stripTitle:document.getElementById('stripTitle'),
+  stripSub:document.getElementById('stripSub'),
+  stripBadge:document.getElementById('stripBadge'),
+  stripMonths:document.getElementById('stripMonths'),
+  stripScroll:document.getElementById('stripScroll'),
+  stripTimeline:document.getElementById('stripTimeline'),
 
-  modal: document.getElementById('modal'),
-  closeModal: document.getElementById('closeModal'),
-  mTitle: document.getElementById('mTitle'),
-  mType: document.getElementById('mType'),
-  mHype: document.getElementById('mHype'),
-  mPoster: document.getElementById('mPoster'),
-  mStudio: document.getElementById('mStudio'),
-  mGenre: document.getElementById('mGenre'),
-  mDirector: document.getElementById('mDirector'),
-  mCast: document.getElementById('mCast'),
-  mTheatrical: document.getElementById('mTheatrical'),
-  mDigital: document.getElementById('mDigital'),
-  mFav: document.getElementById('mFav'),
-  mWatched: document.getElementById('mWatched'),
-  mWeekly: document.getElementById('mWeekly'),
-  mEpNote: document.getElementById('mEpNote'),
-  saveBtn: document.getElementById('saveBtn'),
-  deleteBtn: document.getElementById('deleteBtn'),
+  viewToggle:document.getElementById('viewToggle'),
+  calTitle:document.getElementById('calTitle'),
+  calModeBadge:document.getElementById('calModeBadge'),
+  weekdays:document.getElementById('weekdays'),
+  calGrid:document.getElementById('calGrid'),
+  weekWrap:document.getElementById('weekWrap'),
+  weekGrid:document.getElementById('weekGrid'),
+  prevBtn:document.getElementById('prevBtn'),
+  nextBtn:document.getElementById('nextBtn'),
+  todayBtn:document.getElementById('todayBtn'),
 
-  pickModal: document.getElementById('pickModal'),
-  pickClose: document.getElementById('pickClose'),
-  pickTitle: document.getElementById('pickTitle'),
-  pickDate: document.getElementById('pickDate'),
-  pickGrid: document.getElementById('pickGrid'),
+  miniPrev:document.getElementById('miniPrev'),
+  miniNext:document.getElementById('miniNext'),
+  miniTitle:document.getElementById('miniTitle'),
+  miniHint:document.getElementById('miniHint'),
+  miniDow:document.getElementById('miniDow'),
+  miniGrid:document.getElementById('miniGrid'),
+  miniBack:document.getElementById('miniBack'),
+  miniMonthAside:document.getElementById('miniMonthAside'),
 
-  posterView: document.getElementById('posterView'),
-  posterViewClose: document.getElementById('posterViewClose'),
-  posterViewImg: document.getElementById('posterViewImg'),
+  listTableBody:document.querySelector('#listTable tbody'),
 
-  /* mini sheet */
-  miniOpenBtn: document.getElementById('miniOpenBtn'),
-  miniSheet: document.getElementById('miniSheet'),
-  miniSheetClose: document.getElementById('miniSheetClose'),
-  miniSheetBody: document.getElementById('miniSheetBody'),
+  modal:document.getElementById('modal'),
+  closeModal:document.getElementById('closeModal'),
+  mTitle:document.getElementById('mTitle'),
+  mType:document.getElementById('mType'),
+  mHype:document.getElementById('mHype'),
+  mPoster:document.getElementById('mPoster'),
+  mStudio:document.getElementById('mStudio'),
+  mGenre:document.getElementById('mGenre'),
+  mDirector:document.getElementById('mDirector'),
+  mCast:document.getElementById('mCast'),
+  mTheatrical:document.getElementById('mTheatrical'),
+  mDigital:document.getElementById('mDigital'),
+  mPVODEstimated:document.getElementById('mPVODEstimated'),
+  mPVODConfirmed:document.getElementById('mPVODConfirmed'),
+  mPVODStatus:document.getElementById('mPVODStatus'),
+  mPVODPlatforms:document.getElementById('mPVODPlatforms'),
+  mTheatricalStatus:document.getElementById('mTheatricalStatus'),
+  mTheatricalCheckDate:document.getElementById('mTheatricalCheckDate'),
+  mStillInTheaters:document.getElementById('mStillInTheaters'),
+  mPVODConfidence:document.getElementById('mPVODConfidence'),
+  mPVODReason:document.getElementById('mPVODReason'),
+  mAutoEstimate:document.getElementById('mAutoEstimate'),
+  mNotes:document.getElementById('mNotes'),
+  mFav:document.getElementById('mFav'),
+  mWatched:document.getElementById('mWatched'),
+  mWeekly:document.getElementById('mWeekly'),
+  mEpNote:document.getElementById('mEpNote'),
+  saveBtn:document.getElementById('saveBtn'),
+  deleteBtn:document.getElementById('deleteBtn'),
+
+  pickModal:document.getElementById('pickModal'),
+  pickClose:document.getElementById('pickClose'),
+  pickTitle:document.getElementById('pickTitle'),
+  pickDate:document.getElementById('pickDate'),
+  pickGrid:document.getElementById('pickGrid'),
+
+  posterView:document.getElementById('posterView'),
+  posterViewClose:document.getElementById('posterViewClose'),
+  posterViewImg:document.getElementById('posterViewImg'),
+
+  miniOpenBtn:document.getElementById('miniOpenBtn'),
+  miniSheet:document.getElementById('miniSheet'),
+  miniSheetClose:document.getElementById('miniSheetClose'),
+  miniSheetBody:document.getElementById('miniSheetBody'),
 };
+const calBackBtn = document.getElementById('calBackBtn');
 
-/* ------------------- Poster viewer helpers ------------------- */
+if(calBackBtn){
+  calBackBtn.onclick = () => {
+    miniUI.mode = 'months';
+    renderCalendarShell();
+    mobileSetScreen('mini');
+  };
+}
 function openPosterView(src){
   el.posterViewImg.src = src;
   el.posterView.classList.add('active');
@@ -1513,37 +2172,18 @@ function closePosterView(){
   el.posterViewImg.src = '';
 }
 el.posterViewClose.onclick = closePosterView;
-el.posterView.addEventListener('click', (e)=>{ if(e.target === el.posterView) closePosterView(); });
+el.posterView.addEventListener('click', (e) => {
+  if(e.target === el.posterView) closePosterView();
+});
 
-/* ------------------- Storage + migration ------------------- */
 function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
-function load(){
-  const v = localStorage.getItem(STORAGE_KEY);
-  if(v){
-    try { items = JSON.parse(v) || []; } catch { items = []; }
-    return;
-  }
-  const old = localStorage.getItem('items_v7_letterboxd')
-          || localStorage.getItem('items_v6_letterboxd')
-          || localStorage.getItem('items_v5_letterboxd')
-          || localStorage.getItem('items_v4')
-          || localStorage.getItem('items_v3')
-          || localStorage.getItem('items_v2')
-          || localStorage.getItem('items');
-  if(old){
-    try{
-      const oldArr = JSON.parse(old) || [];
-      items = oldArr.map(x => normalizeImportedItem(x));
-      save();
-    }catch{ items = []; }
-  }
-}
+
 function normalizeImportedItem(x){
   const title = x.title || '';
-  return {
+  const normalized = {
     title,
-    type: x.type || 'movie',
-    poster: x.poster || `https://via.placeholder.com/420x630?text=${encodeURIComponent(title||'Title')}`,
+    type: normalizeManualType(x),
+    poster: x.poster || fallbackPoster(title),
     studio: x.studio || '',
     genre: x.genre || '',
     director: x.director || '',
@@ -1553,42 +2193,87 @@ function normalizeImportedItem(x){
     hype: Number(x.hype ?? 0),
     theatricalDate: x.theatricalDate || x.date || '',
     digitalDate: x.digitalDate || '',
+    pvodEstimatedDate: x.pvodEstimatedDate || '',
+    pvodConfirmedDate: x.pvodConfirmedDate || '',
+    pvodStatus: x.pvodStatus || 'none',
+    pvodPlatforms: x.pvodPlatforms || '',
+    pvodEstimateConfidence: x.pvodEstimateConfidence || '',
+    pvodEstimateReason: x.pvodEstimateReason || '',
+    stillInTheaters: typeof x.stillInTheaters === 'boolean' ? x.stillInTheaters : undefined,
+    theatricalStatus: x.theatricalStatus || 'unknown',
+    theatricalCheckDate: x.theatricalCheckDate || '',
     tmdbId: x.tmdbId ?? null,
     tvmazeId: x.tvmazeId ?? null,
     weekly: !!x.weekly,
-    episodes: Array.isArray(x.episodes) ? x.episodes : []
+    notes: x.notes || '',
+    episodes: Array.isArray(x.episodes) ? x.episodes : [],
+    releasePattern: x.releasePattern || 'wide',
+    isAwardsTitle: !!x.isAwardsTitle,
+    boxOfficeTrend: x.boxOfficeTrend || 'normal',
+    franchiseLevel: x.franchiseLevel || 'none'
   };
+  updatePVODStateSync(normalized, false);
+  return normalized;
 }
 
-/* ------------------- Filtering (2026-aware) ------------------- */
+function load(){
+  const v = localStorage.getItem(STORAGE_KEY);
+  if(v){
+    try { items = JSON.parse(v).map(x => normalizeImportedItem(x)) || []; }
+    catch { items = []; }
+    return;
+  }
+
+  const old = localStorage.getItem('items_v13_letterboxd_2026_tmdb_now_playing')
+    || localStorage.getItem('items_v12_letterboxd_2026_pvod_hold')
+    || localStorage.getItem('items_v11_letterboxd_2026_pvod')
+    || localStorage.getItem('items_v10_letterboxd_2026')
+    || localStorage.getItem('items_v9_letterboxd_2026')
+    || localStorage.getItem('items_v8_letterboxd_2026')
+    || localStorage.getItem('items_v7_letterboxd')
+    || localStorage.getItem('items_v6_letterboxd')
+    || localStorage.getItem('items_v5_letterboxd')
+    || localStorage.getItem('items_v4')
+    || localStorage.getItem('items_v3')
+    || localStorage.getItem('items_v2')
+    || localStorage.getItem('items');
+
+  if(old){
+    try{
+      const oldArr = JSON.parse(old) || [];
+      items = oldArr.map(x => normalizeImportedItem(x));
+      save();
+    }catch{
+      items = [];
+    }
+  }
+}
+
 function passesFilters(it){
   if(ui.favoritesOnly && !it.favorite) return false;
   if(ui.watchedOnly && !it.watched) return false;
-
-  if(ui.contentFilter === 'movies' && it.type !== 'movie') return false;
+  if(ui.contentFilter === 'movies' && it.type !== 'movie' && it.type !== 'tba') return false;
   if(ui.contentFilter === 'shows' && it.type !== 'show') return false;
-
   return true;
 }
 function filteredEntries(){
   return items
-    .map((it, index)=>({ it, index }))
+    .map((it, index) => ({ it, index }))
     .filter(({ it }) => passesFilters(it));
 }
 
-/* ------------------- TMDb (movie) ------------------- */
 function pickUSReleaseDate(release_dates, types){
   const us = (release_dates?.results || []).find(r => r.iso_3166_1 === 'US');
   if(!us || !Array.isArray(us.release_dates)) return '';
   const dates = us.release_dates
     .filter(r => types.includes(r.type) && r.release_date)
-    .sort((a,b)=>{
-      const da = parseISODateLocal((a.release_date||'').slice(0,10))?.getTime() ?? 0;
-      const db = parseISODateLocal((b.release_date||'').slice(0,10))?.getTime() ?? 0;
+    .sort((a, b) => {
+      const da = parseISODateLocal((a.release_date || '').slice(0, 10))?.getTime() ?? 0;
+      const db = parseISODateLocal((b.release_date || '').slice(0, 10))?.getTime() ?? 0;
       return da - db;
     });
   if(!dates.length) return '';
-  return (dates[0].release_date || '').slice(0,10);
+  return (dates[0].release_date || '').slice(0, 10);
 }
 async function tmdbSearchMovie(title){
   const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}`);
@@ -1602,7 +2287,7 @@ async function tmdbFetchMovieDetails(movieId){
 }
 function normalizePoster(path, fallbackTitle){
   if(path) return `https://image.tmdb.org/t/p/w500${path}`;
-  return `https://via.placeholder.com/420x630?text=${encodeURIComponent(fallbackTitle||'Title')}`;
+  return fallbackPoster(fallbackTitle);
 }
 async function addMovie(title){
   const hit = await tmdbSearchMovie(title);
@@ -1619,10 +2304,10 @@ async function addMovie(title){
   const director = crew.find(c => c.job === 'Director')?.name || '';
   const cast = (details.credits?.cast || []).slice(0, 6).map(c => c.name);
 
-  const theatrical = pickUSReleaseDate(rel, [3,2]) || (details.release_date || '').slice(0,10);
+  const theatrical = pickUSReleaseDate(rel, [3, 2]) || (details.release_date || '').slice(0, 10);
   const digital = pickUSReleaseDate(rel, [4]) || '';
 
-  return {
+  const item = {
     title: details.title || title,
     type: 'movie',
     poster,
@@ -1635,70 +2320,92 @@ async function addMovie(title){
     hype: 0,
     theatricalDate: theatrical,
     digitalDate: digital,
+    pvodEstimatedDate: '',
+    pvodConfirmedDate: '',
+    pvodStatus: 'none',
+    pvodPlatforms: '',
+    pvodEstimateConfidence: '',
+    pvodEstimateReason: '',
+    stillInTheaters: undefined,
+    theatricalStatus: 'unknown',
+    theatricalCheckDate: todayLocalISO(),
     tmdbId: hit.id,
     tvmazeId: null,
     weekly: false,
-    episodes: []
+    notes: '',
+    episodes: [],
+    releasePattern: 'wide',
+    isAwardsTitle: false,
+    boxOfficeTrend: 'normal',
+    franchiseLevel: 'none'
   };
+
+  if(digital){
+    item.pvodConfirmedDate = digital;
+    item.pvodStatus = 'confirmed';
+    item.stillInTheaters = false;
+    item.theatricalStatus = 'ended';
+  }else{
+    await updateMovieTheatricalState(item);
+    updatePVODStateSync(item, true);
+  }
+
+  return item;
 }
 
-/* ------------------- TVMaze (show + episodes) ------------------- */
 async function tvmazeSingleSearchShow(title){
   const res = await fetch(`https://api.tvmaze.com/singlesearch/shows?q=${encodeURIComponent(title)}&embed=episodes`);
   if(!res.ok) return null;
   return await res.json();
 }
 function inferWeeklyFromEpisodes(eps){
-  const dates = (eps||[])
+  const dates = (eps || [])
     .map(e => e.airdate)
     .filter(Boolean)
     .map(d => parseISODateLocal(d))
     .filter(Boolean)
-    .sort((a,b)=>a.getTime()-b.getTime());
+    .sort((a, b) => a.getTime() - b.getTime());
+
   if(dates.length < 3) return false;
 
   const gaps = [];
-  for(let i=1;i<dates.length;i++){
-    const diffDays = Math.round((dates[i]-dates[i-1])/(1000*60*60*24));
+  for(let i = 1; i < dates.length; i++){
+    const diffDays = Math.round((dates[i] - dates[i - 1]) / (1000 * 60 * 60 * 24));
     if(diffDays > 0 && diffDays <= 21) gaps.push(diffDays);
   }
   if(gaps.length < 2) return false;
-  const near7 = gaps.filter(g => Math.abs(g-7) <= 1).length;
+  const near7 = gaps.filter(g => Math.abs(g - 7) <= 1).length;
   return (near7 / gaps.length) >= 0.6;
 }
 function showPosterFromTVMaze(show, title){
-  return show?.image?.original || show?.image?.medium || `https://via.placeholder.com/420x630?text=${encodeURIComponent(title||'Show')}`;
+  return show?.image?.original || show?.image?.medium || fallbackPoster(title || 'Show');
 }
-
-/* ✅ IMPORTANT: keep ONLY newest season that has 2026 episodes */
 function normalizeEpisodesFor2026(epsRaw){
   const all = (epsRaw || [])
     .filter(e => e.airdate)
-    .map(e => ({ id:e.id, date:e.airdate, season:e.season, number:e.number, title:e.name||'' }));
+    .map(e => ({ id:e.id, date:e.airdate, season:e.season, number:e.number, title:e.name || '' }));
 
   const in2026 = all.filter(e => isISOInYear(e.date, YEAR_FILTER));
-  if(!in2026.length) return { episodes: [], newestSeason: null };
+  if(!in2026.length) return { episodes:[], newestSeason:null };
 
   const newestSeason = Math.max(...in2026.map(e => Number(e.season || 0)));
   const onlyNewestSeason = in2026
     .filter(e => Number(e.season || 0) === newestSeason)
-    .sort((a,b)=>{
+    .sort((a, b) => {
       const da = parseISODateLocal(a.date)?.getTime() ?? 0;
       const db = parseISODateLocal(b.date)?.getTime() ?? 0;
       if(da !== db) return da - db;
-      return (a.number||0) - (b.number||0);
+      return (a.number || 0) - (b.number || 0);
     });
 
-  return { episodes: onlyNewestSeason, newestSeason };
+  return { episodes:onlyNewestSeason, newestSeason };
 }
-
 async function addShow(title){
   const show = await tvmazeSingleSearchShow(title);
   if(!show) throw new Error('TV show not found on TVMaze');
 
   const epsRaw = show?._embedded?.episodes || [];
   const norm = normalizeEpisodesFor2026(epsRaw);
-
   const weekly = inferWeeklyFromEpisodes(
     (epsRaw || []).filter(e => e.airdate && isISOInYear(e.airdate, YEAR_FILTER))
   );
@@ -1716,54 +2423,82 @@ async function addShow(title){
     hype: 0,
     theatricalDate: '',
     digitalDate: '',
+    pvodEstimatedDate: '',
+    pvodConfirmedDate: '',
+    pvodStatus: 'none',
+    pvodPlatforms: '',
+    pvodEstimateConfidence: '',
+    pvodEstimateReason: '',
+    stillInTheaters: false,
+    theatricalStatus: 'unknown',
+    theatricalCheckDate: '',
     tmdbId: null,
     tvmazeId: show.id,
     weekly,
-    episodes: norm.episodes
+    notes: '',
+    episodes: norm.episodes,
+    releasePattern: 'wide',
+    isAwardsTitle: false,
+    boxOfficeTrend: 'normal',
+    franchiseLevel: 'none'
   };
 }
 
-/* ------------------- Add item ------------------- */
-async function addItem(){
-  const title = el.addTitle.value.trim();
-  const type = el.addType.value;
+async function createItemFromInput(title, type){
+  if(type === 'movie') return await addMovie(title);
+  if(type === 'show') return await addShow(title);
+  return {
+    title,
+    type:'tba',
+    poster:fallbackPoster(title),
+    studio:'',
+    genre:'',
+    director:'',
+    cast:[],
+    favorite:false,
+    watched:false,
+    hype:0,
+    theatricalDate:'',
+    digitalDate:'',
+    pvodEstimatedDate:'',
+    pvodConfirmedDate:'',
+    pvodStatus:'none',
+    pvodPlatforms:'',
+    pvodEstimateConfidence:'',
+    pvodEstimateReason:'',
+    stillInTheaters:false,
+    theatricalStatus:'unknown',
+    theatricalCheckDate:'',
+    tmdbId:null,
+    tvmazeId:null,
+    weekly:false,
+    notes:'',
+    episodes:[],
+    releasePattern:'wide',
+    isAwardsTitle:false,
+    boxOfficeTrend:'normal',
+    franchiseLevel:'none'
+  };
+}
+
+async function handleAdd(titleInput, typeInput){
+  const title = titleInput.value.trim();
+  const type = typeInput.value;
   if(!title) return alert('Title required');
 
   try{
-    let it;
-    if(type === 'movie') it = await addMovie(title);
-    else if(type === 'show') it = await addShow(title);
-    else{
-      it = {
-        title,
-        type: 'tba',
-        poster: `https://via.placeholder.com/420x630?text=${encodeURIComponent(title)}`,
-        studio: '',
-        genre: '',
-        director: '',
-        cast: [],
-        favorite: false,
-        watched: false,
-        hype: 0,
-        theatricalDate: '',
-        digitalDate: '',
-        tmdbId: null,
-        tvmazeId: null,
-        weekly: false,
-        episodes: []
-      };
-    }
-
+    const it = await createItemFromInput(title, type);
     items.push(it);
     save();
-    el.addTitle.value = '';
+    titleInput.value = '';
     renderAll();
+
+    if(type === 'tba') openModal(items.length - 1);
   }catch(err){
     alert(err?.message || 'Could not add item');
   }
 }
 
-/* ------------------- Refresh dates ------------------- */
 async function refreshAll(){
   const targets = items.filter(it => it.tmdbId || it.tvmazeId);
   if(!targets.length) return alert('Nothing to refresh yet.');
@@ -1774,13 +2509,26 @@ async function refreshAll(){
         const { details, rel } = await tmdbFetchMovieDetails(it.tmdbId);
         it.poster = normalizePoster(details.poster_path, it.title);
         it.studio = (details.production_companies || [])[0]?.name || it.studio || '';
-        it.genre = (details.genres || []).map(g=>g.name)[0] || it.genre || '';
+        it.genre = (details.genres || []).map(g => g.name)[0] || it.genre || '';
         const crew = details.credits?.crew || [];
         it.director = crew.find(c => c.job === 'Director')?.name || it.director || '';
-        it.cast = (details.credits?.cast || []).slice(0, 6).map(c=>c.name) || it.cast || [];
-        it.theatricalDate = pickUSReleaseDate(rel, [3,2]) || (details.release_date || '').slice(0,10) || it.theatricalDate || '';
-        it.digitalDate = pickUSReleaseDate(rel, [4]) || it.digitalDate || '';
+        it.cast = (details.credits?.cast || []).slice(0, 6).map(c => c.name) || it.cast || [];
+        it.theatricalDate = pickUSReleaseDate(rel, [3, 2]) || (details.release_date || '').slice(0, 10) || it.theatricalDate || '';
+
+        const tmdbDigital = pickUSReleaseDate(rel, [4]) || '';
+        if(tmdbDigital){
+          it.digitalDate = tmdbDigital;
+          it.pvodConfirmedDate = tmdbDigital;
+          it.pvodStatus = 'confirmed';
+          it.stillInTheaters = false;
+          it.theatricalStatus = 'ended';
+          it.theatricalCheckDate = todayLocalISO();
+        }else{
+          await updateMovieTheatricalState(it);
+          updatePVODStateSync(it, true);
+        }
       }
+
       if(it.tvmazeId){
         const res = await fetch(`https://api.tvmaze.com/shows/${it.tvmazeId}?embed=episodes`);
         if(res.ok){
@@ -1801,9 +2549,9 @@ async function refreshAll(){
   renderAll();
 }
 
-/* ------------------- Events map (2026-only) ------------------- */
 function buildEventsByDay(entries, mode){
-  const map = new Map(); // iso -> events[]
+  const map = new Map();
+
   const add = (iso, ev) => {
     if(!iso) return;
     if(!isISOInYear(iso, YEAR_FILTER)) return;
@@ -1815,14 +2563,15 @@ function buildEventsByDay(entries, mode){
   const includeEpisodes = (ui.contentUI === 'all') || (ui.contentUI === 'shows');
 
   entries.forEach(({ it, index }) => {
-    const poster = it.poster || `https://via.placeholder.com/420x630?text=`;
+    const poster = it.poster || fallbackPoster(it.title);
 
-    if(includeMovies && it.type === 'movie'){
+    if(includeMovies && (it.type === 'movie' || it.type === 'tba')){
       const movieMode = (ui.contentUI === 'all') ? 'theatrical' : mode;
       if(movieMode === 'theatrical'){
-        add(it.theatricalDate, { kind:'movie', idx:index, label: it.title, watched: it.watched, poster, iso: it.theatricalDate });
-      } else if(movieMode === 'digital'){
-        add(it.digitalDate, { kind:'digital', idx:index, label: it.title, watched: it.watched, poster, iso: it.digitalDate });
+        add(it.theatricalDate, { kind:'movie', idx:index, label:it.title, watched:it.watched, poster, iso:it.theatricalDate });
+      }else if(movieMode === 'digital'){
+        const digitalDate = getDigitalCalendarDate(it);
+        add(digitalDate, { kind:'digital', idx:index, label:it.title, watched:it.watched, poster, iso:digitalDate });
       }
     }
 
@@ -1830,29 +2579,28 @@ function buildEventsByDay(entries, mode){
       (it.episodes || []).forEach(ep => {
         if(!isISOInYear(ep.date, YEAR_FILTER)) return;
         const label = `${it.title} • S${ep.season}E${ep.number}`;
-        add(ep.date, { kind:'episode', idx:index, label, watched: it.watched, poster, iso: ep.date });
+        add(ep.date, { kind:'episode', idx:index, label, watched:it.watched, poster, iso:ep.date });
       });
     }
   });
 
   for(const [k, arr] of map.entries()){
-    arr.sort((a,b)=> {
+    arr.sort((a, b) => {
       const da = parseISODateLocal(a.iso)?.getTime() ?? 0;
       const db = parseISODateLocal(b.iso)?.getTime() ?? 0;
       if(da !== db) return da - db;
-      return (a.label||'').localeCompare(b.label||'');
+      return (a.label || '').localeCompare(b.label || '');
     });
   }
 
   return map;
 }
 
-/* ------------------- Mini month + popup helpers ------------------- */
 function miniMonthDots(eventsByDay, iso){
   const evs = eventsByDay.get(iso) || [];
   const hasMovie = evs.some(e => e.kind === 'movie' || e.kind === 'digital');
   const hasEp = evs.some(e => e.kind === 'episode');
-  return {hasMovie, hasEp, count: evs.length};
+  return { hasMovie, hasEp, count:evs.length };
 }
 
 function openPickModal(iso, events){
@@ -1860,14 +2608,14 @@ function openPickModal(iso, events){
   el.pickDate.textContent = iso;
 
   el.pickGrid.innerHTML = '';
-  events.forEach(ev=>{
+  events.forEach(ev => {
     const card = document.createElement('div');
     card.className = 'pick-item';
 
     const img = document.createElement('img');
     img.src = ev.poster;
     img.loading = 'lazy';
-    img.onerror = ()=> img.src = `https://via.placeholder.com/420x630?text=`;
+    img.onerror = () => img.src = fallbackPoster(ev.label);
 
     const meta = document.createElement('div');
     meta.className = 'pick-meta';
@@ -1878,7 +2626,7 @@ function openPickModal(iso, events){
 
     const kind = document.createElement('div');
     kind.className = 'pick-kind ' + ev.kind;
-    kind.textContent = ev.kind === 'movie' ? 'THEATRICAL' : ev.kind === 'digital' ? 'DIGITAL' : 'EPISODE';
+    kind.textContent = ev.kind === 'movie' ? 'THEATRICAL' : ev.kind === 'digital' ? 'PVOD / DIGITAL' : 'EPISODE';
 
     meta.appendChild(name);
     meta.appendChild(kind);
@@ -1898,29 +2646,42 @@ function openPickModal(iso, events){
 }
 function closePickModal(){ el.pickModal.classList.remove('active'); }
 el.pickClose.onclick = closePickModal;
-el.pickModal.addEventListener('click', (e)=>{ if(e.target === el.pickModal) closePickModal(); });
+el.pickModal.addEventListener('click', (e) => {
+  if(e.target === el.pickModal) closePickModal();
+});
 
-/* ------------------- Mini month renderer (YEAR view matches image #1) ------------------- */
 function renderMiniMonth(eventsByDay){
+  if(mobileMQ.matches){
+    miniUI.mode = 'months';
+  }
+
   if(miniUI.mode === 'months'){
-    el.miniHint.textContent = 'Months view • Tap a month';
+    el.miniHint.textContent = mobileMQ.matches ? 'Tap a month to jump the main calendar' : 'Months view • Tap a month';
     el.miniDow.style.display = 'none';
     el.miniGrid.className = 'mini-year';
     el.miniTitle.textContent = String(YEAR_FILTER);
 
     el.miniBack.style.display = 'none';
-    el.miniPrev.onclick = ()=>{};
-    el.miniNext.onclick = ()=>{};
+
+    if(mobileMQ.matches){
+      el.miniPrev.style.display = 'none';
+      el.miniNext.style.display = 'none';
+    }else{
+      el.miniPrev.style.display = '';
+      el.miniNext.style.display = '';
+      el.miniPrev.onclick = () => {};
+      el.miniNext.onclick = () => {};
+    }
 
     const activeMonth = ui.monthCursor.getMonth();
     el.miniGrid.innerHTML = '';
 
     function buildAppleMonth(m){
       const monthStart = new Date(YEAR_FILTER, m, 1);
-      const monthEnd   = new Date(YEAR_FILTER, m + 1, 0);
+      const monthEnd = new Date(YEAR_FILTER, m + 1, 0);
 
       const gridStart = new Date(monthStart);
-      gridStart.setDate(monthStart.getDate() - gridStart.getDay()); // Sun-start
+      gridStart.setDate(monthStart.getDate() - gridStart.getDay());
 
       const gridEnd = new Date(monthEnd);
       gridEnd.setDate(monthEnd.getDate() + (6 - gridEnd.getDay()));
@@ -1930,7 +2691,7 @@ function renderMiniMonth(eventsByDay){
 
       const name = document.createElement('div');
       name.className = 'apple-month-name';
-      name.textContent = monthStart.toLocaleString(undefined, { month: 'short' });
+      name.textContent = monthStart.toLocaleString(undefined, { month:'short' });
       wrap.appendChild(name);
 
       const grid = document.createElement('div');
@@ -1945,67 +2706,85 @@ function renderMiniMonth(eventsByDay){
         cell.textContent = d.getDate();
 
         const evs = (d.getFullYear() === YEAR_FILTER) ? (eventsByDay.get(iso) || []) : [];
-        if(inMonth && evs.length){
-          cell.classList.add('has');
-        }
+        if(inMonth && evs.length) cell.classList.add('has');
 
         grid.appendChild(cell);
       }
 
       wrap.appendChild(grid);
 
-      wrap.onclick = ()=>{
-        miniUI.mode = 'days';
-        ui.monthCursor = new Date(YEAR_FILTER, m, 1);
-        ui.selectedISO = toISODateLocal(new Date(YEAR_FILTER, m, 1));
-        ui.activeMonthKey = `${YEAR_FILTER}-${String(m+1).padStart(2,'0')}`;
-        renderCalendarShell();
-      };
+wrap.onclick = () => {
+  ui.monthCursor = new Date(YEAR_FILTER, m, 1);
+  ui.selectedISO = toISODateLocal(new Date(YEAR_FILTER, m, 1));
+  ui.activeMonthKey = `${YEAR_FILTER}-${String(m + 1).padStart(2, '0')}`;
+
+  // on mobile, stay in months mode and switch screens instead of showing day-view mini
+  if(mobileMQ.matches){
+    miniUI.mode = 'months';
+    ui.view = 'month';
+    Array.from(el.viewToggle.querySelectorAll('button'))
+      .forEach(b => b.classList.toggle('active', b.dataset.view === 'month'));
+
+    renderCalendarShell();
+    mobileSetScreen('main');
+    return;
+  }
+
+  // desktop/tablet behavior
+  miniUI.mode = 'days';
+  renderCalendarShell();
+  setTimeout(() => scrollTimelineToMonth(ui.activeMonthKey), 30);
+};
 
       return wrap;
     }
 
-    for(let m=0;m<12;m++){
+    for(let m = 0; m < 12; m++){
       el.miniGrid.appendChild(buildAppleMonth(m));
     }
     return;
   }
 
-  // DAYS MODE
   const mStart = startOfMonth(ui.monthCursor);
   const mEnd = endOfMonth(ui.monthCursor);
 
   el.miniHint.textContent = 'Days view • Prev/Next changes month • Use ← to go back';
   el.miniDow.style.display = '';
   el.miniGrid.className = 'mini-grid';
-  el.miniTitle.textContent = mStart.toLocaleString(undefined,{month:'long', year:'numeric'});
+  el.miniTitle.textContent = mStart.toLocaleString(undefined, { month:'long', year:'numeric' });
 
   el.miniBack.style.display = '';
-  el.miniBack.onclick = ()=>{
+  el.miniBack.onclick = () => {
     miniUI.mode = 'months';
     renderMiniMonth(eventsByDay);
   };
 
-  el.miniPrev.onclick = ()=>{
-    const prev = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth()-1, 1);
+  el.miniPrev.onclick = () => {
+    const prev = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth() - 1, 1);
     if(prev.getFullYear() !== YEAR_FILTER) return;
     ui.monthCursor = prev;
     ui.selectedISO = toISODateLocal(ui.monthCursor);
-    ui.activeMonthKey = `${YEAR_FILTER}-${String(ui.monthCursor.getMonth()+1).padStart(2,'0')}`;
+    ui.activeMonthKey = `${YEAR_FILTER}-${String(ui.monthCursor.getMonth() + 1).padStart(2, '0')}`;
     renderCalendarShell();
+    setTimeout(() => {
+      scrollTimelineToMonth(ui.activeMonthKey);
+    }, 30);
   };
 
-  el.miniNext.onclick = ()=>{
-    const next = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth()+1, 1);
+  el.miniNext.onclick = () => {
+    const next = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth() + 1, 1);
     if(next.getFullYear() !== YEAR_FILTER) return;
     ui.monthCursor = next;
     ui.selectedISO = toISODateLocal(ui.monthCursor);
-    ui.activeMonthKey = `${YEAR_FILTER}-${String(ui.monthCursor.getMonth()+1).padStart(2,'0')}`;
+    ui.activeMonthKey = `${YEAR_FILTER}-${String(ui.monthCursor.getMonth() + 1).padStart(2, '0')}`;
     renderCalendarShell();
+    setTimeout(() => {
+      scrollTimelineToMonth(ui.activeMonthKey);
+    }, 30);
   };
 
   if(!el.miniDow.dataset.ready){
-    el.miniDow.innerHTML = ['S','M','T','W','T','F','S'].map(d=>`<div>${d}</div>`).join('');
+    el.miniDow.innerHTML = ['S','M','T','W','T','F','S'].map(d => `<div>${d}</div>`).join('');
     el.miniDow.dataset.ready = '1';
   }
 
@@ -2019,20 +2798,19 @@ function renderMiniMonth(eventsByDay){
 
   el.miniGrid.innerHTML = '';
 
-  for(let d = new Date(firstGrid); d <= lastGrid; d.setDate(d.getDate()+1)){
+  for(let d = new Date(firstGrid); d <= lastGrid; d.setDate(d.getDate() + 1)){
     const iso = toISODateLocal(d);
 
     const btn = document.createElement('div');
-    btn.className = 'mini-day' +
-      (d.getMonth() !== mStart.getMonth() ? ' other' : '') +
-      (sameISO(iso, ui.selectedISO) ? ' sel' : '') +
-      (todayISO && sameISO(iso, todayISO) ? ' today' : '');
+    btn.className = 'mini-day'
+      + (d.getMonth() !== mStart.getMonth() ? ' other' : '')
+      + (sameISO(iso, ui.selectedISO) ? ' sel' : '')
+      + (todayISO && sameISO(iso, todayISO) ? ' today' : '');
 
     btn.textContent = d.getDate();
 
     const isClickable = (d.getFullYear() === YEAR_FILTER);
-
-    const dots = isClickable ? miniMonthDots(eventsByDay, iso) : {count:0,hasMovie:false,hasEp:false};
+    const dots = isClickable ? miniMonthDots(eventsByDay, iso) : { count:0, hasMovie:false, hasEp:false };
     if(dots.count){
       const bar = document.createElement('div');
       bar.className = 'mini-dotbar';
@@ -2049,14 +2827,15 @@ function renderMiniMonth(eventsByDay){
       btn.appendChild(bar);
     }
 
-    btn.onclick = ()=>{
+    btn.onclick = () => {
       if(!isClickable) return;
-
       ui.selectedISO = iso;
       ui.monthCursor = new Date(d.getFullYear(), d.getMonth(), 1);
-      ui.activeMonthKey = `${YEAR_FILTER}-${String(d.getMonth()+1).padStart(2,'0')}`;
-
+      ui.activeMonthKey = `${YEAR_FILTER}-${String(d.getMonth() + 1).padStart(2, '0')}`;
       renderCalendarShell();
+      setTimeout(() => {
+        scrollTimelineToMonth(ui.activeMonthKey);
+      }, 30);
 
       const evs = eventsByDay.get(iso) || [];
       if(evs.length) openPickModal(iso, evs);
@@ -2066,22 +2845,21 @@ function renderMiniMonth(eventsByDay){
   }
 }
 
-/* ------------------- Timeline helpers ------------------- */
 function monthKeyFromISO(iso){
   const d = parseISODateLocal(iso);
   if(!d) return null;
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 function monthLabelFromKey(key){
   if(key === 'TBA') return 'TBA';
-  const [y,m] = key.split('-').map(Number);
-  const d = new Date(y, m-1, 1);
+  const [y, m] = key.split('-').map(Number);
+  const d = new Date(y, m - 1, 1);
   return d.toLocaleString(undefined, { month:'long' });
 }
 function monthOrderKey(key){
   if(key === 'TBA') return 999999;
-  const [y,m] = key.split('-').map(Number);
-  return y*100 + m;
+  const [y, m] = key.split('-').map(Number);
+  return y * 100 + m;
 }
 function highlightMonthChip(){
   const chips = Array.from(el.stripMonths.querySelectorAll('.month-chip'));
@@ -2094,29 +2872,29 @@ function scrollTimelineToMonth(key){
 }
 function buildMonthKeysForChips(){
   const keys = ['ALL'];
-  for(let m=1;m<=12;m++) keys.push(`${YEAR_FILTER}-${String(m).padStart(2,'0')}`);
+  for(let m = 1; m <= 12; m++) keys.push(`${YEAR_FILTER}-${String(m).padStart(2, '0')}`);
   keys.push('TBA');
   return keys;
 }
 function renderMonthChips(){
   const keys = buildMonthKeysForChips();
   el.stripMonths.innerHTML = '';
-  keys.forEach(key=>{
+  keys.forEach(key => {
     const chip = document.createElement('div');
     chip.className = 'month-chip';
     chip.dataset.key = key;
     chip.textContent = key === 'ALL' ? 'All' : key === 'TBA' ? 'TBA' : monthLabelFromKey(key);
-    chip.onclick = ()=>{
+    chip.onclick = () => {
       if(key === 'ALL'){
-        el.stripScroll.scrollTo({ left: 0, behavior: 'smooth' });
+        el.stripScroll.scrollTo({ left:0, behavior:'smooth' });
         return;
       }
       ui.activeMonthKey = key;
       if(key !== 'TBA'){
         const [yy, mm] = key.split('-').map(Number);
-        ui.monthCursor = new Date(yy, mm-1, 1);
-        ui.selectedISO = toISODateLocal(new Date(yy, mm-1, 1));
-        miniUI.mode = 'days';
+        ui.monthCursor = new Date(yy, mm - 1, 1);
+        ui.selectedISO = toISODateLocal(new Date(yy, mm - 1, 1));
+        if(!mobileMQ.matches) miniUI.mode = 'days';
       }
       renderCalendarShell();
       highlightMonthChip();
@@ -2126,15 +2904,56 @@ function renderMonthChips(){
   });
 }
 
+function renderMainMonthsBar(){
+  if(!el.mainMonthsBar) return;
+
+  // Only build on mobile (desktop can keep using the top strip months)
+  if(!mobileMQ.matches){
+    el.mainMonthsBar.innerHTML = '';
+    return;
+  }
+
+  const months = Array.from({length:12}, (_, i) => new Date(YEAR_FILTER, i, 1));
+
+  el.mainMonthsBar.innerHTML = '';
+  months.forEach((dt, i) => {
+    const key = `${YEAR_FILTER}-${String(i + 1).padStart(2, '0')}`;
+
+    const chip = document.createElement('div');
+    chip.className = 'main-month-chip' + (ui.activeMonthKey === key ? ' active' : '');
+    chip.textContent = dt.toLocaleString(undefined, { month:'long' });
+
+    chip.onclick = () => {
+      ui.monthCursor = new Date(YEAR_FILTER, i, 1);
+      ui.selectedISO = toISODateLocal(ui.monthCursor);
+      ui.activeMonthKey = key;
+
+      ui.view = 'month';
+      Array.from(el.viewToggle.querySelectorAll('button'))
+        .forEach(b => b.classList.toggle('active', b.dataset.view === 'month'));
+
+      renderCalendarShell();
+
+      // keep the bar positioned near the selected month
+      chip.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+    };
+
+    el.mainMonthsBar.appendChild(chip);
+  });
+}
+
 function renderTimeline(eventsByDay, entries){
   const mode = ui.mode;
-  el.stripBadge.textContent = mode === 'theatrical' ? 'Theatrical' : mode === 'digital' ? 'Digital' : 'TV Episodes';
+  el.stripBadge.textContent =
+    mode === 'theatrical' ? 'Theatrical' :
+    mode === 'digital' ? 'PVOD / Digital' :
+    'TV Episodes';
 
   const contentLabel =
     ui.contentUI === 'all' ? 'All' :
     ui.contentUI === 'movies' ? 'Movies' :
     ui.contentUI === 'shows' ? 'TV Shows' :
-    'Digital';
+    'Digital / PVOD';
 
   el.stripTitle.textContent = `${contentLabel} • Posters (2026)`;
   el.stripSub.textContent = 'Scroll right. Click a poster to edit.';
@@ -2153,15 +2972,21 @@ function renderTimeline(eventsByDay, entries){
   }
 
   const tbaList = [];
-  entries.forEach(({ it, index })=>{
-    const poster = it.poster || `https://via.placeholder.com/420x630?text=`;
-    if(mode === 'theatrical' && it.type==='movie' && !it.theatricalDate) tbaList.push({ kind:'movie', idx:index, label: it.title, watched: it.watched, poster, iso:'' });
-    if(mode === 'digital' && it.type==='movie' && !it.digitalDate) tbaList.push({ kind:'digital', idx:index, label: it.title, watched: it.watched, poster, iso:'' });
-    if(mode === 'episodes' && it.type==='show' && (!it.episodes || it.episodes.length===0)) tbaList.push({ kind:'episode', idx:index, label: it.title + ' • (no 2026 eps)', watched: it.watched, poster, iso:'' });
+  entries.forEach(({ it, index }) => {
+    const poster = it.poster || fallbackPoster(it.title);
+    if(mode === 'theatrical' && (it.type === 'movie' || it.type === 'tba') && !it.theatricalDate){
+      tbaList.push({ kind:'movie', idx:index, label:it.title, watched:it.watched, poster, iso:'', sublabel:'Theatrical TBA' });
+    }
+    if(mode === 'digital' && (it.type === 'movie' || it.type === 'tba') && !getDigitalCalendarDate(it)){
+      tbaList.push({ kind:'digital', idx:index, label:it.title, watched:it.watched, poster, iso:'', sublabel:'PVOD TBA' });
+    }
+    if(mode === 'episodes' && it.type === 'show' && (!it.episodes || it.episodes.length === 0)){
+      tbaList.push({ kind:'episode', idx:index, label:it.title + ' • (no 2026 eps)', watched:it.watched, poster, iso:'', sublabel:'TV TBA' });
+    }
   });
   if(tbaList.length) sections.set('TBA', tbaList);
 
-  const orderedKeys = Array.from(sections.keys()).sort((a,b)=> monthOrderKey(a) - monthOrderKey(b));
+  const orderedKeys = Array.from(sections.keys()).sort((a, b) => monthOrderKey(a) - monthOrderKey(b));
 
   el.stripTimeline.innerHTML = '';
   if(!orderedKeys.length){
@@ -2173,7 +2998,7 @@ function renderTimeline(eventsByDay, entries){
     return;
   }
 
-  orderedKeys.forEach(key=>{
+  orderedKeys.forEach(key => {
     const section = document.createElement('div');
     section.className = 'strip-section';
     section.dataset.key = key;
@@ -2186,22 +3011,22 @@ function renderTimeline(eventsByDay, entries){
     const row = document.createElement('div');
     row.className = 'strip-row';
 
-    const evs = (sections.get(key) || []).slice().sort((a,b)=>{
+    const evs = (sections.get(key) || []).slice().sort((a, b) => {
       const da = parseISODateLocal(a.iso)?.getTime() ?? 0;
       const db = parseISODateLocal(b.iso)?.getTime() ?? 0;
       if(da !== db) return da - db;
-      return (a.label||'').localeCompare(b.label||'');
+      return (a.label || '').localeCompare(b.label || '');
     });
 
-    evs.forEach(ev=>{
+    evs.forEach(ev => {
       const card = document.createElement('div');
       card.className = 'poster-card' + (ev.watched ? ' watched' : '');
-      card.onclick = ()=>{
+      card.onclick = () => {
         if(ev.iso){
           ui.selectedISO = ev.iso;
           setMonthCursorFromISO(ev.iso);
           ui.activeMonthKey = monthKeyFromISO(ev.iso);
-          miniUI.mode = 'days';
+          if(!mobileMQ.matches) miniUI.mode = 'days';
         }
         renderCalendarShell();
         highlightMonthChip();
@@ -2212,7 +3037,7 @@ function renderTimeline(eventsByDay, entries){
       img.className = 'poster-img';
       img.src = ev.poster;
       img.loading = 'lazy';
-      img.onerror = ()=>{ img.src = `https://via.placeholder.com/420x630?text=`; };
+      img.onerror = () => { img.src = fallbackPoster(ev.label); };
       card.appendChild(img);
 
       const meta = document.createElement('div');
@@ -2228,6 +3053,13 @@ function renderTimeline(eventsByDay, entries){
       dt.textContent = ev.iso || 'TBA';
       meta.appendChild(dt);
 
+      if(ev.sublabel){
+        const sub = document.createElement('div');
+        sub.className = 'poster-subdate';
+        sub.textContent = ev.sublabel;
+        meta.appendChild(sub);
+      }
+
       card.appendChild(meta);
       row.appendChild(card);
     });
@@ -2237,11 +3069,10 @@ function renderTimeline(eventsByDay, entries){
   });
 
   const ms = startOfMonth(ui.monthCursor);
-  ui.activeMonthKey = `${YEAR_FILTER}-${String(ms.getMonth()+1).padStart(2,'0')}`;
+  ui.activeMonthKey = `${YEAR_FILTER}-${String(ms.getMonth() + 1).padStart(2, '0')}`;
   highlightMonthChip();
 }
 
-/* ------------------- Month / Week view ------------------- */
 function renderMonthView(eventsByDay){
   el.weekWrap.classList.add('hidden');
   el.calGrid.classList.remove('hidden');
@@ -2249,7 +3080,10 @@ function renderMonthView(eventsByDay){
   el.calGrid.style.display = 'grid';
 
   const mode = ui.mode;
-  el.calModeBadge.textContent = mode === 'theatrical' ? 'Theatrical' : mode === 'digital' ? 'Digital' : 'TV Episodes';
+  el.calModeBadge.textContent =
+    mode === 'theatrical' ? 'Theatrical' :
+    mode === 'digital' ? 'PVOD / Digital' :
+    'TV Episodes';
 
   const mStart = startOfMonth(ui.monthCursor);
   const mEnd = endOfMonth(ui.monthCursor);
@@ -2257,7 +3091,7 @@ function renderMonthView(eventsByDay){
   el.calTitle.textContent = mStart.toLocaleString(undefined, { month:'long', year:'numeric' });
 
   if(!el.weekdays.dataset.ready){
-    el.weekdays.innerHTML = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div>${d}</div>`).join('');
+    el.weekdays.innerHTML = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => `<div>${d}</div>`).join('');
     el.weekdays.dataset.ready = '1';
   }
 
@@ -2271,7 +3105,7 @@ function renderMonthView(eventsByDay){
 
   el.calGrid.innerHTML = '';
 
-  for(let d = new Date(firstGrid); d <= lastGrid; d.setDate(d.getDate()+1)){
+  for(let d = new Date(firstGrid); d <= lastGrid; d.setDate(d.getDate() + 1)){
     const iso = toISODateLocal(d);
     const inYear = d.getFullYear() === YEAR_FILTER;
 
@@ -2280,10 +3114,12 @@ function renderMonthView(eventsByDay){
 
     const top = document.createElement('div');
     top.className = 'cal-daynum';
-    const dn = document.createElement('span'); dn.textContent = d.getDate();
+    const dn = document.createElement('span');
+    dn.textContent = d.getDate();
     const dot = document.createElement('span');
     dot.className = 'dot' + (todayISO && iso === todayISO ? ' today' : '');
-    top.appendChild(dn); top.appendChild(dot);
+    top.appendChild(dn);
+    top.appendChild(dot);
     cell.appendChild(top);
 
     const evs = inYear ? (eventsByDay.get(iso) || []) : [];
@@ -2291,18 +3127,19 @@ function renderMonthView(eventsByDay){
     eventsWrap.className = 'day-events';
     cell.appendChild(eventsWrap);
 
-    evs.slice(0,4).forEach(ev=>{
+    const maxPostersPerDay = mobileMQ.matches ? 2 : 4;
+
+    evs.slice(0, maxPostersPerDay).forEach(ev => {
       const tile = document.createElement('div');
       tile.className = 'event-tile' + (ev.watched ? ' watched' : '');
 
       const img = document.createElement('img');
       img.src = ev.poster;
       img.loading = 'lazy';
-      img.onerror = ()=>{ img.src = `https://via.placeholder.com/420x630?text=`; };
-
+      img.onerror = () => { img.src = fallbackPoster(ev.label); };
       tile.appendChild(img);
 
-      tile.onclick = (e)=>{
+      tile.onclick = (e) => {
         e.stopPropagation();
         ui.selectedISO = iso;
         openPosterView(ev.poster);
@@ -2311,20 +3148,23 @@ function renderMonthView(eventsByDay){
       eventsWrap.appendChild(tile);
     });
 
-    if(evs.length > 4){
+    if(evs.length > maxPostersPerDay){
       const more = document.createElement('div');
       more.className = 'cal-more';
-      more.textContent = `+${evs.length - 4} more`;
+      more.textContent = `+${evs.length - maxPostersPerDay} more`;
       cell.appendChild(more);
     }
 
-    cell.addEventListener('click', ()=>{
+    cell.addEventListener('click', () => {
       if(!inYear) return;
       ui.selectedISO = iso;
-      ui.activeMonthKey = `${YEAR_FILTER}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      ui.activeMonthKey = `${YEAR_FILTER}-${String(d.getMonth() + 1).padStart(2, '0')}`;
       highlightMonthChip();
-      miniUI.mode = 'days';
-      renderMiniMonth(eventsByDay);
+      if(!mobileMQ.matches){
+        miniUI.mode = 'days';
+        renderMiniMonth(eventsByDay);
+      }
+      if(evs.length) openPickModal(iso, evs);
     });
 
     el.calGrid.appendChild(cell);
@@ -2337,7 +3177,7 @@ function renderWeekView(eventsByDay){
   el.calGrid.style.display = 'none';
   el.weekWrap.style.display = 'block';
 
-  const sel = clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER,0,1));
+  const sel = clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER, 0, 1));
   ui.selectedISO = toISODateLocal(sel);
 
   const ws = startOfWeek(sel);
@@ -2351,14 +3191,17 @@ function renderWeekView(eventsByDay){
   el.calTitle.textContent = `${left} – ${right}`;
 
   const mode = ui.mode;
-  el.calModeBadge.textContent = mode === 'theatrical' ? 'Theatrical' : mode === 'digital' ? 'Digital' : 'TV Episodes';
+  el.calModeBadge.textContent =
+    mode === 'theatrical' ? 'Theatrical' :
+    mode === 'digital' ? 'PVOD / Digital' :
+    'TV Episodes';
 
   const realNow = new Date();
   const todayISO = (realNow.getFullYear() === YEAR_FILTER) ? toISODateLocal(realNow) : '';
 
   el.weekGrid.innerHTML = '';
 
-  for(let i=0;i<7;i++){
+  for(let i = 0; i < 7; i++){
     const d = addDays(ws, i);
     const iso = toISODateLocal(d);
     const inYear = d.getFullYear() === YEAR_FILTER;
@@ -2389,18 +3232,18 @@ function renderWeekView(eventsByDay){
     col.appendChild(wrap);
 
     const evs = inYear ? (eventsByDay.get(iso) || []) : [];
-    evs.forEach(ev=>{
+    evs.forEach(ev => {
       const tile = document.createElement('div');
       tile.className = 'event-tile' + (ev.watched ? ' watched' : '');
 
       const img = document.createElement('img');
       img.src = ev.poster;
       img.loading = 'lazy';
-      img.onerror = ()=>{ img.src = `https://via.placeholder.com/640x360?text=`; };
+      img.onerror = () => { img.src = fallbackPoster(ev.label); };
 
       tile.appendChild(img);
 
-      tile.onclick = (e)=>{
+      tile.onclick = (e) => {
         e.stopPropagation();
         openPosterView(ev.poster);
       };
@@ -2408,44 +3251,58 @@ function renderWeekView(eventsByDay){
       wrap.appendChild(tile);
     });
 
-    col.addEventListener('click', ()=>{
+    col.addEventListener('click', () => {
       if(!inYear) return;
       ui.selectedISO = iso;
-      ui.activeMonthKey = `${YEAR_FILTER}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      ui.activeMonthKey = `${YEAR_FILTER}-${String(d.getMonth() + 1).padStart(2, '0')}`;
       highlightMonthChip();
-      miniUI.mode = 'days';
-      renderMiniMonth(eventsByDay);
+      if(!mobileMQ.matches){
+        miniUI.mode = 'days';
+        renderMiniMonth(eventsByDay);
+      }
+      if(evs.length) openPickModal(iso, evs);
     });
 
     el.weekGrid.appendChild(col);
   }
 }
 
-/* ------------------- Lists ------------------- */
 function nextEpisodeISO(it){
   if(it.type !== 'show') return '';
-  const now = new Date(YEAR_FILTER, 0, 1);
-  const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const upcoming = (it.episodes || [])
-    .map(e => parseISODateLocal(e.date))
-    .filter(Boolean)
-    .filter(d => d >= startToday && d.getFullYear() === YEAR_FILTER)
-    .sort((a,b)=>a-b);
-  return upcoming[0] ? toISODateLocal(upcoming[0]) : '';
+  const all = (it.episodes || [])
+    .map(e => e.date)
+    .filter(d => isISOInYear(d, YEAR_FILTER))
+    .sort();
+  return all[0] || '';
 }
+
 function renderLists(){
   const rows = filteredEntries()
     .slice()
-    .sort((a,b)=> (a.it.title||'').localeCompare(b.it.title||''));
+    .sort((a, b) => {
+      const aISO = primarySortISO(a.it);
+      const bISO = primarySortISO(b.it);
+      if(aISO && bISO){
+        const da = parseISODateLocal(aISO)?.getTime() ?? 0;
+        const db = parseISODateLocal(bISO)?.getTime() ?? 0;
+        if(da !== db) return da - db;
+      }
+      if(aISO && !bISO) return -1;
+      if(!aISO && bISO) return 1;
+      return (a.it.title || '').localeCompare(b.it.title || '');
+    });
 
   el.listTableBody.innerHTML = '';
-  rows.forEach(({ it, index })=>{
+  rows.forEach(({ it, index }) => {
     const tr = document.createElement('tr');
 
     const tdTitle = document.createElement('td'); tdTitle.textContent = it.title || '';
-    const tdType = document.createElement('td'); tdType.textContent = (it.type||'').toUpperCase();
+    const tdType = document.createElement('td'); tdType.textContent = (it.type || '').toUpperCase();
     const tdTh = document.createElement('td'); tdTh.textContent = it.theatricalDate || '—';
-    const tdDi = document.createElement('td'); tdDi.textContent = it.digitalDate || '—';
+    const tdPE = document.createElement('td'); tdPE.textContent = it.pvodEstimatedDate || '—';
+    const tdPC = document.createElement('td'); tdPC.textContent = it.pvodConfirmedDate || '—';
+    const tdST = document.createElement('td'); tdST.textContent = it.stillInTheaters ? 'Yes' : 'No';
+    const tdPS = document.createElement('td'); tdPS.textContent = it.pvodStatus || '—';
     const tdEp = document.createElement('td'); tdEp.textContent = nextEpisodeISO(it) || '—';
     const tdFav = document.createElement('td'); tdFav.textContent = it.favorite ? '★' : '—';
     const tdWat = document.createElement('td'); tdWat.textContent = it.watched ? '✓' : '—';
@@ -2454,13 +3311,16 @@ function renderLists(){
     const btn = document.createElement('button');
     btn.className = 'rowbtn';
     btn.textContent = 'Edit';
-    btn.onclick = ()=> openModal(index);
+    btn.onclick = () => openModal(index);
     tdEdit.appendChild(btn);
 
     tr.appendChild(tdTitle);
     tr.appendChild(tdType);
     tr.appendChild(tdTh);
-    tr.appendChild(tdDi);
+    tr.appendChild(tdPE);
+    tr.appendChild(tdPC);
+    tr.appendChild(tdST);
+    tr.appendChild(tdPS);
     tr.appendChild(tdEp);
     tr.appendChild(tdFav);
     tr.appendChild(tdWat);
@@ -2470,7 +3330,6 @@ function renderLists(){
   });
 }
 
-/* ------------------- Modal (edit) ------------------- */
 function openModal(index){
   currentEditIndex = index;
   const it = items[index];
@@ -2485,15 +3344,28 @@ function openModal(index){
   el.mCast.value = (it.cast || []).join(', ');
   el.mTheatrical.value = it.theatricalDate || '';
   el.mDigital.value = it.digitalDate || '';
+  el.mPVODEstimated.value = it.pvodEstimatedDate || '';
+  el.mPVODConfirmed.value = it.pvodConfirmedDate || '';
+  el.mPVODStatus.value = it.pvodStatus || 'none';
+  el.mPVODPlatforms.value = it.pvodPlatforms || '';
+  el.mTheatricalStatus.value = it.theatricalStatus || 'unknown';
+  el.mTheatricalCheckDate.value = it.theatricalCheckDate || '';
+  el.mStillInTheaters.checked = !!it.stillInTheaters;
+  el.mPVODConfidence.value = it.pvodEstimateConfidence || '';
+  el.mPVODReason.value = it.pvodEstimateReason || '';
+  el.mNotes.value = it.notes || '';
   el.mFav.checked = !!it.favorite;
   el.mWatched.checked = !!it.watched;
   el.mWeekly.checked = !!it.weekly;
 
   const epCount = (it.episodes || []).length;
-  el.mEpNote.textContent =
-    it.type === 'show'
-      ? `Episodes saved for 2026 (newest season only): ${epCount}.`
-      : `Tip: If TMDb didn’t provide a digital date, set it manually here. (Only 2026 dates will show on calendar.)`;
+  if(it.type === 'show'){
+    el.mEpNote.textContent = `Episodes saved for 2026 (newest season only): ${epCount}.`;
+  }else if(it.type === 'tba'){
+    el.mEpNote.textContent = `Manual/TBA item: set a theatrical date for All/Movies, or set estimated/confirmed PVOD for Digital.`;
+  }else{
+    el.mEpNote.textContent = `Refresh Dates checks TMDb now playing. If an estimated PVOD date already passed and the movie still appears theatrical, the estimate gets pushed forward 14 days.`;
+  }
 
   el.modal.classList.add('active');
 }
@@ -2502,33 +3374,76 @@ function closeModal(){
   currentEditIndex = null;
 }
 el.closeModal.onclick = closeModal;
-el.modal.addEventListener('click', (e)=>{ if(e.target === el.modal) closeModal(); });
+el.modal.addEventListener('click', (e) => { if(e.target === el.modal) closeModal(); });
 
-el.saveBtn.onclick = ()=>{
+el.mAutoEstimate.onclick = () => {
+  if(currentEditIndex == null) return;
+  const temp = items[currentEditIndex];
+
+  temp.title = el.mTitle.value.trim();
+  temp.studio = el.mStudio.value.trim();
+  temp.genre = el.mGenre.value.trim();
+  temp.theatricalDate = el.mTheatrical.value;
+  temp.theatricalStatus = el.mTheatricalStatus.value;
+  temp.stillInTheaters = el.mStillInTheaters.checked;
+  temp.theatricalCheckDate = el.mTheatricalCheckDate.value || todayLocalISO();
+
+  updatePVODStateSync(temp, true);
+
+  el.mPVODEstimated.value = temp.pvodEstimatedDate || '';
+  el.mPVODConfidence.value = temp.pvodEstimateConfidence || '';
+  el.mPVODReason.value = temp.pvodEstimateReason || '';
+  if(!el.mPVODConfirmed.value) el.mPVODStatus.value = temp.pvodStatus || 'estimated';
+};
+
+el.saveBtn.onclick = () => {
   const it = items[currentEditIndex];
 
   it.title = el.mTitle.value.trim();
   it.type = el.mType.value;
   it.hype = Number(el.mHype.value || 0);
 
-  it.poster = el.mPoster.value.trim();
+  it.poster = el.mPoster.value.trim() || fallbackPoster(it.title);
   it.studio = el.mStudio.value.trim();
   it.genre = el.mGenre.value.trim();
   it.director = el.mDirector.value.trim();
-  it.cast = el.mCast.value.split(',').map(s=>s.trim()).filter(Boolean);
+  it.cast = el.mCast.value.split(',').map(s => s.trim()).filter(Boolean);
 
   it.theatricalDate = el.mTheatrical.value;
   it.digitalDate = el.mDigital.value;
+  it.pvodEstimatedDate = el.mPVODEstimated.value;
+  it.pvodConfirmedDate = el.mPVODConfirmed.value;
+  it.pvodStatus = el.mPVODStatus.value;
+  it.pvodPlatforms = el.mPVODPlatforms.value.trim();
+  it.theatricalStatus = el.mTheatricalStatus.value;
+  it.theatricalCheckDate = el.mTheatricalCheckDate.value || todayLocalISO();
+  it.stillInTheaters = el.mStillInTheaters.checked;
+  it.pvodEstimateConfidence = el.mPVODConfidence.value.trim();
+  it.pvodEstimateReason = el.mPVODReason.value.trim();
+  it.notes = el.mNotes.value.trim();
 
   it.favorite = el.mFav.checked;
   it.watched = el.mWatched.checked;
   it.weekly = el.mWeekly.checked;
 
+  if(it.pvodConfirmedDate){
+    if(it.pvodStatus !== 'live') it.pvodStatus = 'confirmed';
+    it.stillInTheaters = false;
+    if(it.theatricalStatus === 'unknown' || it.theatricalStatus === 'exclusive' || it.theatricalStatus === 'limited'){
+      it.theatricalStatus = 'ended';
+    }
+  }
+
+  if(!it.pvodConfirmedDate && it.type === 'movie'){
+    updatePVODStateSync(it, false);
+  }
+
   save();
   closeModal();
   renderAll();
 };
-el.deleteBtn.onclick = ()=>{
+
+el.deleteBtn.onclick = () => {
   if(confirm('Delete this item?')){
     items.splice(currentEditIndex, 1);
     save();
@@ -2537,7 +3452,6 @@ el.deleteBtn.onclick = ()=>{
   }
 };
 
-/* ------------------- Tabs ------------------- */
 function setTab(name){
   ui.tab = name;
   el.tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
@@ -2546,60 +3460,71 @@ function setTab(name){
   el.tabHelp.classList.toggle('hidden', name !== 'help');
   renderAll();
 }
-el.tabs.forEach(t => t.onclick = ()=> setTab(t.dataset.tab));
+el.tabs.forEach(t => t.onclick = () => setTab(t.dataset.tab));
 
-/* ------------------- Content segmented control ------------------- */
 function setContent(val){
   ui.contentUI = val;
 
   if(val === 'shows'){
     ui.contentFilter = 'shows';
     ui.mode = 'episodes';
-  } else if(val === 'digital'){
+  }else if(val === 'digital'){
     ui.contentFilter = 'movies';
     ui.mode = 'digital';
-  } else if(val === 'movies'){
+  }else if(val === 'movies'){
     ui.contentFilter = 'movies';
     ui.mode = 'theatrical';
-  } else {
+  }else{
     ui.contentFilter = 'all';
     ui.mode = 'theatrical';
   }
 
-  Array.from(el.contentSeg.querySelectorAll('button')).forEach(b=>{
+  Array.from(el.contentSeg.querySelectorAll('button')).forEach(b => {
     b.classList.toggle('active', b.dataset.content === val);
   });
 
   renderAll();
 }
-Array.from(el.contentSeg.querySelectorAll('button')).forEach(b=>{
-  b.onclick = ()=> setContent(b.dataset.content);
+Array.from(el.contentSeg.querySelectorAll('button')).forEach(b => {
+  b.onclick = () => setContent(b.dataset.content);
 });
 
-/* ------------------- Buttons + inputs ------------------- */
-el.addBtn.onclick = addItem;
-el.refreshBtn.onclick = refreshAll;
+el.addBtn.onclick = () => handleAdd(el.addTitle, el.addType);
+el.addBtnMobile.onclick = () => handleAdd(el.addTitleMobile, el.addTypeMobile);
 
-el.clearBtn.onclick = ()=>{
+el.addTitle.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') handleAdd(el.addTitle, el.addType);
+});
+el.addTitleMobile.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') handleAdd(el.addTitleMobile, el.addTypeMobile);
+});
+
+el.refreshBtn.onclick = refreshAll;
+el.refreshBtnMobile.onclick = refreshAll;
+
+function clearAllItems(){
   if(confirm('Remove all items?')){
     items = [];
     save();
     renderAll();
   }
-};
+}
+el.clearBtn.onclick = clearAllItems;
+el.clearBtnMobile.onclick = clearAllItems;
 
-el.exportBtn.onclick = ()=>{
+function exportItems(){
   const blob = new Blob([JSON.stringify(items, null, 2)], { type:'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'movie-show-calendar-2026.json';
+  a.download = 'movie-show-calendar-2026-tmdb-now-playing.json';
   a.click();
   URL.revokeObjectURL(url);
-};
+}
+el.exportBtn.onclick = exportItems;
+el.exportBtnMobile.onclick = exportItems;
 
-el.importFile.addEventListener('change', async (e)=>{
-  const file = e.target.files?.[0];
+async function importFromFile(file){
   if(!file) return;
   try{
     const text = await file.text();
@@ -2611,9 +3536,18 @@ el.importFile.addEventListener('change', async (e)=>{
     renderAll();
   }catch(err){
     alert('Could not import: ' + (err?.message || err));
-  }finally{
-    e.target.value = '';
   }
+}
+
+el.importFile.addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  await importFromFile(file);
+  e.target.value = '';
+});
+el.importFileMobile.addEventListener('change', async (e) => {
+  const file = e.target.files?.[0];
+  await importFromFile(file);
+  e.target.value = '';
 });
 
 function toggleBtn(btn, on){
@@ -2622,98 +3556,110 @@ function toggleBtn(btn, on){
   btn.style.borderColor = on ? 'rgba(0,224,84,.22)' : 'rgba(255,255,255,.10)';
   btn.style.background = on ? 'rgba(0,224,84,.08)' : 'rgba(255,255,255,.03)';
 }
-el.favoritesBtn.onclick = ()=>{ ui.favoritesOnly = !ui.favoritesOnly; toggleBtn(el.favoritesBtn, ui.favoritesOnly); renderAll(); };
-el.watchedBtn.onclick   = ()=>{ ui.watchedOnly   = !ui.watchedOnly;   toggleBtn(el.watchedBtn, ui.watchedOnly);   renderAll(); };
+el.favoritesBtn.onclick = () => {
+  ui.favoritesOnly = !ui.favoritesOnly;
+  toggleBtn(el.favoritesBtn, ui.favoritesOnly);
+  renderAll();
+};
+el.watchedBtn.onclick = () => {
+  ui.watchedOnly = !ui.watchedOnly;
+  toggleBtn(el.watchedBtn, ui.watchedOnly);
+  renderAll();
+};
 
-/* ------------------- View toggle + prev/next/today (clamped to 2026) ------------------- */
-Array.from(el.viewToggle.querySelectorAll('button')).forEach(btn=>{
-  btn.onclick = ()=>{
+Array.from(el.viewToggle.querySelectorAll('button')).forEach(btn => {
+  btn.onclick = () => {
     ui.view = btn.dataset.view;
-    Array.from(el.viewToggle.querySelectorAll('button')).forEach(b=>b.classList.toggle('active', b.dataset.view === ui.view));
+    Array.from(el.viewToggle.querySelectorAll('button')).forEach(b => b.classList.toggle('active', b.dataset.view === ui.view));
     renderCalendarShell();
   };
 });
 
 function canMoveMonth(delta){
-  const test = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth()+delta, 1);
+  const test = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth() + delta, 1);
   return test.getFullYear() === YEAR_FILTER;
 }
 
-el.prevBtn.onclick = ()=>{
+el.prevBtn.onclick = () => {
   if(ui.view === 'month'){
     if(!canMoveMonth(-1)) return;
-    ui.monthCursor = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth()-1, 1);
+    ui.monthCursor = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth() - 1, 1);
     ui.selectedISO = toISODateLocal(ui.monthCursor);
   }else{
-    const s = startOfWeek(clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER,0,1)));
+    const s = startOfWeek(clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER, 0, 1)));
     const nextSel = addDays(s, -7);
     ui.selectedISO = toISODateLocal(clampTo2026(nextSel));
     setMonthCursorFromISO(ui.selectedISO);
   }
-  miniUI.mode = 'days';
+  if(!mobileMQ.matches) miniUI.mode = 'days';
   renderCalendarShell();
+  setTimeout(() => {
+    scrollTimelineToMonth(ui.activeMonthKey);
+  }, 30);
 };
 
-el.nextBtn.onclick = ()=>{
+el.nextBtn.onclick = () => {
   if(ui.view === 'month'){
     if(!canMoveMonth(+1)) return;
-    ui.monthCursor = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth()+1, 1);
+    ui.monthCursor = new Date(ui.monthCursor.getFullYear(), ui.monthCursor.getMonth() + 1, 1);
     ui.selectedISO = toISODateLocal(ui.monthCursor);
   }else{
-    const s = startOfWeek(clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER,0,1)));
+    const s = startOfWeek(clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER, 0, 1)));
     const nextSel = addDays(s, +7);
     ui.selectedISO = toISODateLocal(clampTo2026(nextSel));
     setMonthCursorFromISO(ui.selectedISO);
   }
-  miniUI.mode = 'days';
+  if(!mobileMQ.matches) miniUI.mode = 'days';
   renderCalendarShell();
+  setTimeout(() => {
+    scrollTimelineToMonth(ui.activeMonthKey);
+  }, 30);
 };
 
-el.todayBtn.onclick = ()=>{
+el.todayBtn.onclick = () => {
   const real = new Date();
   const now = (real.getFullYear() === YEAR_FILTER) ? real : new Date(YEAR_FILTER, 0, 1);
   ui.selectedISO = toISODateLocal(now);
   ui.monthCursor = new Date(now.getFullYear(), now.getMonth(), 1);
-  ui.activeMonthKey = `${YEAR_FILTER}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  miniUI.mode = 'days';
+  ui.activeMonthKey = `${YEAR_FILTER}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  if(!mobileMQ.matches) miniUI.mode = 'days';
   renderCalendarShell();
+  setTimeout(() => {
+    scrollTimelineToMonth(ui.activeMonthKey);
+  }, 30);
 };
 
-/* ------------------- Header collapse on scroll ------------------- */
 (function headerCollapse(){
   const threshold = 60;
-  window.addEventListener('scroll', ()=>{
+  window.addEventListener('scroll', () => {
     const y = window.scrollY || 0;
     if(y > threshold) el.header.classList.add('compact');
     else el.header.classList.remove('compact');
     if(y < 20) closePickModal();
-  }, {passive:true});
+  }, { passive:true });
 })();
 
-/* ------------------- Mobile: force Week view on phones ------------------- */
 const mobileMQ = window.matchMedia('(max-width: 720px)');
 function applyMobileDefaults(){
   if(mobileMQ.matches){
-    ui.view = 'week';
-    Array.from(el.viewToggle.querySelectorAll('button')).forEach(b=>{
-      b.classList.toggle('active', b.dataset.view === ui.view);
-    });
+    miniUI.mode = 'months';
+    mobileSetScreen('mini');
+  }else{
+    document.body.classList.remove('mobile-show-mini', 'mobile-show-main');
   }
 }
-mobileMQ.addEventListener?.('change', ()=>{
-  // if we leave phone size while sheet open, close + restore mini month
+mobileMQ.addEventListener?.('change', () => {
   if(!mobileMQ.matches) closeMiniSheet(true);
   applyMobileDefaults();
   renderCalendarShell();
 });
 
-/* ------------------- Mini calendar sheet (moves the mini-month node) ------------------- */
 let miniMove = { parent:null, next:null, moved:false };
 
 function openMiniSheet(){
+  if(mobileMQ.matches) return;
   if(el.miniSheet.classList.contains('active')) return;
 
-  // move mini-month into sheet body so it works with the same IDs
   if(!miniMove.moved){
     miniMove.parent = el.miniMonthAside.parentNode;
     miniMove.next = el.miniMonthAside.nextSibling;
@@ -2723,38 +3669,39 @@ function openMiniSheet(){
   el.miniSheetBody.appendChild(el.miniMonthAside);
 
   el.miniSheet.classList.add('active');
-  el.miniSheet.setAttribute('aria-hidden','false');
+  el.miniSheet.setAttribute('aria-hidden', 'false');
 
-  // ensure mini-month is in the right mode on open
-  setTimeout(()=>{ renderCalendarShell(); }, 0);
+  setTimeout(() => { renderCalendarShell(); }, 0);
 }
-
 function closeMiniSheet(skipRender){
   if(!el.miniSheet.classList.contains('active') && !miniMove.moved) return;
 
   el.miniSheet.classList.remove('active');
-  el.miniSheet.setAttribute('aria-hidden','true');
+  el.miniSheet.setAttribute('aria-hidden', 'true');
 
-  // restore mini-month back into the cal-shell
   if(miniMove.parent){
     if(miniMove.next) miniMove.parent.insertBefore(el.miniMonthAside, miniMove.next);
     else miniMove.parent.appendChild(el.miniMonthAside);
   }
 
-  if(!skipRender) setTimeout(()=>{ renderCalendarShell(); }, 0);
+  if(!skipRender) setTimeout(() => { renderCalendarShell(); }, 0);
 }
 
 el.miniOpenBtn.onclick = openMiniSheet;
-el.miniSheetClose.onclick = ()=> closeMiniSheet(false);
-el.miniSheet.addEventListener('click', (e)=>{
+el.miniSheetClose.onclick = () => closeMiniSheet(false);
+el.miniSheet.addEventListener('click', (e) => {
   if(e.target === el.miniSheet) closeMiniSheet(false);
 });
 
-/* ------------------- Render shell ------------------- */
 function renderCalendarShell(){
-  if(ui.view === 'week') setMonthCursorFromISO(ui.selectedISO);
+  items.forEach(it => {
+    if(it.type === 'movie') updatePVODStateSync(it, false);
+  });
+
+  if(!mobileMQ.matches && ui.view === 'week') setMonthCursorFromISO(ui.selectedISO);
 
   renderMonthChips();
+renderMainMonthsBar();
   highlightMonthChip();
 
   const entries = filteredEntries();
@@ -2772,7 +3719,19 @@ function renderAll(){
   if(ui.tab === 'lists') renderLists();
 }
 
-/* ------------------- Init ------------------- */
+function mobileSetScreen(which){
+  if(!mobileMQ.matches) return;
+
+  document.body.classList.remove('mobile-show-mini', 'mobile-show-main');
+  document.body.classList.add(which === 'main' ? 'mobile-show-main' : 'mobile-show-mini');
+
+  if(which === 'main'){
+    setTimeout(() => el.calWrap?.scrollIntoView({ behavior:'smooth', block:'start' }), 30);
+  }else{
+    setTimeout(() => el.miniMonthAside?.scrollIntoView({ behavior:'smooth', block:'start' }), 30);
+  }
+}
+
 load();
 
 const real = new Date();
@@ -2780,7 +3739,7 @@ const start = (real.getFullYear() === YEAR_FILTER) ? real : new Date(YEAR_FILTER
 
 ui.monthCursor = new Date(start.getFullYear(), start.getMonth(), 1);
 ui.selectedISO = toISODateLocal(start);
-ui.activeMonthKey = `${YEAR_FILTER}-${String(ui.monthCursor.getMonth()+1).padStart(2,'0')}`;
+ui.activeMonthKey = `${YEAR_FILTER}-${String(ui.monthCursor.getMonth() + 1).padStart(2, '0')}`;
 
 miniUI.mode = 'months';
 miniUI.year = YEAR_FILTER;
