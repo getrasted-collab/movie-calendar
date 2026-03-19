@@ -368,7 +368,6 @@ main{
   padding:0 4px;
   overflow:hidden;
 }
-
 .poster-logo{
   display:block;
   max-width:92%;
@@ -377,32 +376,61 @@ main{
   height:auto;
   object-fit:contain;
 }
-
 .poster-title.is-fallback{
   margin-top:2px;
 }
 
+#posterPicker,
 #logoPicker{
   display:grid;
   grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));
   gap:10px;
 }
+
+.poster-option,
 .logo-option{
   border:1px solid rgba(255,255,255,.10);
   border-radius:14px;
   background:rgba(255,255,255,.03);
-  padding:10px;
   cursor:pointer;
   transition:border-color .12s ease, transform .12s ease, background .12s ease;
 }
+.poster-option{ padding:8px; }
+.logo-option{ padding:10px; }
+
+.poster-option:hover,
 .logo-option:hover{
   transform:translateY(-1px);
   border-color:rgba(255,255,255,.20);
 }
+.poster-option.active,
 .logo-option.active{
   border-color:rgba(0,224,84,.40);
   background:rgba(0,224,84,.08);
 }
+
+.poster-option-preview{
+  width:100%;
+  aspect-ratio:2 / 3;
+  border-radius:10px;
+  overflow:hidden;
+  background:rgba(255,255,255,.03);
+  margin-bottom:8px;
+}
+.poster-option-preview img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.poster-option-meta,
+.logo-option-meta{
+  font-size:11px;
+  color:rgba(243,245,247,.62);
+  line-height:1.3;
+  text-align:center;
+}
+
 .logo-option-preview{
   height:42px;
   display:flex;
@@ -416,12 +444,6 @@ main{
   object-fit:contain;
   display:block;
 }
-.logo-option-meta{
-  font-size:11px;
-  color:rgba(243,245,247,.62);
-  line-height:1.3;
-  text-align:center;
-}
 
 @media (max-width:720px){
   .poster-logo-wrap{
@@ -430,31 +452,34 @@ main{
     margin-bottom:4px;
     padding:0 2px;
   }
-
   .poster-logo{
     max-width:94%;
     max-height:22px;
   }
 }
 
-  .mini-bottom-actions{
-    display:none;
-  }
+.mini-bottom-actions{
+  display:none;
+}
 
-  body.mobile-show-mini .mini-bottom-actions{
-    display:flex !important;
-    padding:12px 16px 18px;
-    border-top:1px solid rgba(255,255,255,.06);
-    background:transparent;
-  }
+body.mobile-show-mini .mini-bottom-actions{
+  display:flex !important;
+  flex-direction:column;
+  gap:10px;
+  padding:12px 16px 18px;
+  border-top:1px solid rgba(255,255,255,.06);
+  background:transparent;
+}
 
-  body.mobile-show-mini .mini-bottom-actions button{
-    width:100%;
-    min-height:48px;
-    border-radius:16px;
-    font-weight:900;
-    font-size:15px;
-  }
+body.mobile-show-mini .mini-bottom-actions button,
+body.mobile-show-mini .mini-bottom-actions .import-label{
+  width:100%;
+  min-height:48px;
+  border-radius:16px;
+  font-weight:900;
+  font-size:15px;
+  justify-content:center;
+}
 
 @media (min-width:1380px){
   .cal-shell{ grid-template-columns:390px 1fr; }
@@ -951,7 +976,7 @@ main{
 }
 .pick-modal.active{ visibility:visible; opacity:1; }
 
-..pick-card{
+.pick-card{
   width:min(1100px, 96vw);
   max-width:min(1100px, 96vw);
   max-height:88vh;
@@ -1233,10 +1258,10 @@ main{
 
   .mini-month{
     display:block !important;
-    order:1;
+    order:3;
     width:100%;
     max-width:100%;
-    min-height:calc(100vh - 210px);
+    min-height:auto;
     border-radius:28px;
     background:#000;
     border:1px solid rgba(255,255,255,.06);
@@ -1319,14 +1344,13 @@ main{
 
   body.mobile-show-mini .mobile-add-panel{ display:none !important; }
 
-  /* Put the week row above the mini calendar */
   body.mobile-show-mini .cal-shell{
     display:flex !important;
     flex-direction:column !important;
     gap:14px !important;
   }
 
-  /* Remove the main calendar shell styling on mini screen */
+  /* Week row above mini calendar on mobile */
   body.mobile-show-mini #calWrap{
     display:block !important;
     order:2 !important;
@@ -1339,14 +1363,12 @@ main{
     border-radius:0 !important;
   }
 
-  /* Mini calendar goes under the week row */
   body.mobile-show-mini #miniMonthAside{
     display:block !important;
     order:3 !important;
     margin-top:0;
   }
 
-  /* Hide the main calendar completely on mini screen */
   body.mobile-show-mini #mainMonthsBar,
   body.mobile-show-mini .cal-header,
   body.mobile-show-mini .cal-weekdays,
@@ -1354,7 +1376,6 @@ main{
     display:none !important;
   }
 
-  /* Only keep the week row visible */
   body.mobile-show-mini .cal-body-scroll{
     display:block !important;
     padding:0 !important;
@@ -1426,9 +1447,7 @@ main{
     line-height:1.15;
     -webkit-line-clamp:2;
   }
-  .poster-date{
-    font-size:9px;
-  }
+  .poster-date{ font-size:9px; }
   .poster-subdate{
     font-size:8px;
     line-height:1.2;
@@ -1537,65 +1556,67 @@ main{
     overflow:hidden;
   }
 
-.week-events{
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  flex:1;
-  width:100%;
-}
+  .week-events{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    flex:1;
+    width:100%;
+  }
 
-.week-events .event-tile{
-  width:100%;
-  max-width:42px;
-  flex:0 0 42px;
-  border-radius:10px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.04);
-  cursor:pointer;
-}
+  .week-events .event-tile{
+    width:100%;
+    max-width:42px;
+    flex:0 0 42px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04);
+    cursor:pointer;
+  }
 
-.week-events .event-tile img{
-  width:100%;
-  aspect-ratio:2 / 3;
-  height:auto;
-  object-fit:cover;
-  display:block;
-}
+  .week-events .event-tile img{
+    width:100%;
+    aspect-ratio:2 / 3;
+    height:auto;
+    object-fit:cover;
+    display:block;
+  }
 
-.week-more{
-  margin-top:6px;
-  min-width:30px;
-  height:22px;
-  padding:0 8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.05);
-  color:rgba(243,245,247,.82);
-  font-size:10px;
-  font-weight:900;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
-.pick-card{
-  width:min(96vw, 1100px);
-  max-width:min(96vw, 1100px);
-}
+  .week-more{
+    margin-top:6px;
+    min-width:30px;
+    height:22px;
+    padding:0 8px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+    color:rgba(243,245,247,.82);
+    font-size:10px;
+    font-weight:900;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
 
-.pick-grid{
-  grid-template-columns:repeat(2, minmax(0, 1fr));
-  gap:10px;
-  padding:14px;
-}
+  .pick-card{
+    width:min(96vw, 1100px);
+    max-width:min(96vw, 1100px);
+  }
 
-.pick-item{
-  width:100%;
-  max-width:none;
-}
-.modal-content{ max-width:92vw; }
+  .pick-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:10px;
+    padding:14px;
+  }
+
+  .pick-item{
+    width:100%;
+    max-width:none;
+  }
+
+  .modal-content{ max-width:92vw; }
 
   .mobile-add-panel{ display:block; }
   .mobile-add-panel #addTitle,
@@ -1658,13 +1679,9 @@ main{
 <main>
   <section id="tab-calendar">
     <div class="strip-wrap">
-      <div class="strip-head">
-        <div>
-          <div class="strip-title" id="stripTitle">All • Posters (2026)</div>
-          <div class="strip-sub" id="stripSub">Scroll right. Click a poster to edit.</div>
-        </div>
-        <div class="badge-mini" id="stripBadge">Mode</div>
-      </div>
+<div class="strip-head">
+  <div class="badge-mini" id="stripBadge">Mode</div>
+</div>
 
       <div class="strip-months" id="stripMonths"></div>
 
@@ -1690,6 +1707,15 @@ main{
 
         <div class="mini-bottom-actions">
           <button id="miniFavoritesBtn" class="btn-ghost">★ Favorites</button>
+
+          <label
+            id="miniImportLabel"
+            class="btn-ghost import-label"
+            style="display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;"
+          >
+            Import
+            <input id="importFileMiniBottom" type="file" accept="application/json" style="display:none;">
+          </label>
         </div>
       </aside>
 
@@ -1806,6 +1832,9 @@ main{
 
       <input id="mPoster" class="full" placeholder="Poster URL">
 
+      <div class="full section-label">POSTER OPTIONS</div>
+      <div id="posterPicker" class="full"></div>
+
       <div class="full section-label">LOGO OPTIONS</div>
       <div id="logoPicker" class="full"></div>
 
@@ -1896,7 +1925,7 @@ main{
 <script>
 const YEAR_FILTER = 2026;
 const TMDB_API_KEY = 'ba199522ebd04e467996dcfb2bade6a4';
-const STORAGE_KEY = 'items_v16_logo_picker_2026';
+const STORAGE_KEY = 'items_v17_poster_picker_2026';
 
 function parseISODateLocal(iso){
   if(!iso) return null;
@@ -2221,6 +2250,7 @@ let miniUI = {
 };
 
 const el = {
+  importFileMiniBottom: document.getElementById('importFileMiniBottom'),
   mainMonthsBar: document.getElementById('mainMonthsBar'),
   header:document.getElementById('header'),
   contentSeg:document.getElementById('contentSeg'),
@@ -2294,6 +2324,7 @@ const el = {
   mWatched:document.getElementById('mWatched'),
   mWeekly:document.getElementById('mWeekly'),
   mEpNote:document.getElementById('mEpNote'),
+  posterPicker:document.getElementById('posterPicker'),
   logoPicker:document.getElementById('logoPicker'),
   saveBtn:document.getElementById('saveBtn'),
   deleteBtn:document.getElementById('deleteBtn'),
@@ -2371,6 +2402,53 @@ function buildLogoOptionsFromTMDB(logos = []){
     });
 }
 
+function buildPosterOptionsFromTMDB(posters = [], fallbackPosterUrl = ''){
+  const out = [];
+
+  if(fallbackPosterUrl){
+    out.push({
+      url: fallbackPosterUrl,
+      width: 0,
+      height: 0,
+      lang: '',
+      type: 'current'
+    });
+  }
+
+  if(Array.isArray(posters) && posters.length){
+    posters
+      .filter(p => p?.file_path)
+      .sort((a, b) => {
+        const aLangScore = a.iso_639_1 === 'en' ? 3 : (!a.iso_639_1 ? 2 : 1);
+        const bLangScore = b.iso_639_1 === 'en' ? 3 : (!b.iso_639_1 ? 2 : 1);
+        if(bLangScore !== aLangScore) return bLangScore - aLangScore;
+
+        const aVote = Number(a.vote_average || 0);
+        const bVote = Number(b.vote_average || 0);
+        if(bVote !== aVote) return bVote - aVote;
+
+        const aWidth = Number(a.width || 0);
+        const bWidth = Number(b.width || 0);
+        return bWidth - aWidth;
+      })
+      .forEach(p => {
+        out.push({
+          url: buildTMDBImage(p.file_path, 'w500'),
+          width: Number(p.width || 0),
+          height: Number(p.height || 0),
+          lang: p.iso_639_1 || '',
+          type: 'tmdb'
+        });
+      });
+  }
+
+  return out.filter((opt, i, arr) => arr.findIndex(x => x.url === opt.url) === i);
+}
+
+function pickDefaultPosterFromOptions(options = [], fallback = ''){
+  return options?.[0]?.url || fallback || '';
+}
+
 function pickDefaultLogoFromOptions(options = []){
   return options?.[0]?.url || '';
 }
@@ -2381,6 +2459,8 @@ function normalizeImportedItem(x){
     title,
     type: normalizeManualType(x),
     poster: x.poster || fallbackPoster(title),
+    posterOptions: Array.isArray(x.posterOptions) ? x.posterOptions : [],
+    selectedPosterIndex: Number.isFinite(Number(x.selectedPosterIndex)) ? Number(x.selectedPosterIndex) : -1,
     logo: x.logo || '',
     logoOptions: Array.isArray(x.logoOptions) ? x.logoOptions : [],
     selectedLogoIndex: Number(x.selectedLogoIndex || 0),
@@ -2415,12 +2495,24 @@ function normalizeImportedItem(x){
     boxOfficeTrend: x.boxOfficeTrend || 'normal',
     franchiseLevel: x.franchiseLevel || 'none'
   };
+
   updatePVODStateSync(normalized, false);
+
+  if((!normalized.poster || normalized.poster === fallbackPoster(title)) && normalized.posterOptions.length){
+    const safePosterIndex = Math.min(
+      Math.max(Number(normalized.selectedPosterIndex || 0), 0),
+      normalized.posterOptions.length - 1
+    );
+    normalized.selectedPosterIndex = safePosterIndex;
+    normalized.poster = normalized.posterOptions[safePosterIndex]?.url || normalized.poster;
+  }
+
   if(!normalized.logo && normalized.logoOptions.length){
     const safeIndex = Math.min(normalized.selectedLogoIndex, normalized.logoOptions.length - 1);
     normalized.selectedLogoIndex = Math.max(0, safeIndex);
     normalized.logo = normalized.logoOptions[normalized.selectedLogoIndex]?.url || '';
   }
+
   return normalized;
 }
 
@@ -2431,7 +2523,9 @@ function load(){
     catch { items = []; }
     return;
   }
-  const old = localStorage.getItem('items_v15_mobile_fix_2026')
+
+  const old = localStorage.getItem('items_v16_logo_picker_2026')
+    || localStorage.getItem('items_v15_mobile_fix_2026')
     || localStorage.getItem('items_v14_calendar_ui_refresh_2026')
     || localStorage.getItem('items_v13_letterboxd_2026_tmdb_now_playing')
     || localStorage.getItem('items_v12_letterboxd_2026_pvod_hold')
@@ -2504,7 +2598,8 @@ async function tmdbSearchTV(title){
 }
 
 async function tmdbFetchTVImages(tvId){
-  const res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}/images?api_key=${TMDB_API_KEY}&include_image_language=en,null`);
+  const res = await fetch(`https://api.themoviedb.org
+/images?api_key=${TMDB_API_KEY}&include_image_language=en,null`);
   if(!res.ok) return null;
   return await res.json();
 }
@@ -2513,12 +2608,17 @@ async function addMovie(title){
   const hit = await tmdbSearchMovie(title);
   if(!hit) throw new Error('Movie not found on TMDb');
   const { details, rel } = await tmdbFetchMovieDetails(hit.id);
+
+  const initialPoster = normalizePoster(details.poster_path, details.title || title);
+  const posterOptions = buildPosterOptionsFromTMDB(details.images?.posters || [], initialPoster);
   const logoOptions = buildLogoOptionsFromTMDB(details.images?.logos || []);
 
   const item = {
     title: details.title || title,
     type: 'movie',
-    poster: normalizePoster(details.poster_path, details.title || title),
+    poster: pickDefaultPosterFromOptions(posterOptions, initialPoster),
+    posterOptions,
+    selectedPosterIndex: posterOptions.length ? 0 : -1,
     logo: pickDefaultLogoFromOptions(logoOptions),
     logoOptions,
     selectedLogoIndex: 0,
@@ -2599,6 +2699,7 @@ function normalizeEpisodesFor2026(epsRaw){
   });
   return { episodes:onlyNewestSeason, newestSeason };
 }
+
 async function addShow(title){
   const show = await tvmazeSingleSearchShow(title);
   if(!show) throw new Error('TV show not found on TVMaze');
@@ -2607,11 +2708,20 @@ async function addShow(title){
   let tmdbTvId = tmdbTV?.id ?? null;
   let logoOptions = [];
   let logo = '';
+  let posterOptions = [];
+  let selectedPosterIndex = -1;
+
+  const initialPoster = showPosterFromTVMaze(show, show.name || title);
 
   if(tmdbTvId){
     const tmdbImages = await tmdbFetchTVImages(tmdbTvId).catch(() => null);
     logoOptions = buildLogoOptionsFromTMDB(tmdbImages?.logos || []);
     logo = pickDefaultLogoFromOptions(logoOptions);
+    posterOptions = buildPosterOptionsFromTMDB(tmdbImages?.posters || [], initialPoster);
+    selectedPosterIndex = posterOptions.length ? 0 : -1;
+  }else{
+    posterOptions = initialPoster ? [{ url: initialPoster, width:0, height:0, lang:'', type:'current' }] : [];
+    selectedPosterIndex = posterOptions.length ? 0 : -1;
   }
 
   const epsRaw = show?._embedded?.episodes || [];
@@ -2620,7 +2730,9 @@ async function addShow(title){
   return {
     title: show.name || title,
     type: 'show',
-    poster: showPosterFromTVMaze(show, show.name || title),
+    poster: pickDefaultPosterFromOptions(posterOptions, initialPoster),
+    posterOptions,
+    selectedPosterIndex,
     logo,
     logoOptions,
     selectedLogoIndex: 0,
@@ -2664,6 +2776,8 @@ async function createItemFromInput(title, type){
     title,
     type:'tba',
     poster:fallbackPoster(title),
+    posterOptions:[{ url:fallbackPoster(title), width:0, height:0, lang:'', type:'current' }],
+    selectedPosterIndex:0,
     logo:'',
     logoOptions:[],
     selectedLogoIndex:0,
@@ -2724,7 +2838,20 @@ async function refreshAll(){
     try{
       if(it.tmdbId){
         const { details, rel } = await tmdbFetchMovieDetails(it.tmdbId);
-        it.poster = normalizePoster(details.poster_path, it.title);
+
+        const refreshedPoster = normalizePoster(details.poster_path, it.title);
+        const nextPosterOptions = buildPosterOptionsFromTMDB(details.images?.posters || [], refreshedPoster);
+        if(nextPosterOptions.length){
+          const oldPoster = it.poster || '';
+          it.posterOptions = nextPosterOptions;
+          const matchedIndex = nextPosterOptions.findIndex(p => p.url === oldPoster);
+          it.selectedPosterIndex = matchedIndex >= 0 ? matchedIndex : 0;
+          if(!oldPoster || matchedIndex >= 0){
+            it.poster = nextPosterOptions[it.selectedPosterIndex]?.url || refreshedPoster;
+          }
+        }else{
+          it.poster = refreshedPoster;
+        }
 
         const nextLogoOptions = buildLogoOptionsFromTMDB(details.images?.logos || []);
         if(nextLogoOptions.length){
@@ -2758,7 +2885,8 @@ async function refreshAll(){
         const res = await fetch(`https://api.tvmaze.com/shows/${it.tvmazeId}?embed=episodes`);
         if(res.ok){
           const show = await res.json();
-          it.poster = showPosterFromTVMaze(show, it.title);
+          const refreshedShowPoster = showPosterFromTVMaze(show, it.title);
+          it.poster = refreshedShowPoster;
           it.studio = (show.network?.name || show.webChannel?.name || it.studio || '');
           it.genre = (show.genres || [])[0] || it.genre || '';
           it.episodeRuntimeMinutes = Number(show.averageRuntime || show.runtime || it.episodeRuntimeMinutes || 0);
@@ -2781,6 +2909,20 @@ async function refreshAll(){
               it.selectedLogoIndex = safeIndex;
               it.logo = nextLogoOptions[safeIndex]?.url || nextLogoOptions[0].url || '';
             }
+
+            const nextPosterOptions = buildPosterOptionsFromTMDB(tmdbImages?.posters || [], refreshedShowPoster);
+            if(nextPosterOptions.length){
+              const oldPoster = it.poster || '';
+              it.posterOptions = nextPosterOptions;
+              const matchedIndex = nextPosterOptions.findIndex(p => p.url === oldPoster);
+              it.selectedPosterIndex = matchedIndex >= 0 ? matchedIndex : 0;
+              if(!oldPoster || matchedIndex >= 0){
+                it.poster = nextPosterOptions[it.selectedPosterIndex]?.url || refreshedShowPoster;
+              }
+            }
+          }else{
+            it.posterOptions = refreshedShowPoster ? [{ url: refreshedShowPoster, width:0, height:0, lang:'', type:'current' }] : [];
+            it.selectedPosterIndex = it.posterOptions.length ? 0 : -1;
           }
         }
       }
@@ -3372,6 +3514,45 @@ function renderLists(){
   });
 }
 
+function renderPosterPicker(it){
+  if(!el.posterPicker) return;
+  el.posterPicker.innerHTML = '';
+
+  const options = Array.isArray(it.posterOptions) ? it.posterOptions : [];
+  if(!options.length){
+    el.posterPicker.innerHTML = `<div class="note">No alternate posters available for this title. You can still paste a custom poster URL above.</div>`;
+    return;
+  }
+
+  options.forEach((opt, i) => {
+    const isActive = String(el.mPoster.value || '').trim() === String(opt.url || '').trim();
+
+    const btn = document.createElement('div');
+    btn.className = 'poster-option' + (isActive ? ' active' : '');
+    btn.innerHTML = `
+      <div class="poster-option-preview">
+        <img src="${opt.url}" alt="Poster option ${i + 1}" loading="lazy" referrerpolicy="no-referrer">
+      </div>
+      <div class="poster-option-meta">
+        ${(opt.lang || '—').toUpperCase()} • ${(opt.width || 0)}px
+      </div>
+    `;
+
+    const img = btn.querySelector('img');
+    if(img){
+      img.onerror = () => { btn.style.display = 'none'; };
+    }
+
+    btn.onclick = () => {
+      it.selectedPosterIndex = i;
+      el.mPoster.value = opt.url || '';
+      renderPosterPicker(it);
+    };
+
+    el.posterPicker.appendChild(btn);
+  });
+}
+
 function renderLogoPicker(it){
   if(!el.logoPicker) return;
   el.logoPicker.innerHTML = '';
@@ -3435,6 +3616,7 @@ function openModal(index){
   el.mFav.checked = !!it.favorite;
   el.mWatched.checked = !!it.watched;
   el.mWeekly.checked = !!it.weekly;
+  renderPosterPicker(it);
   renderLogoPicker(it);
 
   const epCount = (it.episodes || []).length;
@@ -3450,6 +3632,11 @@ function closeModal(){
 }
 el.closeModal.onclick = closeModal;
 el.modal.addEventListener('click', (e) => { if(e.target === el.modal) closeModal(); });
+
+el.mPoster.addEventListener('input', () => {
+  if(currentEditIndex == null) return;
+  renderPosterPicker(items[currentEditIndex]);
+});
 
 el.mAutoEstimate.onclick = () => {
   if(currentEditIndex == null) return;
@@ -3474,6 +3661,12 @@ el.saveBtn.onclick = () => {
   it.type = el.mType.value;
   it.hype = Number(el.mHype.value || 0);
   it.poster = el.mPoster.value.trim() || fallbackPoster(it.title);
+
+  if(Array.isArray(it.posterOptions) && it.posterOptions.length){
+    const matchedPosterIndex = it.posterOptions.findIndex(opt => opt.url === it.poster);
+    it.selectedPosterIndex = matchedPosterIndex;
+  }
+
   it.studio = el.mStudio.value.trim();
   it.genre = el.mGenre.value.trim();
   it.director = el.mDirector.value.trim();
@@ -3596,6 +3789,12 @@ el.importFileMobile.addEventListener('change', async (e) => {
   await importFromFile(e.target.files?.[0]);
   e.target.value = '';
 });
+if(el.importFileMiniBottom){
+  el.importFileMiniBottom.addEventListener('change', async (e) => {
+    await importFromFile(e.target.files?.[0]);
+    e.target.value = '';
+  });
+}
 
 function toggleBtn(btn, on){
   btn.style.opacity = on ? '1' : '.75';
