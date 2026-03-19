@@ -80,6 +80,8 @@ body{
 @media (max-width:720px){
   body.mobile-show-main #mainMonthsBar{ display:flex; }
   body.mobile-show-mini #mainMonthsBar{ display:none !important; }
+  body.mobile-show-main .strip-wrap{ display:none !important; }
+  body.mobile-show-main .week-panel{ display:none !important; }
 }
 
 header{
@@ -355,6 +357,105 @@ main{
   gap:18px;
   align-items:start;
 }
+
+.poster-logo-wrap{
+  min-height:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:6px;
+  padding:0 4px;
+  overflow:hidden;
+}
+
+.poster-logo{
+  display:block;
+  max-width:92%;
+  max-height:40px;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+}
+
+.poster-title.is-fallback{
+  margin-top:2px;
+}
+
+#logoPicker{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));
+  gap:10px;
+}
+.logo-option{
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+  padding:10px;
+  cursor:pointer;
+  transition:border-color .12s ease, transform .12s ease, background .12s ease;
+}
+.logo-option:hover{
+  transform:translateY(-1px);
+  border-color:rgba(255,255,255,.20);
+}
+.logo-option.active{
+  border-color:rgba(0,224,84,.40);
+  background:rgba(0,224,84,.08);
+}
+.logo-option-preview{
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:8px;
+}
+.logo-option-preview img{
+  max-width:100%;
+  max-height:40px;
+  object-fit:contain;
+  display:block;
+}
+.logo-option-meta{
+  font-size:11px;
+  color:rgba(243,245,247,.62);
+  line-height:1.3;
+  text-align:center;
+}
+
+@media (max-width:720px){
+  .poster-logo-wrap{
+    height:28px;
+    min-height:28px;
+    margin-bottom:4px;
+    padding:0 2px;
+  }
+
+  .poster-logo{
+    max-width:94%;
+    max-height:22px;
+  }
+}
+
+  .mini-bottom-actions{
+    display:none;
+  }
+
+  body.mobile-show-mini .mini-bottom-actions{
+    display:flex !important;
+    padding:12px 16px 18px;
+    border-top:1px solid rgba(255,255,255,.06);
+    background:transparent;
+  }
+
+  body.mobile-show-mini .mini-bottom-actions button{
+    width:100%;
+    min-height:48px;
+    border-radius:16px;
+    font-weight:900;
+    font-size:15px;
+  }
+
 @media (min-width:1380px){
   .cal-shell{ grid-template-columns:390px 1fr; }
 }
@@ -673,50 +774,93 @@ main{
   font-weight:800;
 }
 
-.week-wrap{ padding:0 14px 14px; overflow:hidden; }
+.week-wrap{
+  padding:0 14px 14px;
+  overflow:hidden;
+}
 .week-grid{
   display:grid;
   grid-template-columns:repeat(7, minmax(0, 1fr));
-  gap:14px;
+  gap:8px;
+  width:100%;
+  min-width:0;
+  overflow:hidden;
   align-items:stretch;
+  padding-bottom:0;
 }
+
 .week-day{
-  background:rgba(20,24,33,.6);
+  min-width:0;
+  min-height:200px;
+  padding:10px 8px 8px;
   border-radius:18px;
-  padding:14px;
-  min-height:140px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(20,24,33,.6);
   display:flex;
   flex-direction:column;
+  overflow:hidden;
 }
 .week-top{
   display:flex;
-  align-items:baseline;
+  align-items:flex-start;
   justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
+  gap:6px;
+  margin-bottom:20px;
 }
 .week-events{
   display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.week-events .event-tile{
-  border-radius:14px;
-  overflow:visible;
-  background:transparent;
-  border:0;
-  height:auto;
+  align-items:flex-start;
+  justify-content:center;
+  flex:1;
   width:100%;
-  max-width:none;
+}
+
+.week-events .event-tile{
+  width:100%;
+  max-width:74px;
+  flex:0 0 74px;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  box-shadow:0 6px 14px rgba(0,0,0,.45);
+  cursor:pointer;
 }
 
 .week-events .event-tile img{
   width:100%;
   aspect-ratio:2 / 3;
   height:auto;
-  object-fit:contain;
-  object-position:center;
+  object-fit:cover;
   display:block;
+}
+
+.week-more{
+  margin-top:8px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:42px;
+  height:28px;
+  padding:0 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  color:rgba(243,245,247,.82);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.02em;
+  cursor:pointer;
+}
+.week-top > div:first-child{ min-width:0; }
+.week-top > div:first-child div:first-child{
+  font-size:11px;
+  line-height:1.1;
+  letter-spacing:.04em;
+}
+.week-top > div:first-child div:last-child{
+  font-size:15px;
+  line-height:1;
 }
 
 .list-wrap{
@@ -807,9 +951,10 @@ main{
 }
 .pick-modal.active{ visibility:visible; opacity:1; }
 
-.pick-card{
-  width:auto;
-  max-width:420px;
+..pick-card{
+  width:min(1100px, 96vw);
+  max-width:min(1100px, 96vw);
+  max-height:88vh;
   background:rgba(16,18,22,.94);
   border:1px solid rgba(255,255,255,.12);
   border-radius:18px;
@@ -818,6 +963,7 @@ main{
   display:flex;
   flex-direction:column;
 }
+
 .pick-head{
   display:flex;
   justify-content:space-between;
@@ -825,7 +971,9 @@ main{
   gap:10px;
   padding:12px 14px;
   border-bottom:1px solid rgba(255,255,255,.08);
+  flex:0 0 auto;
 }
+
 .pick-title{
   font-weight:950;
   display:flex;
@@ -833,6 +981,7 @@ main{
   align-items:center;
   flex-wrap:wrap;
 }
+
 .pick-date{
   color:rgba(243,245,247,.62);
   font-size:12px;
@@ -842,8 +991,10 @@ main{
   padding:4px 10px;
   background:rgba(255,255,255,.03);
 }
+
 .pick-close{
-  width:40px; height:40px;
+  width:40px;
+  height:40px;
   border-radius:14px;
   border:1px solid rgba(255,255,255,.12);
   background:rgba(255,255,255,.04);
@@ -851,16 +1002,21 @@ main{
   cursor:pointer;
   font-weight:950;
 }
+
 .pick-grid{
   padding:20px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));
+  gap:14px;
+  align-items:start;
+  justify-items:center;
+  overflow:auto;
+  max-height:calc(88vh - 76px);
 }
+
 .pick-item{
-  width:260px;
+  width:100%;
+  max-width:220px;
   border:1px solid rgba(255,255,255,.10);
   border-radius:16px;
   overflow:hidden;
@@ -868,10 +1024,12 @@ main{
   background:rgba(12,14,18,.70);
   transition:transform .14s ease, border-color .14s ease;
 }
+
 .pick-item:hover{
   transform:translateY(-2px);
   border-color:rgba(0,224,84,.35);
 }
+
 .pick-item img{
   width:100%;
   aspect-ratio:2/3;
@@ -1069,7 +1227,6 @@ main{
     flex-direction:column;
   }
 
-  /* poster row back on top, calendar below it, add panel at bottom */
   .strip-wrap{ order:1; }
   .cal-shell{ order:2; display:flex !important; flex-direction:column !important; gap:14px !important; }
   .mobile-add-panel{ order:3; }
@@ -1155,21 +1312,71 @@ main{
     top:1px;
   }
 
-  /* mini screen = only mini calendar + bottom filter bar */
-  body.mobile-show-mini .strip-wrap{ display:none !important; }
-  body.mobile-show-mini .mobile-add-panel{ display:none !important; }
-  body.mobile-show-mini #calWrap{ display:none !important; }
-  body.mobile-show-mini #miniMonthAside{ display:block !important; }
+  body.mobile-show-mini .strip-wrap{
+    display:block !important;
+    order:1 !important;
+  }
 
-  body.mobile-show-main #calWrap{ display:block !important; }
-  body.mobile-show-main #miniMonthAside{ display:none !important; }
-  body.mobile-show-main #calBackBtn{ display:inline-flex !important; }
+  body.mobile-show-mini .mobile-add-panel{ display:none !important; }
+
+  /* Put the week row above the mini calendar */
+  body.mobile-show-mini .cal-shell{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:14px !important;
+  }
+
+  /* Remove the main calendar shell styling on mini screen */
+  body.mobile-show-mini #calWrap{
+    display:block !important;
+    order:2 !important;
+    width:100%;
+    max-width:100%;
+    overflow:visible !important;
+    background:transparent !important;
+    border:none !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+  }
+
+  /* Mini calendar goes under the week row */
+  body.mobile-show-mini #miniMonthAside{
+    display:block !important;
+    order:3 !important;
+    margin-top:0;
+  }
+
+  /* Hide the main calendar completely on mini screen */
+  body.mobile-show-mini #mainMonthsBar,
+  body.mobile-show-mini .cal-header,
+  body.mobile-show-mini .cal-weekdays,
+  body.mobile-show-mini .cal-grid{
+    display:none !important;
+  }
+
+  /* Only keep the week row visible */
+  body.mobile-show-mini .cal-body-scroll{
+    display:block !important;
+    padding:0 !important;
+    overflow:visible !important;
+  }
+
+  body.mobile-show-mini .week-panel{
+    display:block !important;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    overflow:hidden;
+    background:rgba(12,14,18,.58);
+    box-shadow:var(--shadow);
+    margin:0;
+  }
 
   body.mobile-show-mini #primaryControls{
     position:fixed;
+    top:calc(10px + env(safe-area-inset-top));
     left:10px;
     right:10px;
-    bottom:calc(10px + env(safe-area-inset-bottom));
+    bottom:auto;
     z-index:130;
     margin-top:0;
     padding:8px;
@@ -1227,19 +1434,14 @@ main{
     line-height:1.2;
   }
 
-  .cal-header{
-    padding:10px 12px;
-  }
+  .cal-header{ padding:10px 12px; }
 
-  /* week row is its own row box under the poster row */
   .week-panel{
     border-top:1px solid rgba(255,255,255,.04);
     border-bottom:1px solid rgba(255,255,255,.08);
     background:rgba(255,255,255,.015);
   }
-  .week-panel-head{
-    padding:10px 12px;
-  }
+  .week-panel-head{ padding:10px 12px; }
 
   .cal-body-scroll{
     width:100%;
@@ -1274,9 +1476,7 @@ main{
     gap:4px;
   }
 
-  .cal-daynum{
-    font-size:10px;
-  }
+  .cal-daynum{ font-size:10px; }
 
   .dot{
     width:6px;
@@ -1291,21 +1491,21 @@ main{
     overflow:hidden;
   }
 
-.event-tile{
-  width:100%;
-  max-width:34px;
-  flex:0 1 34px;
-}
+  .event-tile{
+    width:100%;
+    max-width:34px;
+    flex:0 1 34px;
+  }
 
-.event-tile img{
-  width:100%;
-  aspect-ratio:2 / 3;
-  height:auto;
-  border-radius:8px;
-  object-fit:contain;
-  object-position:center;
-  background:rgba(255,255,255,.03);
-}
+  .event-tile img{
+    width:100%;
+    aspect-ratio:2 / 3;
+    height:auto;
+    border-radius:8px;
+    object-fit:contain;
+    object-position:center;
+    background:rgba(255,255,255,.03);
+  }
 
   .cal-more{
     margin-top:2px;
@@ -1319,38 +1519,84 @@ main{
   }
 
   .week-grid{
-    grid-template-columns:repeat(7, minmax(92px, 1fr));
-    gap:6px;
-    overflow-x:auto;
-    padding-bottom:4px;
-  }
-  .week-grid::-webkit-scrollbar{ height:8px; }
-  .week-grid::-webkit-scrollbar-thumb{
-    background:rgba(255,255,255,.14);
-    border-radius:999px;
+    display:grid;
+    grid-template-columns:repeat(7, minmax(0, 1fr));
+    gap:2px;
+    width:100%;
+    overflow:hidden;
   }
 
   .week-day{
-    min-height:112px;
-    padding:8px;
-    border-radius:14px;
+    background:rgba(20,24,33,.6);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:16px;
+    min-height:130px;
+    padding:4px 4px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
   }
 
-  .week-events{
-    gap:6px;
-  }
+.week-events{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  flex:1;
+  width:100%;
+}
 
 .week-events .event-tile{
+  width:100%;
+  max-width:42px;
+  flex:0 0 42px;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+}
+
+.week-events .event-tile img{
+  width:100%;
+  aspect-ratio:2 / 3;
   height:auto;
+  object-fit:cover;
+  display:block;
+}
+
+.week-more{
+  margin-top:6px;
+  min-width:30px;
+  height:22px;
+  padding:0 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  color:rgba(243,245,247,.82);
+  font-size:10px;
+  font-weight:900;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.pick-card{
+  width:min(96vw, 1100px);
+  max-width:min(96vw, 1100px);
+}
+
+.pick-grid{
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+  padding:14px;
+}
+
+.pick-item{
   width:100%;
   max-width:none;
 }
+.modal-content{ max-width:92vw; }
 
-  .pick-card{ max-width:92vw; }
-  .pick-item{ width:min(260px, 72vw); }
-  .modal-content{ max-width:92vw; }
-
-  /* add panel back at bottom */
   .mobile-add-panel{ display:block; }
   .mobile-add-panel #addTitle,
   .mobile-add-panel #addType,
@@ -1373,7 +1619,7 @@ main{
 <body>
 <header id="header">
   <div class="topbar">
-    <div class="brand">Movie &amp; Show Calendar</div>
+    <div class="brand"></div>
   </div>
 
   <div class="controls" id="primaryControls">
@@ -1414,7 +1660,7 @@ main{
     <div class="strip-wrap">
       <div class="strip-head">
         <div>
-          <div class="strip-title" id="stripTitle">2026 • Posters</div>
+          <div class="strip-title" id="stripTitle">All • Posters (2026)</div>
           <div class="strip-sub" id="stripSub">Scroll right. Click a poster to edit.</div>
         </div>
         <div class="badge-mini" id="stripBadge">Mode</div>
@@ -1438,9 +1684,13 @@ main{
           </div>
         </div>
 
-        <div id="miniHint">Months view • Tap a month</div>
+        <div id="miniHint"></div>
         <div class="mini-dow" id="miniDow"></div>
         <div class="mini-grid" id="miniGrid"></div>
+
+        <div class="mini-bottom-actions">
+          <button id="miniFavoritesBtn" class="btn-ghost">★ Favorites</button>
+        </div>
       </aside>
 
       <div class="cal-wrap" id="calWrap">
@@ -1555,6 +1805,10 @@ main{
       </select>
 
       <input id="mPoster" class="full" placeholder="Poster URL">
+
+      <div class="full section-label">LOGO OPTIONS</div>
+      <div id="logoPicker" class="full"></div>
+
       <input id="mStudio" placeholder="Studio / Network / Event Type">
       <input id="mGenre" placeholder="Genre / Category">
       <input id="mDirector" class="full" placeholder="Director (movies)">
@@ -1642,7 +1896,7 @@ main{
 <script>
 const YEAR_FILTER = 2026;
 const TMDB_API_KEY = 'ba199522ebd04e467996dcfb2bade6a4';
-const STORAGE_KEY = 'items_v15_mobile_fix_2026';
+const STORAGE_KEY = 'items_v16_logo_picker_2026';
 
 function parseISODateLocal(iso){
   if(!iso) return null;
@@ -1697,6 +1951,19 @@ function normalizeManualType(it){
 function todayLocalISO(){
   return toISODateLocal(new Date());
 }
+function formatLength(it){
+  if(it.type === 'movie' && Number(it.runtimeMinutes) > 0){
+    const mins = Number(it.runtimeMinutes);
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return h > 0 ? `${h}h ${m}m` : `${m}m`;
+  }
+  if(it.type === 'show' && Number(it.episodeRuntimeMinutes) > 0){
+    return `${Number(it.episodeRuntimeMinutes)}m episodes`;
+  }
+  return '';
+}
+
 function normalizeStudio(studio = ''){
   const s = String(studio || '').trim().toLowerCase();
   const map = {
@@ -1745,10 +2012,10 @@ function estimatePVOD(item){
   const reasons = [];
 
   const STUDIO_BASE_WINDOWS = {
-    'Universal': 31,'Focus Features': 35,'Disney': 60,'20th Century': 45,'Searchlight': 45,'Warner Bros.': 39,
-    'New Line': 31,'Sony': 39,'Screen Gems': 31,'Paramount': 45,'Lionsgate': 28,'A24': 35,'Neon': 42,
-    'IFC Films': 21,'Magnolia': 21,'RLJE': 21,'Vertical': 14,'Bleecker Street': 28,'Roadside Attractions': 28,
-    'Miramax': 35,'Amazon MGM': 45,'Apple Original Films': 45,'Netflix': 14,'Hulu': 17,'Prime Video': 17
+    'Universal':31,'Focus Features':35,'Disney':60,'20th Century':45,'Searchlight':45,'Warner Bros.':39,
+    'New Line':31,'Sony':39,'Screen Gems':31,'Paramount':45,'Lionsgate':28,'A24':35,'Neon':42,
+    'IFC Films':21,'Magnolia':21,'RLJE':21,'Vertical':14,'Bleecker Street':28,'Roadside Attractions':28,
+    'Miramax':35,'Amazon MGM':45,'Apple Original Films':45,'Netflix':14,'Hulu':17,'Prime Video':17
   };
 
   if(STUDIO_BASE_WINDOWS[studio] != null){
@@ -2027,6 +2294,7 @@ const el = {
   mWatched:document.getElementById('mWatched'),
   mWeekly:document.getElementById('mWeekly'),
   mEpNote:document.getElementById('mEpNote'),
+  logoPicker:document.getElementById('logoPicker'),
   saveBtn:document.getElementById('saveBtn'),
   deleteBtn:document.getElementById('deleteBtn'),
   pickModal:document.getElementById('pickModal'),
@@ -2041,6 +2309,7 @@ const el = {
   miniSheetClose:document.getElementById('miniSheetClose'),
   miniSheetBody:document.getElementById('miniSheetBody'),
 };
+el.miniFavoritesBtn = document.getElementById('miniFavoritesBtn');
 const calBackBtn = document.getElementById('calBackBtn');
 
 if(calBackBtn){
@@ -2066,12 +2335,55 @@ el.posterView.addEventListener('click', (e) => {
 
 function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
 
+function buildTMDBImage(path, preferredSize = 'original'){
+  if(!path) return '';
+  const cleanPath = String(path).startsWith('/') ? path : `/${path}`;
+  return `https://image.tmdb.org/t/p/${preferredSize}${cleanPath}`;
+}
+
+function buildLogoOptionsFromTMDB(logos = []){
+  if(!Array.isArray(logos) || !logos.length) return [];
+  return [...logos]
+    .filter(l => l?.file_path)
+    .sort((a, b) => {
+      const aLangScore = a.iso_639_1 === 'en' ? 3 : (!a.iso_639_1 ? 2 : 1);
+      const bLangScore = b.iso_639_1 === 'en' ? 3 : (!b.iso_639_1 ? 2 : 1);
+      if(bLangScore !== aLangScore) return bLangScore - aLangScore;
+
+      const aVote = Number(a.vote_average || 0);
+      const bVote = Number(b.vote_average || 0);
+      if(bVote !== aVote) return bVote - aVote;
+
+      const aWidth = Number(a.width || 0);
+      const bWidth = Number(b.width || 0);
+      return bWidth - aWidth;
+    })
+    .map(l => {
+      const isSvg = String(l.file_type || '').toLowerCase() === '.svg';
+      return {
+        url: buildTMDBImage(l.file_path, isSvg ? 'original' : 'w500'),
+        lang: l.iso_639_1 || '',
+        width: Number(l.width || 0),
+        height: Number(l.height || 0),
+        type: String(l.file_type || '').replace('.', '') || 'png',
+        vote: Number(l.vote_average || 0)
+      };
+    });
+}
+
+function pickDefaultLogoFromOptions(options = []){
+  return options?.[0]?.url || '';
+}
+
 function normalizeImportedItem(x){
   const title = x.title || '';
   const normalized = {
     title,
     type: normalizeManualType(x),
     poster: x.poster || fallbackPoster(title),
+    logo: x.logo || '',
+    logoOptions: Array.isArray(x.logoOptions) ? x.logoOptions : [],
+    selectedLogoIndex: Number(x.selectedLogoIndex || 0),
     studio: x.studio || '',
     genre: x.genre || '',
     director: x.director || '',
@@ -2079,6 +2391,8 @@ function normalizeImportedItem(x){
     favorite: !!x.favorite,
     watched: !!x.watched,
     hype: Number(x.hype ?? 0),
+    runtimeMinutes: Number(x.runtimeMinutes || 0),
+    episodeRuntimeMinutes: Number(x.episodeRuntimeMinutes || 0),
     theatricalDate: x.theatricalDate || x.date || '',
     digitalDate: x.digitalDate || '',
     pvodEstimatedDate: x.pvodEstimatedDate || '',
@@ -2091,6 +2405,7 @@ function normalizeImportedItem(x){
     theatricalStatus: x.theatricalStatus || 'unknown',
     theatricalCheckDate: x.theatricalCheckDate || '',
     tmdbId: x.tmdbId ?? null,
+    tmdbTvId: x.tmdbTvId ?? null,
     tvmazeId: x.tvmazeId ?? null,
     weekly: !!x.weekly,
     notes: x.notes || '',
@@ -2101,6 +2416,11 @@ function normalizeImportedItem(x){
     franchiseLevel: x.franchiseLevel || 'none'
   };
   updatePVODStateSync(normalized, false);
+  if(!normalized.logo && normalized.logoOptions.length){
+    const safeIndex = Math.min(normalized.selectedLogoIndex, normalized.logoOptions.length - 1);
+    normalized.selectedLogoIndex = Math.max(0, safeIndex);
+    normalized.logo = normalized.logoOptions[normalized.selectedLogoIndex]?.url || '';
+  }
   return normalized;
 }
 
@@ -2111,7 +2431,8 @@ function load(){
     catch { items = []; }
     return;
   }
-  const old = localStorage.getItem('items_v14_calendar_ui_refresh_2026')
+  const old = localStorage.getItem('items_v15_mobile_fix_2026')
+    || localStorage.getItem('items_v14_calendar_ui_refresh_2026')
     || localStorage.getItem('items_v13_letterboxd_2026_tmdb_now_playing')
     || localStorage.getItem('items_v12_letterboxd_2026_pvod_hold')
     || localStorage.getItem('items_v11_letterboxd_2026_pvod')
@@ -2160,22 +2481,47 @@ async function tmdbSearchMovie(title){
   return data?.results?.[0] || null;
 }
 async function tmdbFetchMovieDetails(movieId){
-  const details = await (await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}&append_to_response=credits`)).json();
-  const rel = await (await fetch(`https://api.themoviedb.org/3/movie/${movieId}/release_dates?api_key=${TMDB_API_KEY}`)).json();
+  const details = await (
+    await fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}&append_to_response=credits,images&include_image_language=en,null`
+    )
+  ).json();
+
+  const rel = await (
+    await fetch(`https://api.themoviedb.org/3/movie/${movieId}/release_dates?api_key=${TMDB_API_KEY}`)
+  ).json();
+
   return { details, rel };
 }
 function normalizePoster(path, fallbackTitle){
   return path ? `https://image.tmdb.org/t/p/w500${path}` : fallbackPoster(fallbackTitle);
 }
+
+async function tmdbSearchTV(title){
+  const res = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(title)}`);
+  const data = await res.json();
+  return data?.results?.[0] || null;
+}
+
+async function tmdbFetchTVImages(tvId){
+  const res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}/images?api_key=${TMDB_API_KEY}&include_image_language=en,null`);
+  if(!res.ok) return null;
+  return await res.json();
+}
+
 async function addMovie(title){
   const hit = await tmdbSearchMovie(title);
   if(!hit) throw new Error('Movie not found on TMDb');
   const { details, rel } = await tmdbFetchMovieDetails(hit.id);
+  const logoOptions = buildLogoOptionsFromTMDB(details.images?.logos || []);
 
   const item = {
     title: details.title || title,
     type: 'movie',
     poster: normalizePoster(details.poster_path, details.title || title),
+    logo: pickDefaultLogoFromOptions(logoOptions),
+    logoOptions,
+    selectedLogoIndex: 0,
     studio: (details.production_companies || [])[0]?.name || '',
     genre: (details.genres || []).map(g => g.name)[0] || '',
     director: (details.credits?.crew || []).find(c => c.job === 'Director')?.name || '',
@@ -2183,6 +2529,8 @@ async function addMovie(title){
     favorite: false,
     watched: false,
     hype: 0,
+    runtimeMinutes: Number(details.runtime || 0),
+    episodeRuntimeMinutes: 0,
     theatricalDate: pickUSReleaseDate(rel, [3, 2]) || (details.release_date || '').slice(0, 10),
     digitalDate: pickUSReleaseDate(rel, [4]) || '',
     pvodEstimatedDate: '',
@@ -2195,6 +2543,7 @@ async function addMovie(title){
     theatricalStatus: 'unknown',
     theatricalCheckDate: todayLocalISO(),
     tmdbId: hit.id,
+    tmdbTvId: null,
     tvmazeId: null,
     weekly: false,
     notes: '',
@@ -2253,12 +2602,28 @@ function normalizeEpisodesFor2026(epsRaw){
 async function addShow(title){
   const show = await tvmazeSingleSearchShow(title);
   if(!show) throw new Error('TV show not found on TVMaze');
+
+  const tmdbTV = await tmdbSearchTV(title).catch(() => null);
+  let tmdbTvId = tmdbTV?.id ?? null;
+  let logoOptions = [];
+  let logo = '';
+
+  if(tmdbTvId){
+    const tmdbImages = await tmdbFetchTVImages(tmdbTvId).catch(() => null);
+    logoOptions = buildLogoOptionsFromTMDB(tmdbImages?.logos || []);
+    logo = pickDefaultLogoFromOptions(logoOptions);
+  }
+
   const epsRaw = show?._embedded?.episodes || [];
   const norm = normalizeEpisodesFor2026(epsRaw);
+
   return {
     title: show.name || title,
     type: 'show',
     poster: showPosterFromTVMaze(show, show.name || title),
+    logo,
+    logoOptions,
+    selectedLogoIndex: 0,
     studio: (show.network?.name || show.webChannel?.name || ''),
     genre: (show.genres || [])[0] || '',
     director: '',
@@ -2266,6 +2631,8 @@ async function addShow(title){
     favorite: false,
     watched: false,
     hype: 0,
+    runtimeMinutes: 0,
+    episodeRuntimeMinutes: Number(show.averageRuntime || show.runtime || 0),
     theatricalDate: '',
     digitalDate: '',
     pvodEstimatedDate: '',
@@ -2278,6 +2645,7 @@ async function addShow(title){
     theatricalStatus: 'unknown',
     theatricalCheckDate: '',
     tmdbId: null,
+    tmdbTvId,
     tvmazeId: show.id,
     weekly: inferWeeklyFromEpisodes((epsRaw || []).filter(e => e.airdate && isISOInYear(e.airdate, YEAR_FILTER))),
     notes: '',
@@ -2293,13 +2661,42 @@ async function createItemFromInput(title, type){
   if(type === 'movie') return await addMovie(title);
   if(type === 'show') return await addShow(title);
   return {
-    title, type:'tba', poster:fallbackPoster(title), studio:'', genre:'', director:'', cast:[],
-    favorite:false, watched:false, hype:0, theatricalDate:'', digitalDate:'',
-    pvodEstimatedDate:'', pvodConfirmedDate:'', pvodStatus:'none', pvodPlatforms:'',
-    pvodEstimateConfidence:'', pvodEstimateReason:'', stillInTheaters:false,
-    theatricalStatus:'unknown', theatricalCheckDate:'', tmdbId:null, tvmazeId:null,
-    weekly:false, notes:'', episodes:[], releasePattern:'wide', isAwardsTitle:false,
-    boxOfficeTrend:'normal', franchiseLevel:'none'
+    title,
+    type:'tba',
+    poster:fallbackPoster(title),
+    logo:'',
+    logoOptions:[],
+    selectedLogoIndex:0,
+    studio:'',
+    genre:'',
+    director:'',
+    cast:[],
+    favorite:false,
+    watched:false,
+    hype:0,
+    runtimeMinutes:0,
+    episodeRuntimeMinutes:0,
+    theatricalDate:'',
+    digitalDate:'',
+    pvodEstimatedDate:'',
+    pvodConfirmedDate:'',
+    pvodStatus:'none',
+    pvodPlatforms:'',
+    pvodEstimateConfidence:'',
+    pvodEstimateReason:'',
+    stillInTheaters:false,
+    theatricalStatus:'unknown',
+    theatricalCheckDate:'',
+    tmdbId:null,
+    tmdbTvId:null,
+    tvmazeId:null,
+    weekly:false,
+    notes:'',
+    episodes:[],
+    releasePattern:'wide',
+    isAwardsTitle:false,
+    boxOfficeTrend:'normal',
+    franchiseLevel:'none'
   };
 }
 
@@ -2328,10 +2725,20 @@ async function refreshAll(){
       if(it.tmdbId){
         const { details, rel } = await tmdbFetchMovieDetails(it.tmdbId);
         it.poster = normalizePoster(details.poster_path, it.title);
+
+        const nextLogoOptions = buildLogoOptionsFromTMDB(details.images?.logos || []);
+        if(nextLogoOptions.length){
+          it.logoOptions = nextLogoOptions;
+          const safeIndex = Math.min(Number(it.selectedLogoIndex || 0), nextLogoOptions.length - 1);
+          it.selectedLogoIndex = safeIndex;
+          it.logo = nextLogoOptions[safeIndex]?.url || nextLogoOptions[0].url || '';
+        }
+
         it.studio = (details.production_companies || [])[0]?.name || it.studio || '';
         it.genre = (details.genres || []).map(g => g.name)[0] || it.genre || '';
         it.director = (details.credits?.crew || []).find(c => c.job === 'Director')?.name || it.director || '';
         it.cast = (details.credits?.cast || []).slice(0, 6).map(c => c.name) || it.cast || [];
+        it.runtimeMinutes = Number(details.runtime || it.runtimeMinutes || 0);
         it.theatricalDate = pickUSReleaseDate(rel, [3, 2]) || (details.release_date || '').slice(0, 10) || it.theatricalDate || '';
         const tmdbDigital = pickUSReleaseDate(rel, [4]) || '';
         if(tmdbDigital){
@@ -2346,6 +2753,7 @@ async function refreshAll(){
           updatePVODStateSync(it, true);
         }
       }
+
       if(it.tvmazeId){
         const res = await fetch(`https://api.tvmaze.com/shows/${it.tvmazeId}?embed=episodes`);
         if(res.ok){
@@ -2353,10 +2761,27 @@ async function refreshAll(){
           it.poster = showPosterFromTVMaze(show, it.title);
           it.studio = (show.network?.name || show.webChannel?.name || it.studio || '');
           it.genre = (show.genres || [])[0] || it.genre || '';
+          it.episodeRuntimeMinutes = Number(show.averageRuntime || show.runtime || it.episodeRuntimeMinutes || 0);
           const epsRaw = show?._embedded?.episodes || [];
           const norm = normalizeEpisodesFor2026(epsRaw);
           it.episodes = norm.episodes;
           it.weekly = inferWeeklyFromEpisodes((epsRaw || []).filter(e => e.airdate && isISOInYear(e.airdate, YEAR_FILTER)));
+
+          if(!it.tmdbTvId){
+            const tmdbTV = await tmdbSearchTV(it.title).catch(() => null);
+            if(tmdbTV?.id) it.tmdbTvId = tmdbTV.id;
+          }
+
+          if(it.tmdbTvId){
+            const tmdbImages = await tmdbFetchTVImages(it.tmdbTvId).catch(() => null);
+            const nextLogoOptions = buildLogoOptionsFromTMDB(tmdbImages?.logos || []);
+            if(nextLogoOptions.length){
+              it.logoOptions = nextLogoOptions;
+              const safeIndex = Math.min(Number(it.selectedLogoIndex || 0), nextLogoOptions.length - 1);
+              it.selectedLogoIndex = safeIndex;
+              it.logo = nextLogoOptions[safeIndex]?.url || nextLogoOptions[0].url || '';
+            }
+          }
         }
       }
     }catch(_e){}
@@ -2406,13 +2831,6 @@ function buildEventsByDay(entries, mode){
   return map;
 }
 
-function miniMonthDots(eventsByDay, iso){
-  const evs = eventsByDay.get(iso) || [];
-  const hasMovie = evs.some(e => e.kind === 'movie' || e.kind === 'digital');
-  const hasEp = evs.some(e => e.kind === 'episode');
-  return { hasMovie, hasEp, count:evs.length };
-}
-
 function openPickModal(iso, events){
   el.pickTitle.textContent = events.length === 1 ? 'On this day' : 'On this day • Multiple';
   el.pickDate.textContent = iso;
@@ -2445,7 +2863,7 @@ function renderMiniMonth(eventsByDay){
   if(mobileMQ.matches) miniUI.mode = 'months';
 
   if(miniUI.mode === 'months'){
-    el.miniHint.textContent = 'Tap a month to jump the main calendar';
+    el.miniHint.textContent = '';
     el.miniDow.style.display = 'none';
     el.miniGrid.className = 'mini-year';
     el.miniTitle.textContent = String(YEAR_FILTER);
@@ -2536,11 +2954,13 @@ function renderMonthChips(){
   el.stripMonths.innerHTML = '';
   buildMonthKeysForChips().forEach(key => {
     const chip = document.createElement('div');
-    chip.className = 'month-chip';
+    chip.className = 'month-chip' + (ui.activeMonthKey === key ? ' active' : '');
     chip.dataset.key = key;
     chip.textContent = key === 'ALL' ? 'All' : key === 'TBA' ? 'TBA' : monthLabelFromKey(key);
     chip.onclick = () => {
       if(key === 'ALL'){
+        ui.activeMonthKey = `${YEAR_FILTER}-${String(ui.monthCursor.getMonth() + 1).padStart(2, '0')}`;
+        highlightMonthChip();
         el.stripScroll.scrollTo({ left:0, behavior:'smooth' });
         return;
       }
@@ -2576,6 +2996,7 @@ function renderMainMonthsBar(){
       ui.selectedISO = toISODateLocal(ui.monthCursor);
       ui.activeMonthKey = key;
       renderCalendarShell();
+      scrollTimelineToMonth(key);
       chip.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
     };
     el.mainMonthsBar.appendChild(chip);
@@ -2587,8 +3008,8 @@ function renderTimeline(eventsByDay, entries){
   el.stripBadge.textContent = mode === 'theatrical' ? 'Theatrical' : mode === 'digital' ? 'PVOD / Digital' : 'TV Episodes';
 
   const contentLabel = ui.contentUI === 'all' ? 'All' : ui.contentUI === 'movies' ? 'Movies' : ui.contentUI === 'shows' ? 'TV Shows' : 'Digital / PVOD';
-  el.stripTitle.textContent = `${contentLabel} • Posters (2026)`;
-  el.stripSub.textContent = 'Scroll right. Click a poster to edit.';
+  if(el.stripTitle) el.stripTitle.textContent = `${contentLabel} • Posters (2026)`;
+  if(el.stripSub) el.stripSub.textContent = 'Scroll right. Click a poster to edit.';
 
   const sections = new Map();
   const pushSection = (key, ev) => {
@@ -2672,7 +3093,56 @@ function renderTimeline(eventsByDay, entries){
 
       const meta = document.createElement('div');
       meta.className = 'poster-meta';
-      meta.innerHTML = `<div class="poster-title">${ev.label}</div><div class="poster-date">${ev.iso || 'TBA'}</div>${ev.sublabel ? `<div class="poster-subdate">${ev.sublabel}</div>` : ''}`;
+
+      const itemData = items[ev.idx] || {};
+      const lengthText = formatLength(itemData);
+
+      let displayTitle = '';
+      if(itemData.type === 'show'){
+        const match = String(ev.label || '').match(/S\d+E\d+/i);
+        if(match) displayTitle = match[0];
+      }
+
+      const safeLogo = String(itemData.logo || '').trim();
+
+      const logoHTML = safeLogo
+        ? `
+          <div class="poster-logo-wrap">
+            <img
+              class="poster-logo"
+              src="${safeLogo}"
+              alt="${(itemData.title || ev.label || 'Title').replace(/"/g, '&quot;')} logo"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+            >
+          </div>
+        `
+        : '';
+
+      const fallbackTitleHTML = `
+        <div class="poster-title">
+          ${displayTitle || itemData.title || ev.label || ''}
+        </div>
+      `;
+
+      meta.innerHTML = `
+        ${logoHTML}
+        ${fallbackTitleHTML}
+        <div class="poster-date">${ev.iso || 'TBA'}</div>
+        ${lengthText ? `<div class="poster-subdate">${lengthText}</div>` : ''}
+        ${ev.sublabel ? `<div class="poster-subdate">${ev.sublabel}</div>` : ''}
+      `;
+
+      const logoImg = meta.querySelector('.poster-logo');
+      if(logoImg){
+        logoImg.onerror = () => {
+          const wrap = logoImg.closest('.poster-logo-wrap');
+          if(wrap) wrap.remove();
+          const titleEl = meta.querySelector('.poster-title');
+          if(titleEl) titleEl.classList.add('is-fallback');
+        };
+      }
+
       card.appendChild(meta);
       row.appendChild(card);
     });
@@ -2722,7 +3192,7 @@ function renderMonthView(eventsByDay){
     eventsWrap.className = 'day-events';
     cell.appendChild(eventsWrap);
 
-const maxPostersPerDay = mobileMQ.matches ? 1 : 3;
+    const maxPostersPerDay = mobileMQ.matches ? 1 : 3;
 
     evs.slice(0, maxPostersPerDay).forEach(ev => {
       const tile = document.createElement('div');
@@ -2763,12 +3233,14 @@ function renderWeekView(eventsByDay){
   const sel = clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER, 0, 1));
   ui.selectedISO = toISODateLocal(sel);
 
-  const ws = startOfWeek(sel);
-  const we = endOfWeek(sel);
+  const ws = new Date(sel.getFullYear(), sel.getMonth(), sel.getDate());
+  const we = addDays(ws, 6);
 
   const sameMonth = ws.getMonth() === we.getMonth() && ws.getFullYear() === we.getFullYear();
   const left = ws.toLocaleString(undefined, { month:'short', day:'numeric' });
-  const right = sameMonth ? we.toLocaleString(undefined, { day:'numeric', year:'numeric' }) : we.toLocaleString(undefined, { month:'short', day:'numeric', year:'numeric' });
+  const right = sameMonth
+    ? we.toLocaleString(undefined, { day:'numeric', year:'numeric' })
+    : we.toLocaleString(undefined, { month:'short', day:'numeric', year:'numeric' });
 
   el.weekTitle.textContent = `${left} – ${right}`;
   el.weekModeBadge.textContent = ui.mode === 'theatrical' ? 'Theatrical' : ui.mode === 'digital' ? 'PVOD / Digital' : 'TV Episodes';
@@ -2782,6 +3254,7 @@ function renderWeekView(eventsByDay){
     const d = addDays(ws, i);
     const iso = toISODateLocal(d);
     const inYear = d.getFullYear() === YEAR_FILTER;
+    const evs = inYear ? (eventsByDay.get(iso) || []) : [];
 
     const col = document.createElement('div');
     col.className = 'week-day' + (!inYear ? ' other-month' : '');
@@ -2808,34 +3281,52 @@ function renderWeekView(eventsByDay){
     wrap.className = 'week-events';
     col.appendChild(wrap);
 
-    const evs = inYear ? (eventsByDay.get(iso) || []) : [];
-    evs.forEach(ev => {
+    if(evs.length){
+      const first = evs[0];
+
       const tile = document.createElement('div');
-      tile.className = 'event-tile' + (ev.watched ? ' watched' : '');
+      tile.className = 'event-tile' + (first.watched ? ' watched' : '');
+
       const img = document.createElement('img');
-      img.src = ev.poster;
+      img.src = first.poster;
       img.loading = 'lazy';
-      img.onerror = () => { img.src = fallbackPoster(ev.label); };
+      img.onerror = () => { img.src = fallbackPoster(first.label); };
+
       tile.appendChild(img);
+
       tile.onclick = (e) => {
         e.stopPropagation();
-        openPosterView(ev.poster);
+        ui.selectedISO = iso;
+        openPickModal(iso, evs);
       };
+
       wrap.appendChild(tile);
-    });
+
+      if(evs.length > 1){
+        const more = document.createElement('div');
+        more.className = 'week-more';
+        more.textContent = `+${evs.length - 1}`;
+        more.onclick = (e) => {
+          e.stopPropagation();
+          ui.selectedISO = iso;
+          openPickModal(iso, evs);
+        };
+        col.appendChild(more);
+      }
+    }
 
     col.addEventListener('click', () => {
       if(!inYear) return;
       ui.selectedISO = iso;
       ui.activeMonthKey = `${YEAR_FILTER}-${String(d.getMonth() + 1).padStart(2, '0')}`;
       highlightMonthChip();
+      renderWeekView(eventsByDay);
       if(evs.length) openPickModal(iso, evs);
     });
 
     el.weekGrid.appendChild(col);
   }
 }
-
 function nextEpisodeISO(it){
   if(it.type !== 'show') return '';
   const all = (it.episodes || []).map(e => e.date).filter(d => isISOInYear(d, YEAR_FILTER)).sort();
@@ -2881,6 +3372,43 @@ function renderLists(){
   });
 }
 
+function renderLogoPicker(it){
+  if(!el.logoPicker) return;
+  el.logoPicker.innerHTML = '';
+
+  const options = Array.isArray(it.logoOptions) ? it.logoOptions : [];
+  if(!options.length){
+    el.logoPicker.innerHTML = `<div class="note">No alternate logos available for this title.</div>`;
+    return;
+  }
+
+  options.forEach((opt, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'logo-option' + ((Number(it.selectedLogoIndex || 0) === i) ? ' active' : '');
+    btn.innerHTML = `
+      <div class="logo-option-preview">
+        <img src="${opt.url}" alt="Logo option ${i + 1}" loading="lazy" referrerpolicy="no-referrer">
+      </div>
+      <div class="logo-option-meta">
+        ${(opt.lang || '—').toUpperCase()} • ${(opt.type || 'img').toUpperCase()} • ${opt.width || 0}px
+      </div>
+    `;
+
+    const img = btn.querySelector('img');
+    if(img){
+      img.onerror = () => { btn.style.display = 'none'; };
+    }
+
+    btn.onclick = () => {
+      it.selectedLogoIndex = i;
+      it.logo = opt.url || '';
+      renderLogoPicker(it);
+    };
+
+    el.logoPicker.appendChild(btn);
+  });
+}
+
 function openModal(index){
   currentEditIndex = index;
   const it = items[index];
@@ -2907,6 +3435,7 @@ function openModal(index){
   el.mFav.checked = !!it.favorite;
   el.mWatched.checked = !!it.watched;
   el.mWeekly.checked = !!it.weekly;
+  renderLogoPicker(it);
 
   const epCount = (it.episodes || []).length;
   if(it.type === 'show') el.mEpNote.textContent = `Episodes saved for 2026 (newest season only): ${epCount}.`;
@@ -2964,6 +3493,12 @@ el.saveBtn.onclick = () => {
   it.favorite = el.mFav.checked;
   it.watched = el.mWatched.checked;
   it.weekly = el.mWeekly.checked;
+
+  if(Array.isArray(it.logoOptions) && it.logoOptions.length){
+    const safeIndex = Math.min(Number(it.selectedLogoIndex || 0), it.logoOptions.length - 1);
+    it.selectedLogoIndex = Math.max(0, safeIndex);
+    it.logo = it.logoOptions[it.selectedLogoIndex]?.url || it.logo || '';
+  }
 
   if(it.pvodConfirmedDate){
     if(it.pvodStatus !== 'live') it.pvodStatus = 'confirmed';
@@ -3071,8 +3606,17 @@ function toggleBtn(btn, on){
 el.favoritesBtn.onclick = () => {
   ui.favoritesOnly = !ui.favoritesOnly;
   toggleBtn(el.favoritesBtn, ui.favoritesOnly);
+  if(el.miniFavoritesBtn) toggleBtn(el.miniFavoritesBtn, ui.favoritesOnly);
   renderAll();
 };
+if(el.miniFavoritesBtn){
+  el.miniFavoritesBtn.onclick = () => {
+    ui.favoritesOnly = !ui.favoritesOnly;
+    toggleBtn(el.favoritesBtn, ui.favoritesOnly);
+    toggleBtn(el.miniFavoritesBtn, ui.favoritesOnly);
+    renderAll();
+  };
+}
 el.watchedBtn.onclick = () => {
   ui.watchedOnly = !ui.watchedOnly;
   toggleBtn(el.watchedBtn, ui.watchedOnly);
@@ -3116,6 +3660,7 @@ el.weekPrevBtn.onclick = () => {
   setMonthCursorFromISO(ui.selectedISO);
   renderCalendarShell();
 };
+
 el.weekNextBtn.onclick = () => {
   const sel = clampTo2026(parseISODateLocal(ui.selectedISO) || new Date(YEAR_FILTER, 0, 1));
   ui.selectedISO = toISODateLocal(clampTo2026(addDays(sel, 7)));
@@ -3137,7 +3682,9 @@ const mobileMQ = window.matchMedia('(max-width: 720px)');
 function applyMobileDefaults(){
   if(mobileMQ.matches){
     miniUI.mode = 'months';
-    mobileSetScreen('mini');
+    if(!document.body.classList.contains('mobile-show-main') && !document.body.classList.contains('mobile-show-mini')){
+      mobileSetScreen('mini');
+    }
   }else{
     document.body.classList.remove('mobile-show-mini', 'mobile-show-main');
   }
@@ -3155,6 +3702,9 @@ function renderCalendarShell(){
     if(it.type === 'movie') updatePVODStateSync(it, false);
   });
 
+  const monthStart = startOfMonth(ui.monthCursor);
+  ui.activeMonthKey = `${YEAR_FILTER}-${String(monthStart.getMonth() + 1).padStart(2, '0')}`;
+
   renderMonthChips();
   renderMainMonthsBar();
   highlightMonthChip();
@@ -3170,6 +3720,7 @@ function renderCalendarShell(){
 
 function renderAll(){
   renderCalendarShell();
+  renderLists();
 }
 
 function mobileSetScreen(which){
@@ -3177,9 +3728,13 @@ function mobileSetScreen(which){
   document.body.classList.remove('mobile-show-mini', 'mobile-show-main');
   document.body.classList.add(which === 'main' ? 'mobile-show-main' : 'mobile-show-mini');
   if(which === 'main'){
-    setTimeout(() => document.getElementById('calWrap')?.scrollIntoView({ behavior:'smooth', block:'start' }), 30);
+    requestAnimationFrame(() => {
+      document.getElementById('calWrap')?.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
   }else{
-    setTimeout(() => el.miniMonthAside?.scrollIntoView({ behavior:'smooth', block:'start' }), 30);
+    requestAnimationFrame(() => {
+      el.miniMonthAside?.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
   }
 }
 
@@ -3195,6 +3750,7 @@ miniUI.year = YEAR_FILTER;
 
 applyMobileDefaults();
 setContent('all');
+renderAll();
 
 setTimeout(() => {
   highlightMonthChip();
