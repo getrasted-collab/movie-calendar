@@ -1679,6 +1679,1598 @@ body.mobile-show-mini .mini-bottom-actions .import-label{
   .apple-month-name{ font-size:15px; }
   .apple-day{ font-size:9px; }
 }
+/* =========================
+   UI POLISH PATCH
+   paste at end of <style>
+   ========================= */
+
+:root{
+  --bg:#060708;
+  --panel:rgba(14,16,20,.82);
+  --panel2:rgba(20,24,30,.88);
+  --panel3:rgba(10,13,17,.92);
+
+  --border:rgba(255,255,255,.06);
+  --border-soft:rgba(255,255,255,.04);
+
+  --text:#f5f7fa;
+  --muted:rgba(245,247,250,.62);
+  --muted-2:rgba(245,247,250,.46);
+
+  --accent:#34c759;
+  --accent-soft:rgba(52,199,89,.14);
+  --accent-line:rgba(52,199,89,.24);
+
+  --danger:#ff453a;
+  --shadow:0 14px 34px rgba(0,0,0,.34);
+  --shadow-soft:0 8px 24px rgba(0,0,0,.22);
+
+  --r12:12px;
+  --r16:16px;
+  --r20:20px;
+  --r24:24px;
+
+  --space-1:8px;
+  --space-2:12px;
+  --space-3:16px;
+  --space-4:20px;
+  --space-5:24px;
+}
+
+/* overall */
+body{
+  background:
+    radial-gradient(1100px 700px at 20% 0%, rgba(52,199,89,.06), transparent 55%),
+    radial-gradient(900px 600px at 85% 8%, rgba(255,255,255,.025), transparent 55%),
+    linear-gradient(180deg, #050607 0%, #090b0e 100%);
+  color:var(--text);
+}
+
+main{
+  max-width:1280px;
+  padding:16px 18px 24px;
+}
+
+/* header */
+header{
+  background:linear-gradient(180deg, rgba(15,18,22,.88), rgba(15,18,22,.72));
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border-soft);
+  padding:16px 18px 12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+header.compact{
+  padding:11px 18px 10px;
+}
+
+.brand{
+  font-weight:950;
+  letter-spacing:.01em;
+}
+
+.pill{
+  border:1px solid var(--border-soft);
+  background:rgba(255,255,255,.025);
+  color:var(--muted);
+}
+
+/* controls / segmented */
+.controls{
+  gap:12px;
+  margin-top:14px;
+}
+
+input, select, button, textarea{
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(22,26,32,.82);
+  color:var(--text);
+  padding:11px 13px;
+  box-shadow:none;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:var(--muted-2);
+}
+
+button{
+  transition:
+    transform .12s ease,
+    border-color .12s ease,
+    background .12s ease,
+    opacity .12s ease,
+    box-shadow .12s ease;
+}
+
+button:hover{
+  border-color:rgba(255,255,255,.12);
+}
+
+.btn-accent{
+  background:linear-gradient(180deg, rgba(70,214,109,.96), rgba(52,199,89,.88));
+  color:#041109;
+  box-shadow:0 10px 24px rgba(52,199,89,.16);
+}
+.btn-accent:hover{
+  box-shadow:0 14px 28px rgba(52,199,89,.22);
+}
+
+.btn-ghost{
+  background:rgba(255,255,255,.025);
+}
+
+.btn-danger{
+  background:rgba(255,69,58,.10);
+  border-color:rgba(255,69,58,.18);
+  color:#ffd9d5;
+}
+
+.seg{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.025);
+  padding:3px;
+  gap:2px;
+  border-radius:999px;
+}
+
+.seg button{
+  padding:10px 14px;
+  border-radius:999px;
+  color:rgba(245,247,250,.68);
+  font-weight:800;
+}
+
+.seg button.active{
+  background:rgba(255,255,255,.09);
+  color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
+}
+
+/* primary surfaces */
+.strip-wrap,
+.cal-wrap,
+.list-wrap,
+.mini-month,
+.mobile-add-panel,
+.modal-content,
+.pick-card,
+.sheet-card,
+.poster-view-card{
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, rgba(13,16,20,.86), rgba(11,13,17,.82));
+  box-shadow:var(--shadow);
+}
+
+/* make panels feel less boxy */
+.strip-wrap,
+.cal-wrap,
+.list-wrap{
+  border-radius:20px;
+  overflow:hidden;
+}
+
+/* headings */
+.strip-head,
+.cal-header,
+.list-head,
+.pick-head,
+.sheet-head,
+.week-panel-head,
+.mini-head{
+  background:rgba(255,255,255,.02);
+  border-bottom:1px solid var(--border-soft);
+}
+
+.strip-head{
+  padding:18px 18px 14px;
+  min-height:auto;
+}
+
+.strip-title,
+.cal-title,
+.list-head,
+.week-panel-title,
+.sheet-title,
+.pick-title{
+  font-weight:900;
+  letter-spacing:-.01em;
+}
+
+.strip-sub,
+.note,
+#miniHint{
+  color:var(--muted-2);
+}
+
+/* month chip bars */
+.main-monthsbar,
+.strip-months{
+  background:rgba(255,255,255,.015);
+  border-bottom:1px solid var(--border-soft);
+}
+
+.main-monthsbar{
+  padding:10px 14px;
+}
+.strip-months{
+  padding:10px 14px 12px;
+}
+
+.main-month-chip,
+.month-chip{
+  border:1px solid transparent;
+  background:rgba(255,255,255,.045);
+  color:rgba(245,247,250,.78);
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:800;
+  border-radius:999px;
+  transition:background .12s ease, color .12s ease, border-color .12s ease, transform .12s ease;
+}
+
+.main-month-chip:hover,
+.month-chip:hover{
+  background:rgba(255,255,255,.07);
+  color:#fff;
+}
+
+.main-month-chip.active,
+.month-chip.active{
+  border-color:var(--accent-line);
+  background:var(--accent-soft);
+  color:#effff4;
+  box-shadow:inset 0 0 0 1px rgba(52,199,89,.08);
+}
+
+/* poster strip */
+.strip-scroll{
+  padding:16px 16px 18px;
+}
+.strip-timeline{
+  gap:20px;
+}
+.strip-section{
+  padding-right:20px;
+  border-right:1px solid var(--border-soft);
+}
+.strip-section-title{
+  padding:0 2px 10px;
+  font-size:12px;
+  font-weight:800;
+  color:rgba(245,247,250,.72);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.strip-row{
+  gap:16px;
+}
+
+/* poster cards */
+.poster-card{
+  width:208px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;
+  background:rgba(14,17,21,.92);
+  box-shadow:var(--shadow-soft);
+  transition:
+    transform .16s ease,
+    border-color .16s ease,
+    box-shadow .16s ease,
+    opacity .16s ease;
+}
+
+.poster-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(255,255,255,.14);
+  box-shadow:0 18px 34px rgba(0,0,0,.34);
+}
+
+.poster-img{
+  height:314px;
+}
+
+.poster-meta{
+  padding:12px 12px 13px;
+  gap:4px;
+  background:linear-gradient(180deg, rgba(10,12,16,.88), rgba(9,11,15,.96));
+  border-top:1px solid var(--border-soft);
+}
+
+.poster-logo-wrap{
+  height:38px;
+  min-height:38px;
+  margin-bottom:4px;
+}
+
+.poster-logo{
+  max-height:34px;
+}
+
+.poster-title{
+  font-size:13px;
+  font-weight:800;
+  line-height:1.22;
+  color:rgba(245,247,250,.96);
+}
+
+.poster-date{
+  font-size:11px;
+  font-weight:700;
+  color:rgba(245,247,250,.60);
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+
+.poster-subdate{
+  font-size:10px;
+  font-weight:700;
+  color:rgba(245,247,250,.42);
+}
+
+/* calendar shell spacing */
+.cal-shell{
+  gap:16px;
+}
+
+/* mini calendar */
+.mini-month{
+  border-radius:24px;
+}
+
+.mini-head{
+  padding:16px 18px 14px;
+}
+
+.mini-title{
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:-.03em;
+}
+
+.mini-grid{
+  gap:8px;
+  padding:14px;
+}
+
+.mini-day{
+  border:1px solid transparent;
+  background:rgba(255,255,255,.03);
+  border-radius:14px;
+  color:rgba(245,247,250,.78);
+  font-size:12px;
+  font-weight:700;
+  transition:background .12s ease, border-color .12s ease, transform .12s ease;
+}
+
+.mini-day:hover{
+  background:rgba(255,255,255,.055);
+}
+
+.mini-day.sel{
+  border-color:var(--accent-line);
+  background:rgba(52,199,89,.12);
+  color:#f2fff6;
+}
+
+.mini-day.today{
+  outline:1px solid rgba(52,199,89,.28);
+  outline-offset:2px;
+}
+
+.mini-navbtn{
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+}
+
+/* apple year mini grid */
+.apple-month-name{
+  font-size:17px;
+  font-weight:800;
+  color:rgba(245,247,250,.90);
+}
+
+.apple-day{
+  font-size:11px;
+  font-weight:700;
+  color:rgba(245,247,250,.85);
+}
+
+.apple-day.selected{
+  background:var(--accent);
+  color:#071109;
+}
+
+.apple-month.active .apple-month-name{
+  color:#fff;
+}
+
+/* main calendar */
+.cal-header{
+  padding:13px 16px;
+}
+
+.iconbtn{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+  color:rgba(245,247,250,.90);
+}
+.iconbtn:hover{
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.12);
+}
+
+.cal-weekdays{
+  padding:10px 16px;
+  color:rgba(245,247,250,.46);
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.cal-weekdays > div{
+  font-weight:800;
+}
+
+.cal-grid{
+  gap:8px;
+  padding:0 16px 16px;
+}
+
+.cal-day{
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:16px;
+  background:linear-gradient(180deg, rgba(22,26,33,.72), rgba(17,20,26,.74));
+  padding:8px;
+  gap:8px;
+  min-height:126px;
+}
+
+.cal-day:hover{
+  border-color:rgba(255,255,255,.10);
+}
+
+.cal-daynum{
+  font-size:11px;
+  font-weight:800;
+  color:rgba(245,247,250,.76);
+}
+
+.dot{
+  width:6px;
+  height:6px;
+  background:rgba(255,255,255,.18);
+}
+.dot.today{
+  background:var(--accent);
+  box-shadow:0 0 0 4px rgba(52,199,89,.10);
+}
+
+.event-tile img{
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 6px 14px rgba(0,0,0,.26);
+}
+
+/* week row */
+.week-panel{
+  border-bottom:1px solid var(--border-soft);
+  background:transparent;
+}
+
+.week-panel-head{
+  padding:12px 16px;
+}
+
+.week-wrap{
+  padding:0 16px 16px;
+}
+
+.week-grid{
+  gap:10px;
+}
+
+.week-day{
+  min-height:188px;
+  padding:12px 10px 10px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.05);
+  background:linear-gradient(180deg, rgba(23,27,34,.76), rgba(17,20,25,.82));
+}
+
+.week-top{
+  margin-bottom:14px;
+}
+
+.week-top > div:first-child div:first-child{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color:rgba(245,247,250,.44);
+}
+
+.week-top > div:first-child div:last-child{
+  font-size:20px;
+  font-weight:900;
+  color:#fff;
+}
+
+.week-events .event-tile{
+  max-width:82px;
+  flex:0 0 82px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  box-shadow:0 8px 18px rgba(0,0,0,.24);
+}
+
+.week-more{
+  min-width:46px;
+  height:30px;
+  padding:0 11px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.06);
+  color:rgba(245,247,250,.88);
+  font-size:11px;
+  font-weight:800;
+}
+
+/* table / lists */
+.list-head{
+  padding:14px 16px;
+}
+
+.table th,
+.table td{
+  padding:12px 14px;
+}
+
+.table th{
+  color:rgba(245,247,250,.50);
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.rowbtn{
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+/* modals */
+.modal,
+.pick-modal,
+.sheet,
+.poster-view{
+  backdrop-filter:blur(4px);
+}
+
+.modal-content,
+.pick-card,
+.sheet-card,
+.poster-view-card{
+  border-color:rgba(255,255,255,.08);
+}
+
+.close-modal,
+.pick-close,
+.sheet-close,
+.poster-view-close{
+  border-radius:14px;
+}
+
+/* mobile polish */
+@media (max-width:720px){
+  main{
+    padding:10px 12px 22px;
+  }
+
+  header{
+    padding:12px 12px 10px;
+  }
+
+  .strip-wrap,
+  .cal-wrap,
+  .list-wrap,
+  .mini-month,
+  .mobile-add-panel{
+    border-radius:22px;
+  }
+
+  .strip-head{
+    padding:14px 14px 12px;
+  }
+
+  .strip-months{
+    padding:8px 12px 10px;
+  }
+
+  .strip-scroll{
+    padding:12px 12px 14px;
+  }
+
+  .strip-timeline{
+    gap:12px;
+  }
+
+  .strip-row{
+    gap:12px;
+  }
+
+  .poster-card{
+    width:92px;
+    border-radius:16px;
+  }
+
+  .poster-img{
+    height:138px;
+  }
+
+  .poster-meta{
+    padding:7px 7px 9px;
+    gap:3px;
+  }
+
+  .poster-title{
+    font-size:10px;
+  }
+
+  .poster-date{
+    font-size:8px;
+  }
+
+  .poster-subdate{
+    font-size:8px;
+  }
+
+  .week-panel-head,
+  .cal-header{
+    padding:10px 12px;
+  }
+
+  .week-wrap{
+    padding:0 12px 12px;
+  }
+
+  .week-grid{
+    gap:8px;
+  }
+
+  .week-day{
+    min-height:168px;
+    border-radius:18px;
+    padding:10px 8px 8px;
+  }
+
+  .week-top > div:first-child div:last-child{
+    font-size:18px;
+  }
+
+  .week-events .event-tile{
+    max-width:76px;
+    flex:0 0 76px;
+  }
+
+  .cal-weekdays{
+    padding:8px 10px 6px;
+  }
+
+  .cal-grid{
+    gap:5px;
+    padding:0 10px 12px;
+  }
+
+  .cal-day{
+    min-height:112px;
+    border-radius:14px;
+    padding:6px;
+  }
+
+  .mini-head{
+    padding:16px 16px 12px;
+  }
+
+  .mini-title{
+    font-size:26px;
+  }
+
+  .mini-grid{
+    gap:6px;
+    padding:12px;
+  }
+
+  body.mobile-show-mini #primaryControls{
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(16,18,22,.90);
+    box-shadow:0 14px 30px rgba(0,0,0,.30);
+  }
+}
+/* =========================================
+   PHASE 2 — MOBILE IPHONE-STYLE POLISH
+   paste BELOW the first patch
+   ========================================= */
+
+@media (max-width:720px){
+
+  :root{
+    --bottom-nav-h: 74px;
+  }
+
+  html, body{
+    background:
+      radial-gradient(700px 340px at 50% -10%, rgba(52,199,89,.08), transparent 58%),
+      linear-gradient(180deg, #040506 0%, #090b0e 100%);
+  }
+
+  body{
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  main{
+    max-width:100%;
+    padding:8px 10px calc(18px + env(safe-area-inset-bottom));
+    gap:12px;
+  }
+
+  /* top app feel */
+  header{
+    position:sticky;
+    top:0;
+    z-index:80;
+    padding:
+      calc(10px + env(safe-area-inset-top))
+      12px
+      10px;
+    background:
+      linear-gradient(180deg, rgba(10,12,16,.92), rgba(10,12,16,.72));
+    backdrop-filter:blur(22px) saturate(1.15);
+    -webkit-backdrop-filter:blur(22px) saturate(1.15);
+    border-bottom:1px solid rgba(255,255,255,.05);
+    box-shadow:0 10px 26px rgba(0,0,0,.22);
+  }
+
+  header.compact{
+    padding:
+      calc(8px + env(safe-area-inset-top))
+      12px
+      9px;
+  }
+
+  .brand{
+    font-size:18px;
+    letter-spacing:-.02em;
+    font-weight:950;
+  }
+
+  .pill{
+    min-height:28px;
+    padding:0 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:800;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.06);
+  }
+
+  .controls{
+    margin-top:10px;
+    gap:10px;
+  }
+
+  /* make top controls feel native */
+  input, select, button, textarea{
+    min-height:44px;
+    border-radius:16px;
+    font-size:16px;
+
+  .seg button{
+    min-height:38px;
+    padding:9px 12px;
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:-.01em;
+  }
+
+  /* app sections */
+  .strip-wrap,
+  .cal-wrap,
+  .list-wrap,
+  .mini-month,
+  .mobile-add-panel{
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,.06);
+    background:
+      linear-gradient(180deg, rgba(14,17,22,.92), rgba(10,12,16,.92));
+    overflow:hidden;
+    box-shadow:
+      0 14px 34px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.03);
+  }
+
+  /* poster strip should feel like the hero row */
+  .strip-head{
+    padding:14px 14px 10px;
+    background:transparent;
+    border-bottom:none;
+  }
+
+  .strip-title{
+    font-size:18px;
+    letter-spacing:-.03em;
+  }
+
+  .strip-sub{
+    font-size:11px;
+    color:rgba(245,247,250,.48);
+  }
+
+  .strip-months,
+  .main-monthsbar{
+    background:transparent;
+    border-bottom:none;
+    padding:2px 12px 10px;
+    gap:8px;
+  }
+
+  .month-chip,
+  .main-month-chip{
+    min-height:32px;
+    padding:0 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:850;
+    background:rgba(255,255,255,.06);
+    border:1px solid transparent;
+    color:rgba(245,247,250,.74);
+  }
+
+  .month-chip.active,
+  .main-month-chip.active{
+    background:rgba(52,199,89,.16);
+    border-color:rgba(52,199,89,.22);
+    color:#f3fff6;
+  }
+
+  .strip-scroll{
+    padding:0 12px 14px;
+  }
+
+  .strip-timeline{
+    gap:12px;
+  }
+
+  .strip-section{
+    padding-right:12px;
+    border-right:none;
+  }
+
+  .strip-section-title{
+    padding:0 2px 8px;
+    font-size:10px;
+    letter-spacing:.12em;
+    color:rgba(245,247,250,.42);
+  }
+
+  .strip-row{
+    gap:10px;
+  }
+
+  /* mobile posters more like cards in an iOS media app */
+  .poster-card{
+    width:108px;
+    border-radius:18px;
+    background:rgba(18,21,27,.96);
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:
+      0 12px 22px rgba(0,0,0,.24),
+      inset 0 1px 0 rgba(255,255,255,.03);
+  }
+
+  .poster-img{
+    height:158px;
+    border-radius:18px 18px 0 0;
+  }
+
+  .poster-meta{
+    padding:8px 8px 10px;
+    gap:2px;
+    background:linear-gradient(180deg, rgba(10,12,16,.70), rgba(10,12,16,.96));
+  }
+
+  .poster-logo-wrap{
+    height:28px;
+    min-height:28px;
+    margin-bottom:2px;
+  }
+
+  .poster-logo{
+    max-height:24px;
+  }
+
+  .poster-title{
+    font-size:10px;
+    line-height:1.18;
+    font-weight:800;
+  }
+
+  .poster-date{
+    font-size:8px;
+    letter-spacing:.08em;
+    color:rgba(245,247,250,.56);
+  }
+
+  .poster-subdate{
+    display:none;
+  }
+
+  /* week row as native style cards */
+  .week-panel{
+    border-bottom:none;
+    background:transparent;
+  }
+
+  .week-panel-head{
+    padding:13px 14px 10px;
+    border-bottom:none;
+    background:transparent;
+  }
+
+  .week-panel-title{
+    font-size:17px;
+    letter-spacing:-.02em;
+  }
+
+  .week-wrap{
+    padding:0 12px 14px;
+  }
+
+  .week-grid{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    padding-bottom:2px;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .week-grid::-webkit-scrollbar{
+    display:none;
+  }
+
+  .week-day{
+    flex:0 0 138px;
+    min-height:162px;
+    padding:12px 10px 10px;
+    border-radius:22px;
+    background:
+      linear-gradient(180deg, rgba(26,30,38,.92), rgba(17,20,26,.96));
+    border:1px solid rgba(255,255,255,.05);
+    box-shadow:
+      0 10px 24px rgba(0,0,0,.22),
+      inset 0 1px 0 rgba(255,255,255,.03);
+    scroll-snap-align:start;
+  }
+
+  .week-day.selected,
+  .week-day.active,
+  .week-day.is-selected{
+    border-color:rgba(52,199,89,.20);
+    background:
+      linear-gradient(180deg, rgba(30,42,33,.96), rgba(18,24,20,.98));
+  }
+
+  .week-top{
+    margin-bottom:10px;
+  }
+
+  .week-top > div:first-child div:first-child{
+    font-size:10px;
+    letter-spacing:.12em;
+    color:rgba(245,247,250,.42);
+  }
+
+  .week-top > div:first-child div:last-child{
+    font-size:22px;
+    letter-spacing:-.03em;
+  }
+
+  .week-events{
+    gap:8px;
+  }
+
+  .week-events .event-tile{
+    max-width:56px;
+    flex:0 0 56px;
+    border-radius:12px;
+    overflow:hidden;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.06);
+  }
+
+  .week-events .event-tile img{
+    border-radius:12px;
+  }
+
+  .week-more{
+    min-width:42px;
+    height:28px;
+    padding:0 10px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:900;
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.08);
+  }
+
+  /* mini calendar = more native, less grid-heavy */
+  .mini-month{
+    border-radius:28px;
+  }
+
+  .mini-head{
+    padding:16px 16px 10px;
+    background:transparent;
+    border-bottom:none;
+  }
+
+  .mini-title{
+    font-size:30px;
+    line-height:1;
+    letter-spacing:-.05em;
+  }
+
+  .mini-navbtn{
+    width:34px;
+    height:34px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.06);
+  }
+
+  .mini-grid{
+    gap:7px;
+    padding:10px 12px 14px;
+  }
+
+  .mini-day{
+    min-height:42px;
+    border-radius:15px;
+    background:rgba(255,255,255,.035);
+    border:1px solid transparent;
+    font-size:12px;
+    font-weight:800;
+  }
+
+  .mini-day .dot,
+  .mini-day .mini-dot{
+    transform:translateY(-1px);
+  }
+
+  .mini-day.sel{
+    background:rgba(52,199,89,.16);
+    border-color:rgba(52,199,89,.18);
+  }
+
+  .mini-day.today{
+    outline:none;
+    box-shadow:inset 0 0 0 1px rgba(52,199,89,.28);
+  }
+
+  /* main calendar if shown on mobile */
+  .cal-header{
+    padding:13px 12px 10px;
+    background:transparent;
+    border-bottom:none;
+  }
+
+  .cal-title{
+    font-size:20px;
+    letter-spacing:-.03em;
+  }
+
+  .iconbtn{
+    width:38px;
+    height:38px;
+    border-radius:999px;
+    background:rgba(255,255,255,.055);
+  }
+
+  .cal-weekdays{
+    padding:0 12px 8px;
+    font-size:10px;
+    color:rgba(245,247,250,.34);
+  }
+
+  .cal-grid{
+    gap:6px;
+    padding:0 10px 12px;
+  }
+
+  .cal-day{
+    min-height:96px;
+    border-radius:16px;
+    padding:6px;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.045);
+  }
+
+  .cal-daynum{
+    font-size:11px;
+    font-weight:850;
+  }
+
+  /* bottom bar / floating control feel */
+  .mobile-nav,
+  .bottom-nav,
+  .tabbar{
+    left:10px;
+    right:10px;
+    bottom:calc(10px + env(safe-area-inset-bottom));
+    border-radius:24px;
+    background:rgba(15,18,23,.88);
+    backdrop-filter:blur(20px) saturate(1.15);
+    -webkit-backdrop-filter:blur(20px) saturate(1.15);
+    border:1px solid rgba(255,255,255,.07);
+    box-shadow:
+      0 14px 34px rgba(0,0,0,.30),
+      inset 0 1px 0 rgba(255,255,255,.03);
+  }
+
+  /* sticky mobile controls panel from your existing layout */
+  body.mobile-show-mini #primaryControls{
+    left:10px;
+    right:10px;
+    bottom:calc(12px + env(safe-area-inset-bottom));
+    border-radius:24px;
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(14,17,22,.88);
+    backdrop-filter:blur(20px) saturate(1.1);
+    -webkit-backdrop-filter:blur(20px) saturate(1.1);
+    box-shadow:
+      0 16px 34px rgba(0,0,0,.32),
+      inset 0 1px 0 rgba(255,255,255,.03);
+    padding:8px;
+  }
+
+  /* sheet / modal feel more native */
+  .modal,
+  .pick-modal,
+  .sheet,
+  .poster-view{
+    background:rgba(0,0,0,.48);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+  }
+
+  .modal-content,
+  .pick-card,
+  .sheet-card,
+  .poster-view-card{
+    width:min(100vw - 16px, 560px);
+    border-radius:28px;
+    border:1px solid rgba(255,255,255,.07);
+    background:
+      linear-gradient(180deg, rgba(18,21,27,.96), rgba(12,14,18,.98));
+    box-shadow:
+      0 22px 50px rgba(0,0,0,.42),
+      inset 0 1px 0 rgba(255,255,255,.03);
+  }
+
+  .close-modal,
+  .pick-close,
+  .sheet-close,
+  .poster-view-close{
+    width:34px;
+    height:34px;
+    border-radius:999px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.06);
+  }
+
+  /* small native-feeling motion */
+  .poster-card,
+  .week-day,
+  .mini-day,
+  .month-chip,
+  .main-month-chip,
+  .iconbtn,
+  .mini-navbtn,
+  .seg button,
+  button{
+    transition:
+      transform .14s ease,
+      opacity .14s ease,
+      background .14s ease,
+      border-color .14s ease,
+      box-shadow .14s ease;
+  }
+
+  .poster-card:active,
+  .week-day:active,
+  .mini-day:active,
+  .month-chip:active,
+  .main-month-chip:active,
+  .iconbtn:active,
+  .mini-navbtn:active,
+}
+/* =========================
+   FIX TOP CHIP BAR + SHOW ALL 7 WEEK DAYS
+   paste at very end of <style>
+   ========================= */
+
+@media (max-width:720px){
+
+  /* top month chip area under All / Movies / TV Shows / Digital */
+  .strip-head{
+    padding:8px 10px 6px !important;
+  }
+
+  .strip-months{
+    display:flex !important;
+    align-items:center;
+    gap:6px !important;
+    padding:8px 10px 10px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    white-space:nowrap !important;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    border-bottom:none !important;
+    background:transparent !important;
+  }
+
+  .strip-months::-webkit-scrollbar{
+    display:none !important;
+    height:0 !important;
+  }
+
+  .month-chip{
+    flex:0 0 auto !important;
+    min-width:auto !important;
+    padding:8px 12px !important;
+    font-size:11px !important;
+    line-height:1 !important;
+    border-radius:999px !important;
+    white-space:nowrap !important;
+  }
+
+  /* WEEK BAR: force all 7 days to be visible */
+  .week-wrap{
+    padding:0 8px 10px !important;
+    overflow:hidden !important;
+  }
+
+  .week-grid{
+    display:grid !important;
+    grid-template-columns:repeat(7, minmax(0, 1fr)) !important;
+    gap:4px !important;
+    width:100% !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+
+  .week-day{
+    min-width:0 !important;
+    min-height:118px !important;
+    padding:6px 4px !important;
+    border-radius:14px !important;
+  }
+
+  .week-top{
+    margin-bottom:6px !important;
+  }
+
+  .week-top > div:first-child div:first-child{
+    font-size:8px !important;
+    letter-spacing:.08em !important;
+  }
+
+  .week-top > div:first-child div:last-child{
+    font-size:15px !important;
+    line-height:1 !important;
+  }
+
+  .week-events{
+    gap:4px !important;
+    justify-content:center !important;
+    flex-wrap:wrap !important;
+  }
+
+  .week-events .event-tile{
+    max-width:30px !important;
+    flex:0 1 30px !important;
+    border-radius:8px !important;
+  }
+
+  .week-events .event-tile img{
+    border-radius:8px !important;
+  }
+
+  .week-more{
+    min-width:30px !important;
+    height:22px !important;
+    padding:0 6px !important;
+    font-size:9px !important;
+    border-radius:999px !important;
+  }
+
+  .week-panel-head{
+    padding:10px 10px 8px !important;
+  }
+
+  .week-panel-title{
+    font-size:15px !important;
+  }
+
+  .week-nav{
+    gap:6px !important;
+  }
+
+  .week-nav .iconbtn{
+    width:30px !important;
+    height:30px !important;
+    min-width:30px !important;
+    border-radius:999px !important;
+  }
+}
+/* =========================
+   FIX TOP FILTER BAR
+   paste at end of <style>
+   ========================= */
+
+@media (max-width:720px){
+  /* give the whole top area breathing room */
+  .strip-wrap,
+  .strip-head{
+    overflow:visible !important;
+  }
+
+  .strip-head{
+    padding:8px 8px 6px !important;
+  }
+
+  /* if the segmented bar lives inside another controls row */
+  .controls{
+    gap:8px !important;
+    min-width:0 !important;
+  }
+
+  /* prevent parent from clipping the left edge */
+  .controls > *,
+  .strip-head > *,
+  .seg{
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+}
+@media (max-width:720px){
+  header,
+  main,
+  .strip-wrap,
+  .strip-head,
+  .controls{
+    overflow:visible !important;
+  }
+}
+/* =========================
+   CLEAN MOBILE TOP FILTER BAR
+   paste at very end of <style>
+   ========================= */
+
+@media (max-width:720px){
+
+  .strip-head{
+    padding:8px 10px 6px !important;
+    overflow:visible !important;
+  }
+
+  .controls{
+    min-width:0 !important;
+    gap:8px !important;
+    overflow:visible !important;
+  }
+
+  .seg{
+    display:grid !important;
+    grid-template-columns:repeat(4, 1fr) !important;
+    align-items:center !important;
+    width:100% !important;
+    min-width:0 !important;
+    padding:2px !important;
+    gap:0 !important;
+    border-radius:999px !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+    background:rgba(255,255,255,.05) !important;
+    border:1px solid rgba(255,255,255,.08) !important;
+  }
+
+  .seg button{
+    appearance:none !important;
+    -webkit-appearance:none !important;
+    min-width:0 !important;
+    width:100% !important;
+    height:28px !important;
+    padding:0 6px !important;
+    margin:0 !important;
+    border:0 !important;
+    border-radius:999px !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    font-size:10px !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    letter-spacing:0 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    color:rgba(245,247,250,.78) !important;
+    transform:none !important;
+  }
+
+  .seg button.active{
+    background:rgba(255,255,255,.12) !important;
+    color:#fff !important;
+    box-shadow:none !important;
+    transform:none !important;
+  }
+
+  .seg button:active{
+    transform:none !important;
+  }
+}
+/* =========================
+   FINAL TOP FILTER BAR FIX
+   paste at very end of <style>
+   ========================= */
+
+@media (max-width:720px){
+
+  .strip-head{
+    padding:8px 10px 6px !important;
+    overflow:visible !important;
+  }
+
+  .controls{
+    min-width:0 !important;
+    width:100% !important;
+    gap:8px !important;
+    overflow:visible !important;
+  }
+
+  /* outer pill */
+  .seg{
+    display:grid !important;
+    grid-template-columns:repeat(4, 1fr) !important;
+    align-items:center !important;
+
+    width:100% !important;
+    min-width:0 !important;
+    height:30px !important;
+
+    padding:1px !important;
+    margin:0 !important;
+
+    border-radius:999px !important;
+    border:1px solid rgba(255,255,255,.08) !important;
+    background:rgba(255,255,255,.05) !important;
+
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    box-shadow:none !important;
+  }
+
+/* =========================
+   FINAL MOBILE TOP BAR CLEANUP
+   paste at very end of <style>
+   ========================= */
+@media (max-width:720px){
+
+  .strip-head{
+    padding:8px 10px 10px !important;
+    overflow:visible !important;
+  }
+
+  .controls{
+    width:100% !important;
+    min-width:0 !important;
+    margin-top:0 !important;
+    gap:8px !important;
+    overflow:visible !important;
+    padding-bottom:0 !important;
+  }
+
+  /* top filter bar */
+  .seg{
+    display:grid !important;
+    grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
+    align-items:stretch !important;
+    width:100% !important;
+    min-width:0 !important;
+    height:32px !important;
+    padding:2px !important;
+    margin:0 !important;
+    gap:0 !important;
+    border-radius:999px !important;
+    border:1px solid rgba(255,255,255,.08) !important;
+    background:rgba(255,255,255,.04) !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    box-shadow:none !important;
+  }
+
+  .seg button{
+    appearance:none !important;
+    -webkit-appearance:none !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:100% !important;
+    min-width:0 !important;
+    height:100% !important;
+    margin:0 !important;
+    padding:0 4px !important;
+    border:0 !important;
+    border-radius:999px !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    font-size:10px !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    letter-spacing:0 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    color:rgba(245,247,250,.78) !important;
+    transform:none !important;
+    min-height:0 !important;
+    max-height:none !important;
+    box-sizing:border-box !important;
+    flex:none !important;
+  }
+
+  .seg button.active{
+    background:rgba(255,255,255,.10) !important;
+    color:#fff !important;
+    box-shadow:none !important;
+    transform:none !important;
+  }
+
+  .seg button:active{
+    transform:none !important;
+  }
+
+  /* month chips spacing below top bar */
+  .strip-months{
+    padding:8px 0 0 !important;
+    margin-top:0 !important;
+    border-bottom:none !important;
+    background:transparent !important;
+    gap:8px !important;
+  }
+
+  .month-chip{
+    height:28px !important;
+    padding:0 12px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    font-size:11px !important;
+    line-height:1 !important;
+  }
+}
 </style>
 </head>
 
