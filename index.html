@@ -1437,24 +1437,6 @@ body.mobile-show-mini .mini-bottom-actions .import-label{
     margin:0;
   }
 
-  body.mobile-show-mini #primaryControls{
-    position:fixed;
-    top:calc(10px + env(safe-area-inset-top));
-    left:10px;
-    right:10px;
-    bottom:auto;
-    z-index:130;
-    margin-top:0;
-    padding:8px;
-    border:1px solid rgba(255,255,255,.10);
-    border-radius:24px;
-    background:rgba(18,18,20,.94);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-    box-shadow:0 20px 50px rgba(0,0,0,.45);
-    justify-content:flex-start;
-    display:flex !important;
-  }
   body.mobile-show-mini #primaryControls .seg{
     width:100%;
     display:flex;
@@ -2392,112 +2374,11 @@ button:hover{
     box-shadow:0 14px 30px rgba(0,0,0,.30);
   }
 }
-/* =========================================
-   PHASE 2 — MOBILE IPHONE-STYLE POLISH
-   paste BELOW the first patch
-   ========================================= */
 
-@media (max-width:720px){
-
-  :root{
-    --bottom-nav-h: 74px;
-  }
-
-  html, body{
-    background:
-      radial-gradient(700px 340px at 50% -10%, rgba(52,199,89,.08), transparent 58%),
-      linear-gradient(180deg, #040506 0%, #090b0e 100%);
-  }
-
-  body{
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-  }
-
-  main{
-    max-width:100%;
-    padding:8px 10px calc(18px + env(safe-area-inset-bottom));
-    gap:12px;
-  }
-
-  /* top app feel */
-  header{
-    position:sticky;
-    top:0;
-    z-index:80;
-    padding:
-      calc(10px + env(safe-area-inset-top))
-      12px
-      10px;
-    background:
-      linear-gradient(180deg, rgba(10,12,16,.92), rgba(10,12,16,.72));
-    backdrop-filter:blur(22px) saturate(1.15);
-    -webkit-backdrop-filter:blur(22px) saturate(1.15);
-    border-bottom:1px solid rgba(255,255,255,.05);
-    box-shadow:0 10px 26px rgba(0,0,0,.22);
-  }
-
-  header.compact{
-    padding:
-      calc(8px + env(safe-area-inset-top))
-      12px
-      9px;
-  }
-
-  .brand{
-    font-size:18px;
-    letter-spacing:-.02em;
-    font-weight:950;
-  }
-
-  .pill{
-    min-height:28px;
-    padding:0 10px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:800;
-    background:rgba(255,255,255,.05);
-    border:1px solid rgba(255,255,255,.06);
-  }
-
-  .controls{
-    margin-top:10px;
-    gap:10px;
-  }
-
-  /* make top controls feel native */
-  input, select, button, textarea{
-    min-height:44px;
-    border-radius:16px;
-    font-size:16px;
-
-  .seg button{
-    min-height:38px;
-    padding:9px 12px;
-    font-size:13px;
-    font-weight:850;
-    letter-spacing:-.01em;
-  }
-
-  /* app sections */
-  .strip-wrap,
-  .cal-wrap,
-  .list-wrap,
-  .mini-month,
-  .mobile-add-panel{
-    border-radius:26px;
-    border:1px solid rgba(255,255,255,.06);
-    background:
-      linear-gradient(180deg, rgba(14,17,22,.92), rgba(10,12,16,.92));
-    overflow:hidden;
-    box-shadow:
-      0 14px 34px rgba(0,0,0,.28),
-      inset 0 1px 0 rgba(255,255,255,.03);
-  }
 
   /* poster strip should feel like the hero row */
   .strip-head{
-    padding:14px 14px 10px;
+    padding:12px 12px 0px;
     background:transparent;
     border-bottom:none;
   }
@@ -2900,49 +2781,161 @@ button:hover{
   .main-month-chip:active,
   .iconbtn:active,
   .mini-navbtn:active,
-}
-/* =========================
-   FIX TOP CHIP BAR + SHOW ALL 7 WEEK DAYS
-   paste at very end of <style>
-   ========================= */
 
+/* =========================
+   CLEAN MOBILE TOP BAR FIX
+   ========================= */
 @media (max-width:720px){
 
-  /* top month chip area under All / Movies / TV Shows / Digital */
+  body.mobile-show-mini #primaryControls{
+    position:static !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+    bottom:auto !important;
+    z-index:auto !important;
+
+    width:100% !important;
+    margin:0 !important;
+    padding:8px 10px 0 !important;
+
+    border:none !important;
+    background:transparent !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    box-shadow:none !important;
+  }
+
+  body.mobile-show-mini #primaryControls.controls{
+    justify-content:center !important;
+    gap:0 !important;
+    overflow:visible !important;
+    flex-wrap:nowrap !important;
+    padding-bottom:0 !important;
+  }
+
+  body.mobile-show-mini #primaryControls .seg{
+    all:unset !important;
+    display:grid !important;
+    grid-template-columns:repeat(4, 1fr) !important;
+    width:100% !important;
+    max-width:360px !important;
+    height:26px !important;
+    padding:1px !important;
+    margin:0 auto !important;
+    border-radius:999px !important;
+    border:1px solid rgba(255,255,255,.08) !important;
+    background:rgba(255,255,255,.05) !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+
+  body.mobile-show-mini #primaryControls .seg button{
+    all:unset !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:100% !important;
+    height:100% !important;
+    font-size:9px !important;
+    font-weight:800 !important;
+    line-height:1 !important;
+    color:rgba(245,247,250,.85) !important;
+    border-radius:999px !important;
+    position:relative !important;
+    top:-0.5px !important;
+    white-space:nowrap !important;
+    cursor:pointer !important;
+  }
+
+  body.mobile-show-mini #primaryControls .seg button.active{
+    background:rgba(255,255,255,.12) !important;
+    color:#fff !important;
+  }
+
+  body.mobile-show-mini #primaryControls #favoritesBtn,
+  body.mobile-show-mini #primaryControls #watchedBtn{
+    display:none !important;
+  }
+
   .strip-head{
-    padding:8px 10px 6px !important;
+    padding:0 !important;
+    margin:0 !important;
+    min-height:0 !important;
+    background:transparent !important;
+    border-bottom:none !important;
+    box-shadow:none !important;
+  }
+
+  .strip-title,
+  .strip-sub,
+  .badge-mini{
+    display:none !important;
   }
 
   .strip-months{
-    display:flex !important;
-    align-items:center;
-    gap:6px !important;
-    padding:8px 10px 10px !important;
-    overflow-x:auto !important;
-    overflow-y:hidden !important;
-    white-space:nowrap !important;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-    border-bottom:none !important;
+    margin-top:8px !important;
+    padding:0 10px 10px !important;
     background:transparent !important;
-  }
-
-  .strip-months::-webkit-scrollbar{
-    display:none !important;
-    height:0 !important;
+    border-bottom:none !important;
   }
 
   .month-chip{
-    flex:0 0 auto !important;
-    min-width:auto !important;
-    padding:8px 12px !important;
-    font-size:11px !important;
+    height:26px !important;
+    padding:0 10px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    font-size:10px !important;
     line-height:1 !important;
-    border-radius:999px !important;
-    white-space:nowrap !important;
   }
+}
+/* =========================
+   BIGGER MONTH BUTTONS
+   ========================= */
 
-  /* WEEK BAR: force all 7 days to be visible */
+.strip-months{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  padding:12px 12px !important;
+}
+
+.month-chip{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  height:40px !important;        /* 🔥 bigger */
+  min-width:72px !important;     /* 🔥 wider */
+  padding:0 18px !important;     /* 🔥 more space */
+
+  border-radius:999px !important;
+
+  font-size:13px !important;     /* 🔥 bigger text */
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:.3px !important;
+
+  background:rgba(255,255,255,.07) !important;
+  color:rgba(245,247,250,.9) !important;
+
+  border:1px solid rgba(255,255,255,.08) !important;
+
+  position:relative;
+  top:-0.5px;
+}
+
+.month-chip.active{
+  background:rgba(52,199,89,.22) !important;
+  border-color:rgba(52,199,89,.35) !important;
+  color:#fff !important;
+}
+/* =========================
+   WEEK BAR: SHOW ALL 7 DAYS
+   ========================= */
+@media (max-width:720px){
+
   .week-wrap{
     padding:0 8px 10px !important;
     overflow:hidden !important;
@@ -2959,7 +2952,8 @@ button:hover{
 
   .week-day{
     min-width:0 !important;
-    min-height:118px !important;
+    width:100% !important;
+    min-height:120px !important;
     padding:6px 4px !important;
     border-radius:14px !important;
   }
@@ -2979,296 +2973,32 @@ button:hover{
   }
 
   .week-events{
-    gap:4px !important;
     justify-content:center !important;
-    flex-wrap:wrap !important;
+    align-items:flex-start !important;
+    width:100% !important;
   }
 
   .week-events .event-tile{
-    max-width:30px !important;
-    flex:0 1 30px !important;
+    width:100% !important;
+    max-width:32px !important;
+    flex:0 0 32px !important;
     border-radius:8px !important;
   }
 
   .week-events .event-tile img{
+    width:100% !important;
+    aspect-ratio:2 / 3 !important;
+    height:auto !important;
+    object-fit:cover !important;
     border-radius:8px !important;
   }
 
   .week-more{
-    min-width:30px !important;
-    height:22px !important;
+    min-width:28px !important;
+    height:20px !important;
     padding:0 6px !important;
     font-size:9px !important;
-    border-radius:999px !important;
-  }
-
-  .week-panel-head{
-    padding:10px 10px 8px !important;
-  }
-
-  .week-panel-title{
-    font-size:15px !important;
-  }
-
-  .week-nav{
-    gap:6px !important;
-  }
-
-  .week-nav .iconbtn{
-    width:30px !important;
-    height:30px !important;
-    min-width:30px !important;
-    border-radius:999px !important;
-  }
-}
-/* =========================
-   FIX TOP FILTER BAR
-   paste at end of <style>
-   ========================= */
-
-@media (max-width:720px){
-  /* give the whole top area breathing room */
-  .strip-wrap,
-  .strip-head{
-    overflow:visible !important;
-  }
-
-  .strip-head{
-    padding:8px 8px 6px !important;
-  }
-
-  /* if the segmented bar lives inside another controls row */
-  .controls{
-    gap:8px !important;
-    min-width:0 !important;
-  }
-
-  /* prevent parent from clipping the left edge */
-  .controls > *,
-  .strip-head > *,
-  .seg{
-    min-width:0 !important;
-    max-width:100% !important;
-    box-sizing:border-box !important;
-  }
-}
-@media (max-width:720px){
-  header,
-  main,
-  .strip-wrap,
-  .strip-head,
-  .controls{
-    overflow:visible !important;
-  }
-}
-/* =========================
-   CLEAN MOBILE TOP FILTER BAR
-   paste at very end of <style>
-   ========================= */
-
-@media (max-width:720px){
-
-  .strip-head{
-    padding:8px 10px 6px !important;
-    overflow:visible !important;
-  }
-
-  .controls{
-    min-width:0 !important;
-    gap:8px !important;
-    overflow:visible !important;
-  }
-
-  .seg{
-    display:grid !important;
-    grid-template-columns:repeat(4, 1fr) !important;
-    align-items:center !important;
-    width:100% !important;
-    min-width:0 !important;
-    padding:2px !important;
-    gap:0 !important;
-    border-radius:999px !important;
-    overflow:hidden !important;
-    box-sizing:border-box !important;
-    background:rgba(255,255,255,.05) !important;
-    border:1px solid rgba(255,255,255,.08) !important;
-  }
-
-  .seg button{
-    appearance:none !important;
-    -webkit-appearance:none !important;
-    min-width:0 !important;
-    width:100% !important;
-    height:28px !important;
-    padding:0 6px !important;
-    margin:0 !important;
-    border:0 !important;
-    border-radius:999px !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    font-size:10px !important;
-    line-height:1 !important;
-    font-weight:800 !important;
-    letter-spacing:0 !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-    color:rgba(245,247,250,.78) !important;
-    transform:none !important;
-  }
-
-  .seg button.active{
-    background:rgba(255,255,255,.12) !important;
-    color:#fff !important;
-    box-shadow:none !important;
-    transform:none !important;
-  }
-
-  .seg button:active{
-    transform:none !important;
-  }
-}
-/* =========================
-   FINAL TOP FILTER BAR FIX
-   paste at very end of <style>
-   ========================= */
-
-@media (max-width:720px){
-
-  .strip-head{
-    padding:8px 10px 6px !important;
-    overflow:visible !important;
-  }
-
-  .controls{
-    min-width:0 !important;
-    width:100% !important;
-    gap:8px !important;
-    overflow:visible !important;
-  }
-
-  /* outer pill */
-  .seg{
-    display:grid !important;
-    grid-template-columns:repeat(4, 1fr) !important;
-    align-items:center !important;
-
-    width:100% !important;
-    min-width:0 !important;
-    height:30px !important;
-
-    padding:1px !important;
-    margin:0 !important;
-
-    border-radius:999px !important;
-    border:1px solid rgba(255,255,255,.08) !important;
-    background:rgba(255,255,255,.05) !important;
-
-    box-sizing:border-box !important;
-    overflow:hidden !important;
-    box-shadow:none !important;
-  }
-
-/* =========================
-   FINAL MOBILE TOP BAR CLEANUP
-   paste at very end of <style>
-   ========================= */
-@media (max-width:720px){
-
-  .strip-head{
-    padding:8px 10px 10px !important;
-    overflow:visible !important;
-  }
-
-  .controls{
-    width:100% !important;
-    min-width:0 !important;
-    margin-top:0 !important;
-    gap:8px !important;
-    overflow:visible !important;
-    padding-bottom:0 !important;
-  }
-
-  /* top filter bar */
-  .seg{
-    display:grid !important;
-    grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
-    align-items:stretch !important;
-    width:100% !important;
-    min-width:0 !important;
-    height:32px !important;
-    padding:2px !important;
-    margin:0 !important;
-    gap:0 !important;
-    border-radius:999px !important;
-    border:1px solid rgba(255,255,255,.08) !important;
-    background:rgba(255,255,255,.04) !important;
-    box-sizing:border-box !important;
-    overflow:hidden !important;
-    box-shadow:none !important;
-  }
-
-  .seg button{
-    appearance:none !important;
-    -webkit-appearance:none !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    width:100% !important;
-    min-width:0 !important;
-    height:100% !important;
-    margin:0 !important;
-    padding:0 4px !important;
-    border:0 !important;
-    border-radius:999px !important;
-    background:transparent !important;
-    box-shadow:none !important;
-    font-size:10px !important;
-    line-height:1 !important;
-    font-weight:800 !important;
-    letter-spacing:0 !important;
-    white-space:nowrap !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-    color:rgba(245,247,250,.78) !important;
-    transform:none !important;
-    min-height:0 !important;
-    max-height:none !important;
-    box-sizing:border-box !important;
-    flex:none !important;
-  }
-
-  .seg button.active{
-    background:rgba(255,255,255,.10) !important;
-    color:#fff !important;
-    box-shadow:none !important;
-    transform:none !important;
-  }
-
-  .seg button:active{
-    transform:none !important;
-  }
-
-  /* month chips spacing below top bar */
-  .strip-months{
-    padding:8px 0 0 !important;
-    margin-top:0 !important;
-    border-bottom:none !important;
-    background:transparent !important;
-    gap:8px !important;
-  }
-
-  .month-chip{
-    height:28px !important;
-    padding:0 12px !important;
-    display:inline-flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    font-size:11px !important;
-    line-height:1 !important;
+    margin-top:4px !important;
   }
 }
 </style>
@@ -3282,10 +3012,10 @@ button:hover{
 
   <div class="controls" id="primaryControls">
     <div class="seg" id="contentSeg">
-      <button type="button" data-content="all" class="active">All</button>
-      <button type="button" data-content="movies">Movies</button>
-      <button type="button" data-content="shows">TV Shows</button>
-      <button type="button" data-content="digital">Digital / PVOD</button>
+<button type="button" data-content="all" class="active">All</button>
+<button type="button" data-content="movies">Movies</button>
+<button type="button" data-content="shows">TV</button>
+<button type="button" data-content="digital">PVOD</button>
     </div>
 
     <button id="favoritesBtn" class="btn-ghost">★ Favorites</button>
