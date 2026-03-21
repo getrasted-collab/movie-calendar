@@ -82,6 +82,55 @@ body{
   body.mobile-show-mini #mainMonthsBar{ display:none !important; }
   body.mobile-show-main .strip-wrap{ display:none !important; }
   body.mobile-show-main .week-panel{ display:none !important; }
+
+  /* FULL SCREEN MONTH VIEW FROM MINI CALENDAR */
+  body.mobile-month-open #miniMonthAside{
+    display:none !important;
+  }
+
+  body.mobile-month-open .strip-wrap{
+    display:none !important;
+  }
+
+  body.mobile-month-open .week-panel{
+    display:none !important;
+  }
+
+  body.mobile-month-open #mainMonthsBar{
+    display:none !important;
+  }
+
+  body.mobile-month-open .mobile-add-panel{
+    display:none !important;
+  }
+
+  body.mobile-month-open .cal-shell{
+    display:block !important;
+  }
+
+  body.mobile-month-open #calWrap{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  body.mobile-month-open #calBackBtn{
+    display:flex !important;
+  }
+
+  body.mobile-month-open .cal-header,
+  body.mobile-month-open .cal-weekdays,
+  body.mobile-month-open .cal-grid{
+    display:flex;
+  }
+
+  body.mobile-month-open .cal-weekdays{
+    display:grid !important;
+  }
+
+  body.mobile-month-open .cal-grid{
+    display:grid !important;
+  }
 }
 
 header{
@@ -213,25 +262,22 @@ main{
   overflow:hidden;
 }
 .strip-head{
-  padding:12px 14px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
+  padding: 24px 16px;
+  min-height: 40px;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,.08);
 }
 .strip-title{ font-weight:900; letter-spacing:.2px; }
 .strip-sub{ color:rgba(243,245,247,.58); font-size:12px; margin-top:2px; }
 .badge-mini{
-  display:inline-flex;
+  display: none !important;
   gap:6px;
   align-items:center;
   padding:4px 8px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,.10);
   background:rgba(255,255,255,.03);
-  color:rgba(243,245,247,.68);
+  color: transparent;
   font-size:12px;
 }
 
@@ -1350,7 +1396,6 @@ body.mobile-show-mini .mini-bottom-actions .import-label{
     gap:14px !important;
   }
 
-  /* Week row above mini calendar on mobile */
   body.mobile-show-mini #calWrap{
     display:block !important;
     order:2 !important;
@@ -1679,9 +1724,9 @@ body.mobile-show-mini .mini-bottom-actions .import-label{
 <main>
   <section id="tab-calendar">
     <div class="strip-wrap">
-<div class="strip-head">
-  <div class="badge-mini" id="stripBadge">Mode</div>
-</div>
+      <div class="strip-head">
+        <div class="badge-mini" id="stripBadge">Mode</div>
+      </div>
 
       <div class="strip-months" id="stripMonths"></div>
 
@@ -2345,9 +2390,12 @@ const calBackBtn = document.getElementById('calBackBtn');
 
 if(calBackBtn){
   calBackBtn.onclick = () => {
+    document.body.classList.remove('mobile-month-open');
     miniUI.mode = 'months';
     renderCalendarShell();
-    mobileSetScreen('mini');
+    if(mobileMQ.matches){
+      mobileSetScreen('mini');
+    }
   };
 }
 
@@ -2401,6 +2449,7 @@ function buildLogoOptionsFromTMDB(logos = []){
       };
     });
 }
+
 
 function buildPosterOptionsFromTMDB(posters = [], fallbackPosterUrl = ''){
   const out = [];
@@ -2598,8 +2647,7 @@ async function tmdbSearchTV(title){
 }
 
 async function tmdbFetchTVImages(tvId){
-  const res = await fetch(`https://api.themoviedb.org
-/images?api_key=${TMDB_API_KEY}&include_image_language=en,null`);
+  const res = await fetch(`https://api.themoviedb.org/3/tv/${tvId}/images?api_key=${TMDB_API_KEY}&include_image_language=en,null`);
   if(!res.ok) return null;
   return await res.json();
 }
@@ -3021,7 +3069,7 @@ function renderMiniMonth(eventsByDay){
       const monthStart = new Date(YEAR_FILTER, m, 1);
       const monthEnd = new Date(YEAR_FILTER, m + 1, 0);
       const gridStart = new Date(monthStart); gridStart.setDate(monthStart.getDate() - gridStart.getDay());
-      const gridEnd = new Date(monthEnd); gridEnd.setDate(monthEnd.getDate() + (6 - gridEnd.getDay()));
+      const gridEnd = new Date(monthEnd); gridEnd.setDate(monthEnd.getDate() + (6 - monthEnd.getDay()));
 
       const wrap = document.createElement('div');
       wrap.className = 'apple-month' + (m === activeMonth ? ' active' : '');
@@ -3051,9 +3099,16 @@ function renderMiniMonth(eventsByDay){
         ui.monthCursor = new Date(YEAR_FILTER, m, 1);
         ui.selectedISO = toISODateLocal(new Date(YEAR_FILTER, m, 1));
         ui.activeMonthKey = `${YEAR_FILTER}-${String(m + 1).padStart(2, '0')}`;
+
+        if(mobileMQ.matches){
+          document.body.classList.add('mobile-month-open');
+        }
+
         renderCalendarShell();
-        if(mobileMQ.matches) mobileSetScreen('main');
-        else setTimeout(() => scrollTimelineToMonth(ui.activeMonthKey), 30);
+
+        if(!mobileMQ.matches){
+          setTimeout(() => scrollTimelineToMonth(ui.activeMonthKey), 30);
+        }
       };
       return wrap;
     }
@@ -3122,7 +3177,7 @@ function renderMonthChips(){
 
 function renderMainMonthsBar(){
   if(!el.mainMonthsBar) return;
-  if(!mobileMQ.matches){
+  if(!mobileMQ.matches || document.body.classList.contains('mobile-month-open')){
     el.mainMonthsBar.innerHTML = '';
     return;
   }
@@ -3881,11 +3936,11 @@ const mobileMQ = window.matchMedia('(max-width: 720px)');
 function applyMobileDefaults(){
   if(mobileMQ.matches){
     miniUI.mode = 'months';
-    if(!document.body.classList.contains('mobile-show-main') && !document.body.classList.contains('mobile-show-mini')){
+    if(!document.body.classList.contains('mobile-show-main') && !document.body.classList.contains('mobile-show-mini') && !document.body.classList.contains('mobile-month-open')){
       mobileSetScreen('mini');
     }
   }else{
-    document.body.classList.remove('mobile-show-mini', 'mobile-show-main');
+    document.body.classList.remove('mobile-show-mini', 'mobile-show-main', 'mobile-month-open');
   }
 }
 mobileMQ.addEventListener?.('change', () => {
@@ -3915,6 +3970,10 @@ function renderCalendarShell(){
   renderMiniMonth(eventsByDay);
   renderWeekView(eventsByDay);
   renderMonthView(eventsByDay);
+
+  if(mobileMQ.matches && document.body.classList.contains('mobile-month-open')){
+    document.body.classList.remove('mobile-show-mini', 'mobile-show-main');
+  }
 }
 
 function renderAll(){
@@ -3924,6 +3983,8 @@ function renderAll(){
 
 function mobileSetScreen(which){
   if(!mobileMQ.matches) return;
+  if(document.body.classList.contains('mobile-month-open')) return;
+
   document.body.classList.remove('mobile-show-mini', 'mobile-show-main');
   document.body.classList.add(which === 'main' ? 'mobile-show-main' : 'mobile-show-mini');
   if(which === 'main'){
